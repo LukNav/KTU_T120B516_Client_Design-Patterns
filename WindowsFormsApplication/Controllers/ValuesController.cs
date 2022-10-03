@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WindowsFormsApplication.Controllers
@@ -7,13 +8,18 @@ namespace WindowsFormsApplication.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        public ValuesController(IHttpClientFactory httpClientFactory)
+        {
+
+        }
+
         [HttpGet]
         public ActionResult<string> Get()
         {
             string text = "";
             Program.MainForm.Invoke(new Action(() =>
             {
-                text = Program.MainForm.textBox1.Text;
+                text = Program.MainForm.NameTextBox.Text;
             }));
             return text;
         }
@@ -23,7 +29,7 @@ namespace WindowsFormsApplication.Controllers
         {
             Program.MainForm.Invoke(new Action(() =>
             {
-                Program.MainForm.textBox1.Text = id;
+                Program.MainForm.NameTextBox.Text = id;
             }));
             return Ok();
         }
