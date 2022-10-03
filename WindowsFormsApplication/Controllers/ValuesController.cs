@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
+using WindowsFormsApplication.Models;
 
 namespace WindowsFormsApplication.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase
     {
@@ -14,25 +14,21 @@ namespace WindowsFormsApplication.Controllers
             _httpClientFactory = httpClientFactory;
         }
 
+        [Route("health")]
         [HttpGet]
         public ActionResult<string> Get()
         {
-            string text = "";
-            Program.MainForm.Invoke(new Action(() =>
-            {
-                text = Program.MainForm.NameTextBox.Text;
-            }));
-            return text;
+            return "Healthy";
         }
 
-        [HttpGet("{id}")]
-        public ActionResult Get(string id)
+        [HttpPost("StartGame")]
+        public ActionResult StartGame([FromBody] Game gameInfo)
         {
             Program.MainForm.Invoke(new Action(() =>
             {
-                Program.MainForm.NameTextBox.Text = id;
+                Program.MainForm.StartGame(gameInfo);
             }));
-            return Ok();
+            return NoContent();
         }
     }
 }

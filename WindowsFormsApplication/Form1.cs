@@ -20,7 +20,7 @@ namespace WindowsFormsApplication
             PlayerName = Program.MainForm.NameTextBox.Text;
             if (!string.IsNullOrEmpty(PlayerName))//if anything is entered in the name textbox
             {
-                if (TryCreateClient(PlayerName) == true)//try sending request to server and create a new player
+                if (TryCreateClient(PlayerName, Program.LocalHostPort) == true)//try sending request to server and create a new player
                 {
                     HideLoginItems();//Hide Ui login labels
                     ToggleReadyToPlayUIItems(true);//Show Ready to play button and label in UI
@@ -39,10 +39,15 @@ namespace WindowsFormsApplication
             ToggleWaitingForPlayerUiItems(true);//Show "Waiting for players" label
             
             //Now we wait for server's response that everybody is ready
+        }
 
-            //CurrentGame = GetGameInfo();//Get current Game info from Server
-            //SetGameInfo(CurrentGame);//Update game info in UI
-            //ShowGamePlayersLabels();//Enable visibility of game info in UI
+        public void StartGame(Game game)
+        {
+            CurrentGame = game;
+            SetGameInfo(CurrentGame);//Update game info in UI
+            ShowGamePlayersLabels();//Enable visibility of game info in UI
+            ToggleWaitingForPlayerUiItems(false);
+            Program.MainForm.GameStartedLabel.Visible = true;
         }
         #region UI controls
 
@@ -58,6 +63,7 @@ namespace WindowsFormsApplication
             Program.MainForm.Player2Label.Visible = true;
             Program.MainForm.Player1Name.Visible = true;
             Program.MainForm.Player2Name.Visible = true;
+            Program.MainForm.PlayersLabel.Visible = true;
         }
 
         private void ToggleReadyToPlayUIItems(bool isVisible)
@@ -68,9 +74,19 @@ namespace WindowsFormsApplication
 
         private void SetGameInfo(Game game)
         {
-
             Program.MainForm.Player1Name.Text = game.Player1.Name;
             Program.MainForm.Player2Name.Text = game.Player2.Name;
+
+            if (game.Player1.Name == PlayerName)
+            {
+                Program.MainForm.Player1Label.Text += " (You)";
+                Program.MainForm.Player2Label.Text += " (Oponnent)";
+            }
+            else
+            {
+                Program.MainForm.Player2Label.Text += " (You)";
+                Program.MainForm.Player1Label.Text += " (Oponnent)";
+            }
         }
 
         private void ToggleWaitingForPlayerUiItems(bool isVisible)
@@ -82,9 +98,9 @@ namespace WindowsFormsApplication
 
         #region HttpRequests
 
-        private bool TryCreateClient(string name)
+        private bool TryCreateClient(string name, string localhostPort)
         {
-            string serverUrl = $"{Program.ServerIp}/Player/Create/{name}";
+            string serverUrl = $"{Program.ServerIp}/Player/Create/{name}/{localhostPort}";
 
             HttpResponseMessage httpResponseMessage = HttpRequests.GetRequest(serverUrl);
             string responseMessage = httpResponseMessage.Message();

@@ -39,6 +39,8 @@
             this.ReadyToPlayButton = new System.Windows.Forms.Button();
             this.ReadyToPlayLabel = new System.Windows.Forms.Label();
             this.WaitingForPlayersLabel = new System.Windows.Forms.Label();
+            this.PlayersLabel = new System.Windows.Forms.Label();
+            this.GameStartedLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // NameTextBox
@@ -82,9 +84,9 @@
             this.Player1Label.AutoSize = true;
             this.Player1Label.Location = new System.Drawing.Point(12, 391);
             this.Player1Label.Name = "Player1Label";
-            this.Player1Label.Size = new System.Drawing.Size(45, 15);
+            this.Player1Label.Size = new System.Drawing.Size(76, 15);
             this.Player1Label.TabIndex = 5;
-            this.Player1Label.Text = "Player1";
+            this.Player1Label.Text = "Player1 (you)";
             this.Player1Label.Visible = false;
             // 
             // Player2Label
@@ -92,15 +94,15 @@
             this.Player2Label.AutoSize = true;
             this.Player2Label.Location = new System.Drawing.Point(12, 415);
             this.Player2Label.Name = "Player2Label";
-            this.Player2Label.Size = new System.Drawing.Size(45, 15);
+            this.Player2Label.Size = new System.Drawing.Size(110, 15);
             this.Player2Label.TabIndex = 6;
-            this.Player2Label.Text = "Player2";
+            this.Player2Label.Text = "Player2 (Oponnent)";
             this.Player2Label.Visible = false;
             // 
             // Player1Name
             // 
             this.Player1Name.AutoSize = true;
-            this.Player1Name.Location = new System.Drawing.Point(63, 391);
+            this.Player1Name.Location = new System.Drawing.Point(128, 391);
             this.Player1Name.Name = "Player1Name";
             this.Player1Name.Size = new System.Drawing.Size(25, 15);
             this.Player1Name.TabIndex = 7;
@@ -110,7 +112,7 @@
             // Player2Name
             // 
             this.Player2Name.AutoSize = true;
-            this.Player2Name.Location = new System.Drawing.Point(63, 415);
+            this.Player2Name.Location = new System.Drawing.Point(128, 415);
             this.Player2Name.Name = "Player2Name";
             this.Player2Name.Size = new System.Drawing.Size(25, 15);
             this.Player2Name.TabIndex = 8;
@@ -148,11 +150,33 @@
             this.WaitingForPlayersLabel.Text = "Waiting for players to join and get Ready";
             this.WaitingForPlayersLabel.Visible = false;
             // 
+            // PlayersLabel
+            // 
+            this.PlayersLabel.AutoSize = true;
+            this.PlayersLabel.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.PlayersLabel.Location = new System.Drawing.Point(50, 354);
+            this.PlayersLabel.Name = "PlayersLabel";
+            this.PlayersLabel.Size = new System.Drawing.Size(72, 25);
+            this.PlayersLabel.TabIndex = 12;
+            this.PlayersLabel.Text = "Players";
+            // 
+            // GameStartedLabel
+            // 
+            this.GameStartedLabel.AutoSize = true;
+            this.GameStartedLabel.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.GameStartedLabel.Location = new System.Drawing.Point(263, 37);
+            this.GameStartedLabel.Name = "GameStartedLabel";
+            this.GameStartedLabel.Size = new System.Drawing.Size(272, 32);
+            this.GameStartedLabel.TabIndex = 14;
+            this.GameStartedLabel.Text = "The Game Has Started!!!";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.GameStartedLabel);
+            this.Controls.Add(this.PlayersLabel);
             this.Controls.Add(this.WaitingForPlayersLabel);
             this.Controls.Add(this.ReadyToPlayLabel);
             this.Controls.Add(this.ReadyToPlayButton);
@@ -184,5 +208,7 @@
         private Button ReadyToPlayButton;
         private Label ReadyToPlayLabel;
         private Label WaitingForPlayersLabel;
+        private Label PlayersLabel;
+        private Label GameStartedLabel;
     }
 }
