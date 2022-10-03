@@ -8,9 +8,10 @@ namespace WindowsFormsApplication.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private readonly IHttpClientFactory _httpClientFactory;
         public ValuesController(IHttpClientFactory httpClientFactory)
         {
-
+            _httpClientFactory = httpClientFactory;
         }
 
         [HttpGet]

@@ -30,7 +30,8 @@
         {
             this.NameTextBox = new System.Windows.Forms.TextBox();
             this.SubmitNameButton = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
+            this.EnterNameLabel = new System.Windows.Forms.Label();
+            this.ErrorLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // NameTextBox
@@ -44,27 +45,38 @@
             // 
             this.SubmitNameButton.Location = new System.Drawing.Point(447, 193);
             this.SubmitNameButton.Name = "SubmitNameButton";
-            this.SubmitNameButton.Size = new System.Drawing.Size(78, 23);
+            this.SubmitNameButton.Size = new System.Drawing.Size(88, 23);
             this.SubmitNameButton.TabIndex = 1;
-            this.SubmitNameButton.Text = "StartSession";
+            this.SubmitNameButton.Text = "Start Session";
             this.SubmitNameButton.UseVisualStyleBackColor = true;
             this.SubmitNameButton.Click += new System.EventHandler(this.SubmitNameButton_Click);
             // 
-            // label2
+            // EnterNameLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(248, 197);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(96, 15);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Enter your Name";
+            this.EnterNameLabel.AutoSize = true;
+            this.EnterNameLabel.Location = new System.Drawing.Point(248, 197);
+            this.EnterNameLabel.Name = "EnterNameLabel";
+            this.EnterNameLabel.Size = new System.Drawing.Size(96, 15);
+            this.EnterNameLabel.TabIndex = 3;
+            this.EnterNameLabel.Text = "Enter your Name";
+            // 
+            // ErrorLabel
+            // 
+            this.ErrorLabel.AutoSize = true;
+            this.ErrorLabel.BackColor = System.Drawing.SystemColors.Control;
+            this.ErrorLabel.ForeColor = System.Drawing.Color.Red;
+            this.ErrorLabel.Location = new System.Drawing.Point(345, 165);
+            this.ErrorLabel.Name = "ErrorLabel";
+            this.ErrorLabel.Size = new System.Drawing.Size(0, 15);
+            this.ErrorLabel.TabIndex = 4;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.ErrorLabel);
+            this.Controls.Add(this.EnterNameLabel);
             this.Controls.Add(this.SubmitNameButton);
             this.Controls.Add(this.NameTextBox);
             this.Name = "Form1";
@@ -78,6 +90,7 @@
 
         public TextBox NameTextBox;
         private Button SubmitNameButton;
-        private Label label2;
+        private Label EnterNameLabel;
+        private Label ErrorLabel;
     }
 }

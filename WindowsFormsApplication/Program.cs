@@ -9,7 +9,7 @@ namespace WindowsFormsApplication
     public class Program
     {
         public static Form1 MainForm { get; private set; }
-        public static readonly string ServerIp = "https://localhost:7134/";
+        public static readonly string ServerIp = "https://localhost:7134";
 
 
         [STAThread]

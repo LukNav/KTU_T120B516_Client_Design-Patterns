@@ -16,6 +16,7 @@ namespace WindowsFormsApplication
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddHttpClient();
         }
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {

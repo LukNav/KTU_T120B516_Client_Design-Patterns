@@ -13,34 +13,51 @@ namespace WindowsFormsApplication
 
         private void SubmitNameButton_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(Program.MainForm.NameTextBox.Text))
-                CreateClient(Program.MainForm.NameTextBox.Text);
+            if (!string.IsNullOrEmpty(Program.MainForm.NameTextBox.Text))//if anything is entered
+            {
+                if(TryCreateClient(Program.MainForm.NameTextBox.Text) == true)
+                {
+                    Program.MainForm.SubmitNameButton.Visible = false;
+                    Program.MainForm.EnterNameLabel.Visible = false;
+                    Program.MainForm.NameTextBox.Visible = false;
+                }
+            }
+            else
+            {
+                Program.MainForm.ErrorLabel.Text = "Please enter a Name and then click Start Session";
+            }
+
         }
 
-        private void CreateClient(string name)
+        private bool TryCreateClient(string name)
         {
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"{Program.ServerIp}/Player/Create/{name}")
             {
                 Headers =
                 {
                     { HeaderNames.Accept, "*/*" },
-                    { HeaderNames.UserAgent, "ButtNet" }
+                    { HeaderNames.UserAgent, "Client" }
                 }
             };
 
-            
-            using (var httpClient = _httpClientFactory.CreateClient())
+            using (var httpClient = new HttpClient())
             {
-                var httpResponseMessage = httpClient.Send(httpRequestMessage).HandleResponse();
+                var httpResponseMessage = httpClient.Send(httpRequestMessage);
 
-                var contentStream = httpResponseMessage.Content.ReadAsStringAsync().Result;
-                responseImage = JsonSerializer.Deserialize<ImageFile>(contentStream, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
+                var responseMessage = httpResponseMessage.Content.ReadAsStringAsync().Result;
+                //var responseMessage = JsonSerializer.Deserialize<string>(contentStream, new JsonSerializerOptions
+                //{
+                //    PropertyNameCaseInsensitive = true
+                //});
+
+                if (httpResponseMessage.StatusCode == System.Net.HttpStatusCode.Created)
+                    return true;
+                else
+                    Program.MainForm.ErrorLabel.Text = responseMessage;
+
             }
 
-            return responseImage;
+            return false;
         }
     }
 }
