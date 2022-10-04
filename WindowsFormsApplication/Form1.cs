@@ -65,6 +65,8 @@ namespace WindowsFormsApplication
             Program.MainForm.Player1Name.Visible = true;
             Program.MainForm.Player2Name.Visible = true;
             Program.MainForm.PlayersLabel.Visible = true;
+            Program.MainForm.Player1FactionColor.Visible = true;
+            Program.MainForm.Player2FactionColor.Visible = true;
         }
 
         private void ToggleReadyToPlayUIItems(bool isVisible)
@@ -76,9 +78,9 @@ namespace WindowsFormsApplication
         private void SetGameInfo(Game game)
         {
             Program.MainForm.Player1Name.Text = game.Player1.Name;
-            Program.MainForm.Player1FactionColor.BackColor = game.Player1.PlayerColor;
+            Program.MainForm.Player1FactionColor.BackColor = Color.FromKnownColor(game.Player1.PlayerColor);
             Program.MainForm.Player2Name.Text = game.Player2.Name;
-            Program.MainForm.Player2FactionColor.BackColor = game.Player2.PlayerColor;
+            Program.MainForm.Player2FactionColor.BackColor = Color.FromKnownColor(game.Player2.PlayerColor);
 
             if (game.Player1.Name == PlayerName)
             {
