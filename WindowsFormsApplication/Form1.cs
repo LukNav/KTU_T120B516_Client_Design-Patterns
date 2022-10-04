@@ -56,6 +56,7 @@ namespace WindowsFormsApplication
             Program.MainForm.SubmitNameButton.Visible = false;
             Program.MainForm.EnterNameLabel.Visible = false;
             Program.MainForm.NameTextBox.Visible = false;
+            Program.MainForm.ErrorLabel.Visible = false;
         }
         private void ShowGamePlayersLabels()
         {

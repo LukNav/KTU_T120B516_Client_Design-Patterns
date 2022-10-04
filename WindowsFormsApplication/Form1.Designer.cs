@@ -86,9 +86,9 @@
             this.Player1Label.AutoSize = true;
             this.Player1Label.Location = new System.Drawing.Point(34, 391);
             this.Player1Label.Name = "Player1Label";
-            this.Player1Label.Size = new System.Drawing.Size(76, 15);
+            this.Player1Label.Size = new System.Drawing.Size(45, 15);
             this.Player1Label.TabIndex = 5;
-            this.Player1Label.Text = "Player1 (you)";
+            this.Player1Label.Text = "Player1";
             this.Player1Label.Visible = false;
             // 
             // Player2Label
@@ -96,9 +96,9 @@
             this.Player2Label.AutoSize = true;
             this.Player2Label.Location = new System.Drawing.Point(34, 415);
             this.Player2Label.Name = "Player2Label";
-            this.Player2Label.Size = new System.Drawing.Size(110, 15);
+            this.Player2Label.Size = new System.Drawing.Size(45, 15);
             this.Player2Label.TabIndex = 6;
-            this.Player2Label.Text = "Player2 (Oponnent)";
+            this.Player2Label.Text = "Player2";
             this.Player2Label.Visible = false;
             // 
             // Player1Name
