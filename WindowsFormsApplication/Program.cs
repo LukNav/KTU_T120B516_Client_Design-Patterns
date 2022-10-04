@@ -10,7 +10,7 @@ namespace WindowsFormsApplication
     {
         public static Form1 MainForm { get; private set; }
         public static readonly string ServerIp = "https://localhost:7134";
-        public static readonly string LocalHostPort = "5501";
+        public static readonly string LocalHostPort = "5551";
 
         [STAThread]
         public static void Main(string[] args)
@@ -25,7 +25,7 @@ namespace WindowsFormsApplication
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseUrls("https://*:5501")
+                .UseUrls("https://*:5551")
                 .UseStartup<Startup>();
     }
 }

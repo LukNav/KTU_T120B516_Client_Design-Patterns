@@ -75,7 +75,9 @@ namespace WindowsFormsApplication
         private void SetGameInfo(Game game)
         {
             Program.MainForm.Player1Name.Text = game.Player1.Name;
+            Program.MainForm.Player1FactionColor.BackColor = game.Player1.PlayerColor;
             Program.MainForm.Player2Name.Text = game.Player2.Name;
+            Program.MainForm.Player2FactionColor.BackColor = game.Player2.PlayerColor;
 
             if (game.Player1.Name == PlayerName)
             {
