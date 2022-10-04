@@ -159,6 +159,7 @@
             this.PlayersLabel.Size = new System.Drawing.Size(72, 25);
             this.PlayersLabel.TabIndex = 12;
             this.PlayersLabel.Text = "Players";
+            this.PlayersLabel.Visible = false;
             // 
             // GameStartedLabel
             // 
@@ -169,6 +170,7 @@
             this.GameStartedLabel.Size = new System.Drawing.Size(272, 32);
             this.GameStartedLabel.TabIndex = 14;
             this.GameStartedLabel.Text = "The Game Has Started!!!";
+            this.GameStartedLabel.Visible = false;
             // 
             // Form1
             // 
