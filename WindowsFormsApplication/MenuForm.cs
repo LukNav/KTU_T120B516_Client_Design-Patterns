@@ -36,7 +36,7 @@ namespace WindowsFormsApplication
         {
             SetPlayerAsReady(PlayerName);//Set Player as ready in Server
             ToggleReadyToPlayUIItems(false);//Hide Ready button
-            ToggleWaitingForPlayerUiItems(true);//Show "Waiting for players" label
+            ShowWaitingForPlayerLabel(true);//Show "Waiting for players" label
             
             //Now we wait for server's response that everybody is ready
         }
@@ -44,29 +44,17 @@ namespace WindowsFormsApplication
         public void StartGame(Game game)
         {
             CurrentGame = game;
-            SetGameInfo(CurrentGame);//Update game info in UI
-            ShowGamePlayersLabels();//Enable visibility of game info in UI
-            ToggleWaitingForPlayerUiItems(false);
-            Program.MenuForm.GameStartedLabel.Visible = true;
+            Program.MenuForm.Visible = false;
+            Program.GameForm.Visible = true;
         }
         #region UI controls
 
-        private static void HideLoginItems()
+        private void HideLoginItems()
         {
             Program.MenuForm.SubmitNameButton.Visible = false;
             Program.MenuForm.EnterNameLabel.Visible = false;
             Program.MenuForm.NameTextBox.Visible = false;
             Program.MenuForm.ErrorLabel.Visible = false;
-        }
-        private void ShowGamePlayersLabels()
-        {
-            Program.MenuForm.Player1Label.Visible = true;
-            Program.MenuForm.Player2Label.Visible = true;
-            Program.MenuForm.Player1Name.Visible = true;
-            Program.MenuForm.Player2Name.Visible = true;
-            Program.MenuForm.PlayersLabel.Visible = true;
-            Program.MenuForm.Player1FactionColor.Visible = true;
-            Program.MenuForm.Player2FactionColor.Visible = true;
         }
 
         private void ToggleReadyToPlayUIItems(bool isVisible)
@@ -75,26 +63,7 @@ namespace WindowsFormsApplication
             Program.MenuForm.ReadyToPlayLabel.Visible = isVisible;
         }
 
-        private void SetGameInfo(Game game)
-        {
-            Program.MenuForm.Player1Name.Text = game.Player1.Name;
-            Program.MenuForm.Player1FactionColor.BackColor = Color.FromKnownColor(game.Player1.PlayerColor);
-            Program.MenuForm.Player2Name.Text = game.Player2.Name;
-            Program.MenuForm.Player2FactionColor.BackColor = Color.FromKnownColor(game.Player2.PlayerColor);
-
-            if (game.Player1.Name == PlayerName)
-            {
-                Program.MenuForm.Player1Label.Text += " (You)";
-                Program.MenuForm.Player2Label.Text += " (Oponnent)";
-            }
-            else
-            {
-                Program.MenuForm.Player2Label.Text += " (You)";
-                Program.MenuForm.Player1Label.Text += " (Oponnent)";
-            }
-        }
-
-        private void ToggleWaitingForPlayerUiItems(bool isVisible)
+        private void ShowWaitingForPlayerLabel(bool isVisible)
         {
             Program.MenuForm.WaitingForPlayersLabel.Visible = isVisible;
         }
