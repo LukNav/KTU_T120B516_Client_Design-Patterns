@@ -127,8 +127,8 @@
             this.Controls.Add(this.Player1Name);
             this.Controls.Add(this.Player2Label);
             this.Controls.Add(this.Player1Label);
-            this.Name = $"Game: {Program.LocalHostPort}";
-            this.Text = $"Game: { Program.LocalHostPort}";
+            this.Name = "GameForm";
+            this.Load += new System.EventHandler(this.GameForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
