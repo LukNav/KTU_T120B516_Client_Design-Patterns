@@ -127,8 +127,8 @@
             this.Controls.Add(this.Player1Name);
             this.Controls.Add(this.Player2Label);
             this.Controls.Add(this.Player1Label);
-            this.Name = "GameForm";
-            this.Text = "Menu";
+            this.Name = $"Game: {Program.LocalHostPort}";
+            this.Text = $"Game: { Program.LocalHostPort}";
             this.ResumeLayout(false);
             this.PerformLayout();
 

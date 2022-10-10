@@ -216,8 +216,8 @@
             this.Controls.Add(this.EnterNameLabel);
             this.Controls.Add(this.SubmitNameButton);
             this.Controls.Add(this.NameTextBox);
-            this.Name = "Menu";
-            this.Text = "Menu";
+            this.Name = $"Menu: {Program.LocalHostPort}";
+            this.Text = $"Menu: {Program.LocalHostPort}";
             this.ResumeLayout(false);
             this.PerformLayout();
 
