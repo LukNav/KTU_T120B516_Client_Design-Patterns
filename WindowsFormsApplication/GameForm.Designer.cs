@@ -164,7 +164,6 @@
             // 
             // Pawn3PictureHighlight
             // 
-            this.Pawn3PictureHighlight.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.Pawn3PictureHighlight.BackColor = System.Drawing.SystemColors.MenuHighlight;
             this.Pawn3PictureHighlight.Location = new System.Drawing.Point(7, 208);
             this.Pawn3PictureHighlight.Name = "Pawn3PictureHighlight";
@@ -172,10 +171,10 @@
             this.Pawn3PictureHighlight.TabIndex = 26;
             this.Pawn3PictureHighlight.TabStop = false;
             this.Pawn3PictureHighlight.Visible = false;
+            this.Pawn3PictureHighlight.Click += new System.EventHandler(this.Pawn3PictureHighlight_Click);
             // 
             // Pawn2PictureHighlight
             // 
-            this.Pawn2PictureHighlight.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.Pawn2PictureHighlight.BackColor = System.Drawing.SystemColors.MenuHighlight;
             this.Pawn2PictureHighlight.Location = new System.Drawing.Point(7, 132);
             this.Pawn2PictureHighlight.Name = "Pawn2PictureHighlight";
@@ -183,10 +182,10 @@
             this.Pawn2PictureHighlight.TabIndex = 25;
             this.Pawn2PictureHighlight.TabStop = false;
             this.Pawn2PictureHighlight.Visible = false;
+            this.Pawn2PictureHighlight.Click += new System.EventHandler(this.Pawn2PictureHighlight_Click);
             // 
             // Pawn1PictureHighlight
             // 
-            this.Pawn1PictureHighlight.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.Pawn1PictureHighlight.BackColor = System.Drawing.SystemColors.MenuHighlight;
             this.Pawn1PictureHighlight.Location = new System.Drawing.Point(7, 56);
             this.Pawn1PictureHighlight.Name = "Pawn1PictureHighlight";

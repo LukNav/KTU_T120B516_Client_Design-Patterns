@@ -76,37 +76,67 @@ namespace WindowsFormsApplication
 
         private void GameForm_Load(object sender, EventArgs e)
         {
-            this.Size= new Size(1200, 1200);
-            int tileWidth = 30;
-            int tileHeight = 30;
-            int tileRows = 30;
-            int tileCols = 30;
+            this.Name = $"Game: {Program.LocalHostPort}";
+            this.Text = $"Game: {Program.LocalHostPort}";
 
-            using (Bitmap sourceBmp = new Bitmap("D:\\900x900.jpg"))
+            this.Size= new Size(630, 630);
+            int tileWidth = 70;
+            int tileHeight = 70;
+            int tileRows = 9;
+            int tileCols = 9;
+
+            Size s = new Size(tileWidth, tileHeight);
+            Rectangle destRect = new Rectangle(Point.Empty, s);
+            for (int row = 0; row < tileRows; row++)
             {
-                Size s = new Size(tileWidth, tileHeight);
-                Rectangle destRect = new Rectangle(Point.Empty, s);
-                for (int row = 0; row < tileRows; row++)
-                    for (int col = 0; col < tileCols; col++)
-                    {
-                        PictureBox p = new PictureBox();
-                        p.Size = s;
-                        Point loc = new Point(tileWidth * col, tileHeight * row);
-                        Rectangle srcRect = new Rectangle(loc, s);
-                        Bitmap tile = new Bitmap(tileWidth, tileHeight);
-                        Graphics G = Graphics.FromImage(tile);
-                        G.DrawImage(sourceBmp, destRect, srcRect, GraphicsUnit.Pixel);
-                        p.Image = tile;
-                        p.Location = loc;
-                        p.Tag = loc;
-                        p.Name = String.Format("Col={0:00}-Row={1:00}", col, row);
-                        p.Text = $"Col:{col} x Row:{row}";
-                        // p.MouseDown += p_MouseDown;
-                        // p.MouseUp += p_MouseUp;
-                        // p.MouseMove += p_MouseMove;
-                        this.Controls.Add(p);
-                    }
+                for (int col = 0; col < tileCols; col++)
+                {
+                    PictureBox p = new PictureBox();
+                    p.Size = s;
+                    Point loc = new Point(tileWidth * col, tileHeight * row);
+                    Rectangle srcRect = new Rectangle(loc, s);
+                    Bitmap tile = new Bitmap(tileWidth, tileHeight);
+                    Graphics G = Graphics.FromImage(tile);
+                    G.DrawImage(FileUtils.GetImage("GrassTile.png"), destRect, srcRect, GraphicsUnit.Pixel);
+                    p.Image = tile;
+                    p.Location = loc;
+                    p.Tag = loc;
+                    p.Name = String.Format("Col={0:00}-Row={1:00}", col, row);
+                    this.Controls.Add(p);
+                }
             }
+
+            //this.Size= new Size(1200, 1200);
+            //int tileWidth = 30;
+            //int tileHeight = 30;
+            //int tileRows = 30;
+            //int tileCols = 30;
+
+            //using (Bitmap sourceBmp = new Bitmap("D:\\900x900.jpg"))
+            //{
+            //    Size s = new Size(tileWidth, tileHeight);
+            //    Rectangle destRect = new Rectangle(Point.Empty, s);
+            //    for (int row = 0; row < tileRows; row++)
+            //        for (int col = 0; col < tileCols; col++)
+            //        {
+            //            PictureBox p = new PictureBox();
+            //            p.Size = s;
+            //            Point loc = new Point(tileWidth * col, tileHeight * row);
+            //            Rectangle srcRect = new Rectangle(loc, s);
+            //            Bitmap tile = new Bitmap(tileWidth, tileHeight);
+            //            Graphics G = Graphics.FromImage(tile);
+            //            G.DrawImage(sourceBmp, destRect, srcRect, GraphicsUnit.Pixel);
+            //            p.Image = tile;
+            //            p.Location = loc;
+            //            p.Tag = loc;
+            //            p.Name = String.Format("Col={0:00}-Row={1:00}", col, row);
+            //            p.Text = $"Col:{col} x Row:{row}";
+            //            // p.MouseDown += p_MouseDown;
+            //            // p.MouseUp += p_MouseUp;
+            //            // p.MouseMove += p_MouseMove;
+            //            this.Controls.Add(p);
+            //        }
+            //}
         }
 
         private void Pawn1Picture_Click(object sender, EventArgs e)
@@ -134,6 +164,16 @@ namespace WindowsFormsApplication
 
             Pawn2PictureHighlight.Visible=false;
             Pawn1PictureHighlight.Visible=false;
+        }
+
+        private void Pawn3PictureHighlight_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Pawn2PictureHighlight_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

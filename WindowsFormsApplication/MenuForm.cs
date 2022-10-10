@@ -86,12 +86,12 @@ namespace WindowsFormsApplication
             return false;
         }
 
-        private Game GetGameInfo()
-        {
-            string serverUrl = $"{Program.ServerIp}/Game";
-            HttpResponseMessage httpResponseMessage = HttpRequests.GetRequest(serverUrl);
-            return httpResponseMessage.Deserialize<Game>();
-        }
+        //private Game GetGameInfo()
+        //{
+        //    string serverUrl = $"{Program.ServerIp}/Game";
+        //    HttpResponseMessage httpResponseMessage = HttpRequests.GetRequest(serverUrl);
+        //    return httpResponseMessage.Deserialize<Game>();
+        //}
 
         private void SetPlayerAsReady(string name)
         {
@@ -100,5 +100,17 @@ namespace WindowsFormsApplication
         }
 
         #endregion
+
+        private void MenuForm_Load(object sender, EventArgs e)
+        {
+            this.Name = $"Menu: {Program.LocalHostPort}";
+            this.Text = $"Menu: {Program.LocalHostPort}";
+        }
+
+        private void DebugButton_Click(object sender, EventArgs e)
+        {
+            string serverUrl = $"{Program.ServerIp}/Debug/StartGameSolo/{Program.LocalHostPort}";
+            HttpRequests.GetRequest(serverUrl);
+        }
     }
 }

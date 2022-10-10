@@ -43,6 +43,7 @@
             this.GameStartedLabel = new System.Windows.Forms.Label();
             this.Player1FactionColor = new System.Windows.Forms.Label();
             this.Player2FactionColor = new System.Windows.Forms.Label();
+            this.DebugButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // NameTextBox
@@ -196,11 +197,22 @@
             this.Player2FactionColor.Text = "   ";
             this.Player2FactionColor.Visible = false;
             // 
-            // Form1
+            // DebugButton
+            // 
+            this.DebugButton.Location = new System.Drawing.Point(0, 0);
+            this.DebugButton.Name = "DebugButton";
+            this.DebugButton.Size = new System.Drawing.Size(75, 23);
+            this.DebugButton.TabIndex = 17;
+            this.DebugButton.Text = "Debug";
+            this.DebugButton.UseVisualStyleBackColor = true;
+            this.DebugButton.Click += new System.EventHandler(this.DebugButton_Click);
+            // 
+            // MenuForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.DebugButton);
             this.Controls.Add(this.Player2FactionColor);
             this.Controls.Add(this.Player1FactionColor);
             this.Controls.Add(this.GameStartedLabel);
@@ -216,8 +228,8 @@
             this.Controls.Add(this.EnterNameLabel);
             this.Controls.Add(this.SubmitNameButton);
             this.Controls.Add(this.NameTextBox);
-            this.Name = $"Menu: {Program.LocalHostPort}";
-            this.Text = $"Menu: {Program.LocalHostPort}";
+            this.Name = "MenuForm";
+            this.Load += new System.EventHandler(this.MenuForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -240,5 +252,6 @@
         private Label GameStartedLabel;
         private Label Player1FactionColor;
         private Label Player2FactionColor;
+        private Button DebugButton;
     }
 }
