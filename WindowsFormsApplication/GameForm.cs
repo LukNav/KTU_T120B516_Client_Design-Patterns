@@ -10,7 +10,7 @@ namespace WindowsFormsApplication
     {
         public static string PlayerName { get; private set; }
         public static Game CurrentGame { get; private set; }
-        private Pawn _selectedSpawnablePawn;
+        private Pawn _selectedPawn;
 
         public GameForm()
         {
@@ -22,7 +22,7 @@ namespace WindowsFormsApplication
             Program.MenuForm.Visible = false;
             Program.GameForm.Visible = true;
             CurrentGame = game;
-            _selectedSpawnablePawn = CurrentGame.GameLevel.Pawn1;
+            _selectedPawn = CurrentGame.GameLevel.Pawn1;
             SetGameInfo(CurrentGame);//Update game info in UI
         }
         #region UI controls
@@ -79,7 +79,10 @@ namespace WindowsFormsApplication
             this.Name = $"Game: {Program.LocalHostPort}";
             this.Text = $"Game: {Program.LocalHostPort}";
 
-            this.Size= new Size(630, 630);
+            this.Size= new Size(1000,900);
+            int tileOriginX = 200;
+            int tileOriginY = 100;
+            int spacer = 2;
             int tileWidth = 70;
             int tileHeight = 70;
             int tileRows = 9;
@@ -93,55 +96,20 @@ namespace WindowsFormsApplication
                 {
                     PictureBox p = new PictureBox();
                     p.Size = s;
-                    Point loc = new Point(tileWidth * col, tileHeight * row);
-                    Rectangle srcRect = new Rectangle(loc, s);
-                    Bitmap tile = new Bitmap(tileWidth, tileHeight);
-                    Graphics G = Graphics.FromImage(tile);
-                    G.DrawImage(FileUtils.GetImage("GrassTile.png"), destRect, srcRect, GraphicsUnit.Pixel);
-                    p.Image = tile;
+                    Point loc = new Point(spacer+tileOriginX + tileWidth * col, spacer+tileOriginY + tileHeight * row);
+                    p.Image = FileUtils.GetImage("GrassTile.png");
                     p.Location = loc;
                     p.Tag = loc;
                     p.Name = String.Format("Col={0:00}-Row={1:00}", col, row);
+                    p.MouseDown += new System.Windows.Forms.MouseEventHandler(MouseDownOnGrid);
                     this.Controls.Add(p);
                 }
             }
-
-            //this.Size= new Size(1200, 1200);
-            //int tileWidth = 30;
-            //int tileHeight = 30;
-            //int tileRows = 30;
-            //int tileCols = 30;
-
-            //using (Bitmap sourceBmp = new Bitmap("D:\\900x900.jpg"))
-            //{
-            //    Size s = new Size(tileWidth, tileHeight);
-            //    Rectangle destRect = new Rectangle(Point.Empty, s);
-            //    for (int row = 0; row < tileRows; row++)
-            //        for (int col = 0; col < tileCols; col++)
-            //        {
-            //            PictureBox p = new PictureBox();
-            //            p.Size = s;
-            //            Point loc = new Point(tileWidth * col, tileHeight * row);
-            //            Rectangle srcRect = new Rectangle(loc, s);
-            //            Bitmap tile = new Bitmap(tileWidth, tileHeight);
-            //            Graphics G = Graphics.FromImage(tile);
-            //            G.DrawImage(sourceBmp, destRect, srcRect, GraphicsUnit.Pixel);
-            //            p.Image = tile;
-            //            p.Location = loc;
-            //            p.Tag = loc;
-            //            p.Name = String.Format("Col={0:00}-Row={1:00}", col, row);
-            //            p.Text = $"Col:{col} x Row:{row}";
-            //            // p.MouseDown += p_MouseDown;
-            //            // p.MouseUp += p_MouseUp;
-            //            // p.MouseMove += p_MouseMove;
-            //            this.Controls.Add(p);
-            //        }
-            //}
         }
 
         private void Pawn1Picture_Click(object sender, EventArgs e)
         {
-            _selectedSpawnablePawn = CurrentGame.GameLevel.Pawn1;
+            _selectedPawn = CurrentGame.GameLevel.Pawn1;
             Pawn1PictureHighlight.Visible=true;
 
             Pawn2PictureHighlight.Visible=false;
@@ -150,7 +118,7 @@ namespace WindowsFormsApplication
 
         private void Pawn2Picture_Click(object sender, EventArgs e)
         {
-            _selectedSpawnablePawn = CurrentGame.GameLevel.Pawn2;
+            _selectedPawn = CurrentGame.GameLevel.Pawn2;
             Pawn2PictureHighlight.Visible=true;
 
             Pawn1PictureHighlight.Visible=false;
@@ -159,21 +127,18 @@ namespace WindowsFormsApplication
 
         private void Pawn3Picture_Click(object sender, EventArgs e)
         {
-            _selectedSpawnablePawn = CurrentGame.GameLevel.Pawn3;
+            _selectedPawn = CurrentGame.GameLevel.Pawn3;
             Pawn3PictureHighlight.Visible=true;
 
             Pawn2PictureHighlight.Visible=false;
             Pawn1PictureHighlight.Visible=false;
         }
 
-        private void Pawn3PictureHighlight_Click(object sender, EventArgs e)
+        private PictureBox _currentTile;
+        void MouseDownOnGrid(object sender, MouseEventArgs e)
         {
-
-        }
-
-        private void Pawn2PictureHighlight_Click(object sender, EventArgs e)
-        {
-
+            _currentTile = (PictureBox)sender;
+            _currentTile.Image = FileUtils.GetImage(_selectedPawn.ImageName);
         }
     }
 }
