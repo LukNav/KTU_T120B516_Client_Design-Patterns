@@ -10,6 +10,8 @@ namespace WindowsFormsApplication
     {
         public static string PlayerName { get; private set; }
         public static Game CurrentGame { get; private set; }
+        private Pawn _selectedSpawnablePawn;
+
         public GameForm()
         {
             InitializeComponent();
@@ -20,6 +22,7 @@ namespace WindowsFormsApplication
             Program.MenuForm.Visible = false;
             Program.GameForm.Visible = true;
             CurrentGame = game;
+            _selectedSpawnablePawn = CurrentGame.GameLevel.Pawn1;
             SetGameInfo(CurrentGame);//Update game info in UI
         }
         #region UI controls
@@ -106,50 +109,31 @@ namespace WindowsFormsApplication
             }
         }
 
-        private bool _ignoreEventOnCheckedChanged = false;
-        private void Pawn1RadioButton_CheckedChanged(object sender, EventArgs e)
+        private void Pawn1Picture_Click(object sender, EventArgs e)
         {
-            if (_ignoreEventOnCheckedChanged 
-               && Pawn1RadioButton.Checked == false && Pawn2RadioButton.Checked == true 
-               || 
-               _ignoreEventOnCheckedChanged 
-               && Pawn1RadioButton.Checked == false && Pawn3RadioButton.Checked == true)
-                return;
+            _selectedSpawnablePawn = CurrentGame.GameLevel.Pawn1;
+            Pawn1PictureHighlight.Visible=true;
 
-            _ignoreEventOnCheckedChanged=true;
-            Pawn2RadioButton.Checked=false;
-            Pawn3RadioButton.Checked=false;
-            _ignoreEventOnCheckedChanged=false;
+            Pawn2PictureHighlight.Visible=false;
+            Pawn3PictureHighlight.Visible=false;
         }
 
-        private void Pawn2RadioButton_CheckedChanged(object sender, EventArgs e)
+        private void Pawn2Picture_Click(object sender, EventArgs e)
         {
-            if (_ignoreEventOnCheckedChanged
-               && Pawn2RadioButton.Checked == false && Pawn1RadioButton.Checked == true
-               ||
-               _ignoreEventOnCheckedChanged
-               && Pawn2RadioButton.Checked == false && Pawn3RadioButton.Checked == true)
-                return; ;
+            _selectedSpawnablePawn = CurrentGame.GameLevel.Pawn2;
+            Pawn2PictureHighlight.Visible=true;
 
-            _ignoreEventOnCheckedChanged=true;
-            Pawn1RadioButton.Checked=false;
-            Pawn3RadioButton.Checked=false;
-            _ignoreEventOnCheckedChanged=false;
+            Pawn1PictureHighlight.Visible=false;
+            Pawn3PictureHighlight.Visible=false;
         }
 
-        private void Pawn3RadioButton_CheckedChanged(object sender, EventArgs e)
+        private void Pawn3Picture_Click(object sender, EventArgs e)
         {
-            if (_ignoreEventOnCheckedChanged
-               && Pawn3RadioButton.Checked == false && Pawn2RadioButton.Checked == true
-               ||
-               _ignoreEventOnCheckedChanged
-               && Pawn3RadioButton.Checked == false && Pawn1RadioButton.Checked == true)
-                return;
+            _selectedSpawnablePawn = CurrentGame.GameLevel.Pawn3;
+            Pawn3PictureHighlight.Visible=true;
 
-            _ignoreEventOnCheckedChanged=true;
-            Pawn1RadioButton.Checked=false;
-            Pawn2RadioButton.Checked=false;
-            _ignoreEventOnCheckedChanged=false;
+            Pawn2PictureHighlight.Visible=false;
+            Pawn1PictureHighlight.Visible=false;
         }
     }
 }

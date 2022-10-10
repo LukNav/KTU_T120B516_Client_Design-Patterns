@@ -36,17 +36,20 @@
             this.PlayersLabel = new System.Windows.Forms.Label();
             this.Player1FactionColor = new System.Windows.Forms.Label();
             this.Player2FactionColor = new System.Windows.Forms.Label();
-            this.Pawn1RadioButton = new System.Windows.Forms.RadioButton();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.Pawn1Picture = new System.Windows.Forms.PictureBox();
             this.Pawn2Picture = new System.Windows.Forms.PictureBox();
-            this.Pawn2RadioButton = new System.Windows.Forms.RadioButton();
             this.Pawn3Picture = new System.Windows.Forms.PictureBox();
-            this.Pawn3RadioButton = new System.Windows.Forms.RadioButton();
             this.label1 = new System.Windows.Forms.Label();
+            this.Pawn3PictureHighlight = new System.Windows.Forms.PictureBox();
+            this.Pawn2PictureHighlight = new System.Windows.Forms.PictureBox();
+            this.Pawn1PictureHighlight = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.Pawn1Picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Pawn2Picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Pawn3Picture)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Pawn3PictureHighlight)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Pawn2PictureHighlight)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Pawn1PictureHighlight)).BeginInit();
             this.SuspendLayout();
             // 
             // Player1Label
@@ -115,18 +118,6 @@
             this.Player2FactionColor.TabIndex = 16;
             this.Player2FactionColor.Text = "   ";
             // 
-            // Pawn1RadioButton
-            // 
-            this.Pawn1RadioButton.AutoSize = true;
-            this.Pawn1RadioButton.Checked = true;
-            this.Pawn1RadioButton.Location = new System.Drawing.Point(88, 89);
-            this.Pawn1RadioButton.Name = "Pawn1RadioButton";
-            this.Pawn1RadioButton.Size = new System.Drawing.Size(14, 13);
-            this.Pawn1RadioButton.TabIndex = 17;
-            this.Pawn1RadioButton.TabStop = true;
-            this.Pawn1RadioButton.UseVisualStyleBackColor = true;
-            this.Pawn1RadioButton.CheckedChanged += new System.EventHandler(this.Pawn1RadioButton_CheckedChanged);
-            // 
             // imageList1
             // 
             this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
@@ -140,6 +131,7 @@
             this.Pawn1Picture.Size = new System.Drawing.Size(70, 70);
             this.Pawn1Picture.TabIndex = 18;
             this.Pawn1Picture.TabStop = false;
+            this.Pawn1Picture.Click += new System.EventHandler(this.Pawn1Picture_Click);
             // 
             // Pawn2Picture
             // 
@@ -148,16 +140,7 @@
             this.Pawn2Picture.Size = new System.Drawing.Size(70, 70);
             this.Pawn2Picture.TabIndex = 20;
             this.Pawn2Picture.TabStop = false;
-            // 
-            // Pawn2RadioButton
-            // 
-            this.Pawn2RadioButton.AutoSize = true;
-            this.Pawn2RadioButton.Location = new System.Drawing.Point(88, 165);
-            this.Pawn2RadioButton.Name = "Pawn2RadioButton";
-            this.Pawn2RadioButton.Size = new System.Drawing.Size(14, 13);
-            this.Pawn2RadioButton.TabIndex = 19;
-            this.Pawn2RadioButton.UseVisualStyleBackColor = true;
-            this.Pawn2RadioButton.CheckedChanged += new System.EventHandler(this.Pawn2RadioButton_CheckedChanged);
+            this.Pawn2Picture.Click += new System.EventHandler(this.Pawn2Picture_Click);
             // 
             // Pawn3Picture
             // 
@@ -166,16 +149,7 @@
             this.Pawn3Picture.Size = new System.Drawing.Size(70, 70);
             this.Pawn3Picture.TabIndex = 22;
             this.Pawn3Picture.TabStop = false;
-            // 
-            // Pawn3RadioButton
-            // 
-            this.Pawn3RadioButton.AutoSize = true;
-            this.Pawn3RadioButton.Location = new System.Drawing.Point(88, 241);
-            this.Pawn3RadioButton.Name = "Pawn3RadioButton";
-            this.Pawn3RadioButton.Size = new System.Drawing.Size(14, 13);
-            this.Pawn3RadioButton.TabIndex = 21;
-            this.Pawn3RadioButton.UseVisualStyleBackColor = true;
-            this.Pawn3RadioButton.CheckedChanged += new System.EventHandler(this.Pawn3RadioButton_CheckedChanged);
+            this.Pawn3Picture.Click += new System.EventHandler(this.Pawn3Picture_Click);
             // 
             // label1
             // 
@@ -188,6 +162,38 @@
             this.label1.Text = "Spawnable\r\nPawns";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // Pawn3PictureHighlight
+            // 
+            this.Pawn3PictureHighlight.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.Pawn3PictureHighlight.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.Pawn3PictureHighlight.Location = new System.Drawing.Point(7, 208);
+            this.Pawn3PictureHighlight.Name = "Pawn3PictureHighlight";
+            this.Pawn3PictureHighlight.Size = new System.Drawing.Size(80, 80);
+            this.Pawn3PictureHighlight.TabIndex = 26;
+            this.Pawn3PictureHighlight.TabStop = false;
+            this.Pawn3PictureHighlight.Visible = false;
+            // 
+            // Pawn2PictureHighlight
+            // 
+            this.Pawn2PictureHighlight.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.Pawn2PictureHighlight.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.Pawn2PictureHighlight.Location = new System.Drawing.Point(7, 132);
+            this.Pawn2PictureHighlight.Name = "Pawn2PictureHighlight";
+            this.Pawn2PictureHighlight.Size = new System.Drawing.Size(80, 80);
+            this.Pawn2PictureHighlight.TabIndex = 25;
+            this.Pawn2PictureHighlight.TabStop = false;
+            this.Pawn2PictureHighlight.Visible = false;
+            // 
+            // Pawn1PictureHighlight
+            // 
+            this.Pawn1PictureHighlight.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.Pawn1PictureHighlight.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.Pawn1PictureHighlight.Location = new System.Drawing.Point(7, 56);
+            this.Pawn1PictureHighlight.Name = "Pawn1PictureHighlight";
+            this.Pawn1PictureHighlight.Size = new System.Drawing.Size(80, 80);
+            this.Pawn1PictureHighlight.TabIndex = 24;
+            this.Pawn1PictureHighlight.TabStop = false;
+            // 
             // GameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -195,11 +201,8 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.Pawn3Picture);
-            this.Controls.Add(this.Pawn3RadioButton);
             this.Controls.Add(this.Pawn2Picture);
-            this.Controls.Add(this.Pawn2RadioButton);
             this.Controls.Add(this.Pawn1Picture);
-            this.Controls.Add(this.Pawn1RadioButton);
             this.Controls.Add(this.Player2FactionColor);
             this.Controls.Add(this.Player1FactionColor);
             this.Controls.Add(this.PlayersLabel);
@@ -207,11 +210,17 @@
             this.Controls.Add(this.Player1Name);
             this.Controls.Add(this.Player2Label);
             this.Controls.Add(this.Player1Label);
+            this.Controls.Add(this.Pawn1PictureHighlight);
+            this.Controls.Add(this.Pawn3PictureHighlight);
+            this.Controls.Add(this.Pawn2PictureHighlight);
             this.Name = "GameForm";
             this.Load += new System.EventHandler(this.GameForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Pawn1Picture)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Pawn2Picture)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Pawn3Picture)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Pawn3PictureHighlight)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Pawn2PictureHighlight)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Pawn1PictureHighlight)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -225,13 +234,13 @@
         private Label PlayersLabel;
         private Label Player1FactionColor;
         private Label Player2FactionColor;
-        private RadioButton Pawn1RadioButton;
         private ImageList imageList1;
         private PictureBox Pawn1Picture;
         private PictureBox Pawn2Picture;
-        private RadioButton Pawn2RadioButton;
         private PictureBox Pawn3Picture;
-        private RadioButton Pawn3RadioButton;
         private Label label1;
+        private PictureBox Pawn3PictureHighlight;
+        private PictureBox Pawn2PictureHighlight;
+        private PictureBox Pawn1PictureHighlight;
     }
 }
