@@ -25,7 +25,7 @@ namespace WindowsFormsApplication
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseUrls("https://*:5551")
+                .UseUrls($"https://*:{LocalHostPort}")
                 .UseStartup<Startup>();
     }
 }
