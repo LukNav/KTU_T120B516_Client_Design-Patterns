@@ -24,6 +24,5 @@ namespace WindowsFormsApplication.Helpers
                 return clonedImg;
             }
         }
-            
     }
 }
