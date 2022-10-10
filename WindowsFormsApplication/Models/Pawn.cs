@@ -8,7 +8,7 @@ namespace WindowsFormsApplication.Models
 {
     public class Pawn
     {
-        public Pawn(Point position, string imageName, int health, int cost, int speed, int damage)
+        public Pawn(Position position, string imageName, int health, int cost, int speed, int damage)
         {
             Position=position;
             ImageName=imageName;
@@ -18,7 +18,7 @@ namespace WindowsFormsApplication.Models
             Damage=damage;
         }
 
-        public Point Position { get; set; }
+        public Position Position { get; set; }
         public string ImageName { get; set; }
         public int Health { get; set; }
         public int Cost { get; set; }
