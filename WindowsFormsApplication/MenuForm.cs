@@ -6,18 +6,18 @@ using WindowsFormsApplication.Models;
 
 namespace WindowsFormsApplication
 {
-    public partial class Form1 : Form
+    public partial class MenuForm : Form
     {
         public static string PlayerName { get; private set; }
         public static Game CurrentGame { get; private set; }
-        public Form1()
+        public MenuForm()
         {
             InitializeComponent();
         }
 
         private void SubmitNameButton_Click(object sender, EventArgs e)
         {
-            PlayerName = Program.MainForm.NameTextBox.Text;
+            PlayerName = Program.MenuForm.NameTextBox.Text;
             if (!string.IsNullOrEmpty(PlayerName))//if anything is entered in the name textbox
             {
                 if (TryCreateClient(PlayerName, Program.LocalHostPort) == true)//try sending request to server and create a new player
@@ -29,7 +29,7 @@ namespace WindowsFormsApplication
                     return;
             }
             else
-                Program.MainForm.ErrorLabel.Text = "Please enter a Name and then click Start Session";
+                Program.MenuForm.ErrorLabel.Text = "Please enter a Name and then click Start Session";
         }
 
         private void ReadyButton_Click(object sender, EventArgs e)
@@ -47,56 +47,56 @@ namespace WindowsFormsApplication
             SetGameInfo(CurrentGame);//Update game info in UI
             ShowGamePlayersLabels();//Enable visibility of game info in UI
             ToggleWaitingForPlayerUiItems(false);
-            Program.MainForm.GameStartedLabel.Visible = true;
+            Program.MenuForm.GameStartedLabel.Visible = true;
         }
         #region UI controls
 
         private static void HideLoginItems()
         {
-            Program.MainForm.SubmitNameButton.Visible = false;
-            Program.MainForm.EnterNameLabel.Visible = false;
-            Program.MainForm.NameTextBox.Visible = false;
-            Program.MainForm.ErrorLabel.Visible = false;
+            Program.MenuForm.SubmitNameButton.Visible = false;
+            Program.MenuForm.EnterNameLabel.Visible = false;
+            Program.MenuForm.NameTextBox.Visible = false;
+            Program.MenuForm.ErrorLabel.Visible = false;
         }
         private void ShowGamePlayersLabels()
         {
-            Program.MainForm.Player1Label.Visible = true;
-            Program.MainForm.Player2Label.Visible = true;
-            Program.MainForm.Player1Name.Visible = true;
-            Program.MainForm.Player2Name.Visible = true;
-            Program.MainForm.PlayersLabel.Visible = true;
-            Program.MainForm.Player1FactionColor.Visible = true;
-            Program.MainForm.Player2FactionColor.Visible = true;
+            Program.MenuForm.Player1Label.Visible = true;
+            Program.MenuForm.Player2Label.Visible = true;
+            Program.MenuForm.Player1Name.Visible = true;
+            Program.MenuForm.Player2Name.Visible = true;
+            Program.MenuForm.PlayersLabel.Visible = true;
+            Program.MenuForm.Player1FactionColor.Visible = true;
+            Program.MenuForm.Player2FactionColor.Visible = true;
         }
 
         private void ToggleReadyToPlayUIItems(bool isVisible)
         {
-            Program.MainForm.ReadyToPlayButton.Visible = isVisible;
-            Program.MainForm.ReadyToPlayLabel.Visible = isVisible;
+            Program.MenuForm.ReadyToPlayButton.Visible = isVisible;
+            Program.MenuForm.ReadyToPlayLabel.Visible = isVisible;
         }
 
         private void SetGameInfo(Game game)
         {
-            Program.MainForm.Player1Name.Text = game.Player1.Name;
-            Program.MainForm.Player1FactionColor.BackColor = Color.FromKnownColor(game.Player1.PlayerColor);
-            Program.MainForm.Player2Name.Text = game.Player2.Name;
-            Program.MainForm.Player2FactionColor.BackColor = Color.FromKnownColor(game.Player2.PlayerColor);
+            Program.MenuForm.Player1Name.Text = game.Player1.Name;
+            Program.MenuForm.Player1FactionColor.BackColor = Color.FromKnownColor(game.Player1.PlayerColor);
+            Program.MenuForm.Player2Name.Text = game.Player2.Name;
+            Program.MenuForm.Player2FactionColor.BackColor = Color.FromKnownColor(game.Player2.PlayerColor);
 
             if (game.Player1.Name == PlayerName)
             {
-                Program.MainForm.Player1Label.Text += " (You)";
-                Program.MainForm.Player2Label.Text += " (Oponnent)";
+                Program.MenuForm.Player1Label.Text += " (You)";
+                Program.MenuForm.Player2Label.Text += " (Oponnent)";
             }
             else
             {
-                Program.MainForm.Player2Label.Text += " (You)";
-                Program.MainForm.Player1Label.Text += " (Oponnent)";
+                Program.MenuForm.Player2Label.Text += " (You)";
+                Program.MenuForm.Player1Label.Text += " (Oponnent)";
             }
         }
 
         private void ToggleWaitingForPlayerUiItems(bool isVisible)
         {
-            Program.MainForm.WaitingForPlayersLabel.Visible = isVisible;
+            Program.MenuForm.WaitingForPlayersLabel.Visible = isVisible;
         }
 
         #endregion
@@ -113,7 +113,7 @@ namespace WindowsFormsApplication
             if (httpResponseMessage.StatusCode == System.Net.HttpStatusCode.Created)
                 return true;
             else
-                Program.MainForm.ErrorLabel.Text = responseMessage;
+                Program.MenuForm.ErrorLabel.Text = responseMessage;
 
             return false;
         }

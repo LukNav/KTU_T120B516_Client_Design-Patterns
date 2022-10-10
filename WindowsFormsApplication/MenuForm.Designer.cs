@@ -1,6 +1,6 @@
 ﻿namespace WindowsFormsApplication
 {
-    partial class Form1
+    partial class MenuForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -216,8 +216,8 @@
             this.Controls.Add(this.EnterNameLabel);
             this.Controls.Add(this.SubmitNameButton);
             this.Controls.Add(this.NameTextBox);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "Menu";
+            this.Text = "Menu";
             this.ResumeLayout(false);
             this.PerformLayout();
 

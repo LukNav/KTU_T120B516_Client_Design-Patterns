@@ -24,9 +24,9 @@ namespace WindowsFormsApplication.Controllers
         [HttpPost("StartGame")]
         public ActionResult StartGame([FromBody] Game gameInfo)
         {
-            Program.MainForm.Invoke(new Action(() =>
+            Program.MenuForm.Invoke(new Action(() =>
             {
-                Program.MainForm.StartGame(gameInfo);
+                Program.MenuForm.StartGame(gameInfo);
             }));
             return NoContent();
         }

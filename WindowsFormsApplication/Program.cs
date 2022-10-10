@@ -8,7 +8,7 @@ namespace WindowsFormsApplication
 {
     public class Program
     {
-        public static Form1 MainForm { get; private set; }
+        public static MenuForm MenuForm { get; private set; }
         public static readonly string ServerIp = "https://localhost:7134";
         public static readonly string LocalHostPort = "5551";
 
@@ -19,8 +19,8 @@ namespace WindowsFormsApplication
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            MainForm = new Form1();
-            Application.Run(MainForm);
+            MenuForm = new MenuForm();
+            Application.Run(MenuForm);
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
