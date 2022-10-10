@@ -17,6 +17,8 @@ namespace WindowsFormsApplication
 
         public void StartGame(Game game)
         {
+            Program.MenuForm.Visible = false;
+            Program.GameForm.Visible = true;
             CurrentGame = game;
             SetGameInfo(CurrentGame);//Update game info in UI
         }

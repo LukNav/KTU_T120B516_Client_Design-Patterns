@@ -9,7 +9,6 @@ namespace WindowsFormsApplication
     public partial class MenuForm : Form
     {
         public static string PlayerName { get; private set; }
-        public static Game CurrentGame { get; private set; }
         public MenuForm()
         {
             InitializeComponent();
@@ -43,9 +42,9 @@ namespace WindowsFormsApplication
 
         public void StartGame(Game game)
         {
-            CurrentGame = game;
             Program.MenuForm.Visible = false;
             Program.GameForm.Visible = true;
+            Program.GameForm.StartGame(game);
         }
         #region UI controls
 
