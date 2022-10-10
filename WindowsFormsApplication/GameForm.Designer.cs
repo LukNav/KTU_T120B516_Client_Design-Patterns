@@ -28,14 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.Player1Label = new System.Windows.Forms.Label();
             this.Player2Label = new System.Windows.Forms.Label();
             this.Player1Name = new System.Windows.Forms.Label();
             this.Player2Name = new System.Windows.Forms.Label();
             this.PlayersLabel = new System.Windows.Forms.Label();
-            this.GameStartedLabel = new System.Windows.Forms.Label();
             this.Player1FactionColor = new System.Windows.Forms.Label();
             this.Player2FactionColor = new System.Windows.Forms.Label();
+            this.Pawn1RadioButton = new System.Windows.Forms.RadioButton();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.Pawn1Picture = new System.Windows.Forms.PictureBox();
+            this.Pawn2Picture = new System.Windows.Forms.PictureBox();
+            this.Pawn2RadioButton = new System.Windows.Forms.RadioButton();
+            this.Pawn3Picture = new System.Windows.Forms.PictureBox();
+            this.Pawn3RadioButton = new System.Windows.Forms.RadioButton();
+            this.label1 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.Pawn1Picture)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Pawn2Picture)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Pawn3Picture)).BeginInit();
             this.SuspendLayout();
             // 
             // Player1Label
@@ -84,16 +95,6 @@
             this.PlayersLabel.TabIndex = 12;
             this.PlayersLabel.Text = "Players";
             // 
-            // GameStartedLabel
-            // 
-            this.GameStartedLabel.AutoSize = true;
-            this.GameStartedLabel.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.GameStartedLabel.Location = new System.Drawing.Point(263, 37);
-            this.GameStartedLabel.Name = "GameStartedLabel";
-            this.GameStartedLabel.Size = new System.Drawing.Size(272, 32);
-            this.GameStartedLabel.TabIndex = 14;
-            this.GameStartedLabel.Text = "The Game Has Started!!!";
-            // 
             // Player1FactionColor
             // 
             this.Player1FactionColor.AutoSize = true;
@@ -114,14 +115,93 @@
             this.Player2FactionColor.TabIndex = 16;
             this.Player2FactionColor.Text = "   ";
             // 
+            // Pawn1RadioButton
+            // 
+            this.Pawn1RadioButton.AutoSize = true;
+            this.Pawn1RadioButton.Checked = true;
+            this.Pawn1RadioButton.Location = new System.Drawing.Point(88, 89);
+            this.Pawn1RadioButton.Name = "Pawn1RadioButton";
+            this.Pawn1RadioButton.Size = new System.Drawing.Size(14, 13);
+            this.Pawn1RadioButton.TabIndex = 17;
+            this.Pawn1RadioButton.TabStop = true;
+            this.Pawn1RadioButton.UseVisualStyleBackColor = true;
+            this.Pawn1RadioButton.CheckedChanged += new System.EventHandler(this.Pawn1RadioButton_CheckedChanged);
+            // 
+            // imageList1
+            // 
+            this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            // 
+            // Pawn1Picture
+            // 
+            this.Pawn1Picture.Location = new System.Drawing.Point(12, 62);
+            this.Pawn1Picture.Name = "Pawn1Picture";
+            this.Pawn1Picture.Size = new System.Drawing.Size(70, 70);
+            this.Pawn1Picture.TabIndex = 18;
+            this.Pawn1Picture.TabStop = false;
+            // 
+            // Pawn2Picture
+            // 
+            this.Pawn2Picture.Location = new System.Drawing.Point(12, 138);
+            this.Pawn2Picture.Name = "Pawn2Picture";
+            this.Pawn2Picture.Size = new System.Drawing.Size(70, 70);
+            this.Pawn2Picture.TabIndex = 20;
+            this.Pawn2Picture.TabStop = false;
+            // 
+            // Pawn2RadioButton
+            // 
+            this.Pawn2RadioButton.AutoSize = true;
+            this.Pawn2RadioButton.Location = new System.Drawing.Point(88, 165);
+            this.Pawn2RadioButton.Name = "Pawn2RadioButton";
+            this.Pawn2RadioButton.Size = new System.Drawing.Size(14, 13);
+            this.Pawn2RadioButton.TabIndex = 19;
+            this.Pawn2RadioButton.UseVisualStyleBackColor = true;
+            this.Pawn2RadioButton.CheckedChanged += new System.EventHandler(this.Pawn2RadioButton_CheckedChanged);
+            // 
+            // Pawn3Picture
+            // 
+            this.Pawn3Picture.Location = new System.Drawing.Point(12, 214);
+            this.Pawn3Picture.Name = "Pawn3Picture";
+            this.Pawn3Picture.Size = new System.Drawing.Size(70, 70);
+            this.Pawn3Picture.TabIndex = 22;
+            this.Pawn3Picture.TabStop = false;
+            // 
+            // Pawn3RadioButton
+            // 
+            this.Pawn3RadioButton.AutoSize = true;
+            this.Pawn3RadioButton.Location = new System.Drawing.Point(88, 241);
+            this.Pawn3RadioButton.Name = "Pawn3RadioButton";
+            this.Pawn3RadioButton.Size = new System.Drawing.Size(14, 13);
+            this.Pawn3RadioButton.TabIndex = 21;
+            this.Pawn3RadioButton.UseVisualStyleBackColor = true;
+            this.Pawn3RadioButton.CheckedChanged += new System.EventHandler(this.Pawn3RadioButton_CheckedChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label1.Location = new System.Drawing.Point(-2, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(104, 50);
+            this.label1.TabIndex = 23;
+            this.label1.Text = "Spawnable\r\nPawns";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // GameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.Pawn3Picture);
+            this.Controls.Add(this.Pawn3RadioButton);
+            this.Controls.Add(this.Pawn2Picture);
+            this.Controls.Add(this.Pawn2RadioButton);
+            this.Controls.Add(this.Pawn1Picture);
+            this.Controls.Add(this.Pawn1RadioButton);
             this.Controls.Add(this.Player2FactionColor);
             this.Controls.Add(this.Player1FactionColor);
-            this.Controls.Add(this.GameStartedLabel);
             this.Controls.Add(this.PlayersLabel);
             this.Controls.Add(this.Player2Name);
             this.Controls.Add(this.Player1Name);
@@ -129,6 +209,9 @@
             this.Controls.Add(this.Player1Label);
             this.Name = "GameForm";
             this.Load += new System.EventHandler(this.GameForm_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.Pawn1Picture)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Pawn2Picture)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Pawn3Picture)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -140,8 +223,15 @@
         private Label Player1Name;
         private Label Player2Name;
         private Label PlayersLabel;
-        private Label GameStartedLabel;
         private Label Player1FactionColor;
         private Label Player2FactionColor;
+        private RadioButton Pawn1RadioButton;
+        private ImageList imageList1;
+        private PictureBox Pawn1Picture;
+        private PictureBox Pawn2Picture;
+        private RadioButton Pawn2RadioButton;
+        private PictureBox Pawn3Picture;
+        private RadioButton Pawn3RadioButton;
+        private Label label1;
     }
 }

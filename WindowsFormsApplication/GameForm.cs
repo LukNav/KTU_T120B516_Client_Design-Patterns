@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using Microsoft.Net.Http.Headers;
 using WindowsFormsApplication.Controllers;
 using WindowsFormsApplication.Helpers;
@@ -27,6 +27,19 @@ namespace WindowsFormsApplication
        
 
         private void SetGameInfo(Game game)
+        {
+            UpdatePlayersColorsAndNames(game);
+            UpdateSpawnablePawns(game.GameLevel);
+        }
+
+        private void UpdateSpawnablePawns(GameLevel gameLevel)
+        {
+            Pawn1Picture.Image = FileUtils.GetImage(gameLevel.Pawn1.ImageName);
+            Pawn2Picture.Image = FileUtils.GetImage(gameLevel.Pawn2.ImageName);
+            Pawn3Picture.Image = FileUtils.GetImage(gameLevel.Pawn3.ImageName);
+        }
+
+        private static void UpdatePlayersColorsAndNames(Game game)
         {
             Program.GameForm.Player1Name.Text = game.Player1.Name;
             Program.GameForm.Player1FactionColor.BackColor = Color.FromKnownColor(game.Player1.PlayerColor);
@@ -91,6 +104,52 @@ namespace WindowsFormsApplication
                         this.Controls.Add(p);
                     }
             }
+        }
+
+        private bool _ignoreEventOnCheckedChanged = false;
+        private void Pawn1RadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (_ignoreEventOnCheckedChanged 
+               && Pawn1RadioButton.Checked == false && Pawn2RadioButton.Checked == true 
+               || 
+               _ignoreEventOnCheckedChanged 
+               && Pawn1RadioButton.Checked == false && Pawn3RadioButton.Checked == true)
+                return;
+
+            _ignoreEventOnCheckedChanged=true;
+            Pawn2RadioButton.Checked=false;
+            Pawn3RadioButton.Checked=false;
+            _ignoreEventOnCheckedChanged=false;
+        }
+
+        private void Pawn2RadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (_ignoreEventOnCheckedChanged
+               && Pawn2RadioButton.Checked == false && Pawn1RadioButton.Checked == true
+               ||
+               _ignoreEventOnCheckedChanged
+               && Pawn2RadioButton.Checked == false && Pawn3RadioButton.Checked == true)
+                return; ;
+
+            _ignoreEventOnCheckedChanged=true;
+            Pawn1RadioButton.Checked=false;
+            Pawn3RadioButton.Checked=false;
+            _ignoreEventOnCheckedChanged=false;
+        }
+
+        private void Pawn3RadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (_ignoreEventOnCheckedChanged
+               && Pawn3RadioButton.Checked == false && Pawn2RadioButton.Checked == true
+               ||
+               _ignoreEventOnCheckedChanged
+               && Pawn3RadioButton.Checked == false && Pawn1RadioButton.Checked == true)
+                return;
+
+            _ignoreEventOnCheckedChanged=true;
+            Pawn1RadioButton.Checked=false;
+            Pawn2RadioButton.Checked=false;
+            _ignoreEventOnCheckedChanged=false;
         }
     }
 }
