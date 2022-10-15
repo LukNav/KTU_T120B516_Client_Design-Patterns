@@ -139,6 +139,14 @@ namespace WindowsFormsApplication
         {
             _currentTile = (PictureBox)sender;
             _currentTile.Image = FileUtils.GetImage(_selectedPawn.ImageName);
+            _currentTile.Paint += new PaintEventHandler((sender, e) =>
+            {
+                e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                e.Graphics.DrawString(_selectedPawn.Health.ToString(), Font, Brushes.Red, 0, 0);
+            });
+
+
+            //TODO: Add this pawn to next tick send
         }
     }
 }
