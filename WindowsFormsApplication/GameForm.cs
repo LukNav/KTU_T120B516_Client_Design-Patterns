@@ -11,6 +11,7 @@ namespace WindowsFormsApplication
         public static string PlayerName { get; private set; }
         public static Game CurrentGame { get; private set; }
         private Pawn _selectedPawn;
+        private int _ticks = 0;
 
         public GameForm()
         {
@@ -139,6 +140,14 @@ namespace WindowsFormsApplication
         {
             _currentTile = (PictureBox)sender;
             _currentTile.Image = FileUtils.GetImage(_selectedPawn.ImageName);
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            _ticks++;
+
+            //Cia tikrinau ar isvis tickeris veikia.
+            //Program.GameForm.Player1Name.Text = _ticks.ToString(); 
         }
     }
 }

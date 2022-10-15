@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.Player1Label = new System.Windows.Forms.Label();
             this.Player2Label = new System.Windows.Forms.Label();
             this.Player1Name = new System.Windows.Forms.Label();
@@ -43,6 +44,7 @@
             this.Pawn2PictureHighlight = new System.Windows.Forms.PictureBox();
             this.Pawn1PictureHighlight = new System.Windows.Forms.PictureBox();
             this.SpawnPawnButton = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.Pawn1Picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Pawn2Picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Pawn3Picture)).BeginInit();
@@ -194,6 +196,12 @@
             this.SpawnPawnButton.Text = "Spawn";
             this.SpawnPawnButton.UseVisualStyleBackColor = true;
             // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // GameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -244,5 +252,6 @@
         private PictureBox Pawn2PictureHighlight;
         private PictureBox Pawn1PictureHighlight;
         private Button SpawnPawnButton;
+        private System.Windows.Forms.Timer timer1;
     }
 }

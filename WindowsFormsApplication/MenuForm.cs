@@ -86,12 +86,12 @@ namespace WindowsFormsApplication
             return false;
         }
 
-        //private Game GetGameInfo()
-        //{
-        //    string serverUrl = $"{Program.ServerIp}/Game";
-        //    HttpResponseMessage httpResponseMessage = HttpRequests.GetRequest(serverUrl);
-        //    return httpResponseMessage.Deserialize<Game>();
-        //}
+        private Game GetGameInfo()
+        {
+            string serverUrl = $"{Program.ServerIp}/Game";
+            HttpResponseMessage httpResponseMessage = HttpRequests.GetRequest(serverUrl);
+            return httpResponseMessage.Deserialize<Game>();
+        }
 
         private void SetPlayerAsReady(string name)
         {
