@@ -138,15 +138,31 @@ namespace WindowsFormsApplication
         void MouseDownOnGrid(object sender, MouseEventArgs e)
         {
             _currentTile = (PictureBox)sender;
-            _currentTile.Image = FileUtils.GetImage(_selectedPawn.ImageName);
-            _currentTile.Paint += new PaintEventHandler((sender, e) =>
+            Position currentPosition = GetPositionFromTile(_currentTile);
+            if (currentPosition.Y <= 0)
             {
-                e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-                e.Graphics.DrawString(_selectedPawn.Health.ToString(), Font, Brushes.Red, 0, 0);
-            });
+                _currentTile.Image = FileUtils.GetImage(_selectedPawn.ImageName);
+                _currentTile.Paint += new PaintEventHandler((sender, e) =>
+                {
+                    e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                    e.Graphics.DrawString(_selectedPawn.Health.ToString(), Font, Brushes.Red, 0, 0);
+                });
 
-
-            //TODO: Add this pawn to next tick send
+                Pawn pawnToSend = _selectedPawn;
+                pawnToSend.Position = currentPosition;
+                //TODO: Add this pawn to next tick send
+            }
         }
+
+        private Position GetPositionFromTile(PictureBox tile)
+        {
+            Position position = new Position
+            (
+                Int32.Parse(tile.Name.Substring(4, 2)),
+                Int32.Parse(tile.Name.Substring(11, 2))
+            );
+            return position;
+        }
+
     }
 }
