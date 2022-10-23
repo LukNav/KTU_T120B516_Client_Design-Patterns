@@ -8,6 +8,10 @@ namespace WindowsFormsApplication.Models.BuilderPattern
 {
     public interface IGameGridBuilder
     {
+        GameGridBuilder SetPlayerOneTowerY(int playerOneTowerY);
+        GameGridBuilder SetPlayerTwoTowerY(int playerTwoTowerY);
+        GameGridBuilder SetTowerX(int towerX);
+        GameGridBuilder SetTowerLength(int towerLength);
         GameGridBuilder SetTileOriginX(int tileOriginX);
         GameGridBuilder SetTileOriginY(int tileOriginY);
         GameGridBuilder SetSpacer(int spacer);

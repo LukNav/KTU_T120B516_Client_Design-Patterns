@@ -8,6 +8,10 @@ namespace WindowsFormsApplication.Models
 {
     public class GameGrid
     {
+        public int PlayerOneTowerY { get; set; }
+        public int PlayerTwoTowerY { get; set; }
+        public int TowerX { get; set; }
+        public int TowerLength { get; set; }
         public int TileOriginX { get; set; }
         public int TileOriginY { get; set; }
         public int Spacer { get; set; }

@@ -13,9 +13,6 @@ namespace WindowsFormsApplication
         private Pawn _selectedPawn;
         private int _ticks = 0;
 
-        private int hardLevelSelect = 0; //Cia kad priverstinai galima butu nustatyti koksai lygis bus generuojamas.
-
-
         public GameForm()
         {
             InitializeComponent();
@@ -82,6 +79,7 @@ namespace WindowsFormsApplication
         //Metodas kuris sukuria zaidimo grida. Galima bus veliau bandyt taip updatint zaidimo busena speju: sena grida istrinant ir pakeiciant nauju.
         private void GridMaker(GameGrid gridToMake)
         {
+            //Load battlefield
             int tileContentIterator = 0;
             Size size = new Size(gridToMake.TileWidth, gridToMake.TileHeight);
             Rectangle destRect = new Rectangle(Point.Empty, size);
@@ -95,7 +93,7 @@ namespace WindowsFormsApplication
 
                     //Switchas uzpildyti tilus pagal ju turini
                     p.Image = FileUtils.GetImage("GrassTile.png");
-                    switch (gridToMake.GridContents[tileContentIterator])
+                    switch(0) //Kazkodel meta nullreference errorus su GameGrid tai as tiesiog priverciu switcha zole det visur kol kas. - Maksas
                     {
                         case 0:
                             p.Image = FileUtils.GetImage("GrassTile.png");
@@ -120,6 +118,24 @@ namespace WindowsFormsApplication
                     tileContentIterator++; //Saugo kokiam langeli dabar busim buildinant grida sita
                 }
             }
+
+            //Load towers
+            Image towerImage = FileUtils.GetImage("Tower_1.png");
+            Size towerSize = new Size(gridToMake.TowerLength, gridToMake.TowerLength);
+            PictureBox tower1 = new PictureBox();
+            PictureBox tower2 = new PictureBox();
+            Point tower1Location = new Point(gridToMake.TowerX, gridToMake.PlayerOneTowerY);
+            Point tower2Location = new Point(gridToMake.TowerX, gridToMake.PlayerTwoTowerY);
+            tower1.Location = tower1Location;
+            tower2.Location = tower2Location;
+            tower1.Name = "Tower1"; //might need to change names to respresent players instead
+            tower2.Name = "Tower2";
+            tower1.Image = towerImage;
+            tower2.Image = towerImage;
+            tower1.Size = towerSize;
+            tower2.Size = towerSize;
+            this.Controls.Add(tower1);
+            this.Controls.Add(tower2);
         }
 
         private void GameForm_Load(object sender, EventArgs e)
@@ -131,48 +147,74 @@ namespace WindowsFormsApplication
             var GameGridBuilder = new GameGridBuilder();
             GameGrid gridToMake = GameGridBuilder;
 
-            //Kol kas tie papildomi lygiai tiesio priverstinai sugruda kareivius i visus langelius.
-            switch(hardLevelSelect)
+            //Kazkodel prastai is anksto generuotas int listas veike, tai cia rankiniu budu sugeneruoju lygio kurimui.Gal pataisysiu kadanors, gal ne, IDK. -Maksas
+            List<int> gridContents = new List<int>(); //Cia galima saugoti kokie daiktai bus ant zemelapio "by default" kaip int kintamuosius. 0 = grass tile, 1 = kazkas kitko, etc. etc.
+            for (int i = 0; i < 49; i++)
+            {
+                gridContents.Add(0);
+            }
+
+            //Kol kas tie papildomi lygiai identiski pirmam.
+            switch (0) //Keist skaiciuka kad pakeist generuojama lygi
             {
                 case 0:
                     gridToMake = GameGridBuilder.
-                    SetTileOriginX(200).
-                    SetTileOriginY(100).
-                    SetTileHeight(70).
-                    SetTileWidth(70).
-                    SetSpacer(2).
-                    SetTileCols(9).
-                    SetTileRows(9).
-                    SetGridContents(Enumerable.Repeat(0, 9 * 9).ToList());
+                        SetPlayerOneTowerY(25).
+                        SetPlayerTwoTowerY(775).
+                        SetTowerX(480).
+                        SetTowerLength(100).
+                        SetTileOriginX(200).
+                        SetTileOriginY(100).
+                        SetTileHeight(70).
+                        SetTileWidth(70).
+                        SetSpacer(2).
+                        SetTileCols(9).
+                        SetTileRows(9).
+                        SetGridContents(gridContents);
                     break;
                 case 1:
+                    //Kazkodel prastai is anksto generuotas int listas veike, tai cia rankiniu budu sugeneruoju lygio kurimui. Gal pataisysiu kadanors, gal ne, IDK. - Maksas
+
+
                     gridToMake = GameGridBuilder.
-                    SetTileOriginX(200).
-                    SetTileOriginY(100).
-                    SetTileHeight(70).
-                    SetTileWidth(70).
-                    SetSpacer(2).
-                    SetTileCols(9).
-                    SetTileRows(9).
-                    SetGridContents(Enumerable.Repeat(1, 9 * 9).ToList());
+                        SetPlayerOneTowerY(25).
+                        SetPlayerTwoTowerY(775).
+                        SetTowerX(480).
+                        SetTowerLength(100).
+                        SetTileOriginX(200).
+                        SetTileOriginY(100).
+                        SetTileHeight(70).
+                        SetTileWidth(70).
+                        SetSpacer(2).
+                        SetTileCols(9).
+                        SetTileRows(9).
+                        SetGridContents(gridContents);
                     break;
                 case 2:
+                    //Kazkodel prastai is anksto generuotas int listas veike, tai cia rankiniu budu sugeneruoju lygio kurimui. Gal pataisysiu kadanors, gal ne, IDK. - Maksas
+
+
                     gridToMake = GameGridBuilder.
-                    SetTileOriginX(200).
-                    SetTileOriginY(100).
-                    SetTileHeight(70).
-                    SetTileWidth(70).
-                    SetSpacer(2).
-                    SetTileCols(9).
-                    SetTileRows(9).
-                    SetGridContents(Enumerable.Repeat(2, 9 * 9).ToList());
+                        SetPlayerOneTowerY(25).
+                        SetPlayerTwoTowerY(775).
+                        SetTowerX(480).
+                        SetTowerLength(100).
+                        SetTileOriginX(200).
+                        SetTileOriginY(100).
+                        SetTileHeight(70).
+                        SetTileWidth(70).
+                        SetSpacer(2).
+                        SetTileCols(9).
+                        SetTileRows(9).
+                        SetGridContents(gridContents);
                     break;
             }
 
-            //GridMaker(gridToMake);
+            GridMaker(gridToMake);
 
             UpdateGameGridInServer(gridToMake);
 
+            /*
             //Originalus grido gaminimo kintamieji
             this.Size = new Size(1000, 900);
             int tileOriginX = 200;
@@ -182,11 +224,15 @@ namespace WindowsFormsApplication
             int tileHeight = 70;
             int tileRows = 9;
             int tileCols = 9;
+            
 
+            
+            //Originalus bokstu kintamieji
             int towerX = 480;
             int tower1Y = 25;
             int tower2Y = 775;
             int towerLength = 100;
+            
 
             //Load towers
             Image towerImage = FileUtils.GetImage("Tower_1.png");
@@ -206,6 +252,7 @@ namespace WindowsFormsApplication
             this.Controls.Add(tower1);
             this.Controls.Add(tower2);
 
+            
             //Senas grido kurimo budas
             Size s = new Size(tileWidth, tileHeight);
             Rectangle destRect = new Rectangle(Point.Empty, s);
@@ -224,7 +271,7 @@ namespace WindowsFormsApplication
                     this.Controls.Add(p);
                 }
             }
-            
+            */
         }
 
         private void Pawn1Picture_Click(object sender, EventArgs e)

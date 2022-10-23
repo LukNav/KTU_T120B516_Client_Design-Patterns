@@ -8,6 +8,10 @@ namespace WindowsFormsApplication.Models
 {
     public class GameGridBuilder : BuilderPattern.IGameGridBuilder
     {
+        private int PlayerOneTowerY { get; set; }
+        private int PlayerTwoTowerY { get; set; }
+        private int TowerX { get; set; }
+        private int TowerLength { get; set; }
         private int TileOriginX { get; set; }
         private int TileOriginY { get; set; }
         private int Spacer { get; set; }
@@ -76,9 +80,37 @@ namespace WindowsFormsApplication.Models
                 TileWidth = TileWidth,
                 TileHeight = TileHeight,
                 TileRows = TileRows,
-                TileCols = TileCols
+                TileCols = TileCols,
+                PlayerOneTowerY = PlayerOneTowerY,
+                PlayerTwoTowerY = PlayerTwoTowerY,
+                TowerX = TowerX,
+                TowerLength = TowerLength,
             };
-        }        
+        }
+
+        public GameGridBuilder SetPlayerOneTowerY(int playerOneTowerY)
+        {
+            PlayerOneTowerY = playerOneTowerY;
+            return this;
+        }
+
+        public GameGridBuilder SetPlayerTwoTowerY(int playerTwoTowerY)
+        {
+            PlayerTwoTowerY = playerTwoTowerY;
+            return this;
+        }
+
+        public GameGridBuilder SetTowerX(int towerX)
+        {
+            TowerX = towerX;
+            return this;
+        }
+
+        public GameGridBuilder SetTowerLength(int towerLength)
+        {
+            TowerLength = towerLength;
+            return this;
+        }
 
         public static implicit operator GameGrid(GameGridBuilder ggb)
         {
