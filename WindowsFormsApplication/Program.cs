@@ -11,7 +11,7 @@ namespace WindowsFormsApplication
         public static MenuForm MenuForm { get; private set; }
         public static GameForm GameForm { get; private set; }
         public static readonly string ServerIp = "https://localhost:7134";
-        public static readonly string LocalHostPort = "5551";
+        public static readonly string LocalHostPort = "5555";
 
         [STAThread]
         public static void Main(string[] args)

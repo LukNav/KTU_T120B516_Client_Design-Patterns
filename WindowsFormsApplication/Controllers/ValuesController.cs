@@ -30,5 +30,27 @@ namespace WindowsFormsApplication.Controllers
             }));
             return NoContent();
         }
+
+        //DAR NEBAIGTAS, SCUFFED AF. - Maksas
+        [HttpPost("GetGameState")]
+        public ActionResult GetGameState([FromBody] string text)
+        {
+            Program.GameForm.Invoke(new Action(() =>
+            {
+                Program.GameForm.GetGameState();
+            }));
+            return NoContent();
+        }
+
+        //DAR NEBAIGTAS, SCUFFED AF. - Maksas
+        [HttpPost("UpdateGameState")]
+        public ActionResult UpdateGameState([FromBody] string text)
+        {
+            Program.GameForm.Invoke(new Action(() =>
+            {
+                Program.GameForm.UpdateGameState();
+            }));
+            return NoContent();
+        }
     }
 }
