@@ -10,6 +10,7 @@ namespace WindowsFormsApplication
     {
         public static string PlayerName { get; private set; }
         public static Game CurrentGame { get; private set; }
+        public GameState CurrentGameState { get; private set; }
         private Pawn _selectedPawn;
         private int _ticks = 0;
 
@@ -315,7 +316,7 @@ namespace WindowsFormsApplication
 
                 Pawn pawnToSend = _selectedPawn;
                 pawnToSend.Position = currentPosition;
-                //TODO: Add this pawn to next tick send
+                CurrentGameState.Pawns.Add(pawnToSend);
             }
         }
 
