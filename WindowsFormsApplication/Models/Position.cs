@@ -10,5 +10,13 @@
             X=x;
             Y=y;
         }
+        public static bool operator == (Position a, Position b)
+        {
+            return a.X == b.X && a.Y == b.Y;
+        }
+        public static bool operator !=(Position a, Position b)
+        {
+            return a.X != b.X || a.Y != b.Y;
+        }
     }
 }
