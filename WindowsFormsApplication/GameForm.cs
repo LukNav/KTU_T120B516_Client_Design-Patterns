@@ -13,6 +13,7 @@ namespace WindowsFormsApplication
         public GameState CurrentGameState { get; private set; }
         private Pawn _selectedPawn;
         private int _ticks = 0;
+        public List<PictureBox> tiles = new List<PictureBox>();
 
         public GameForm()
         {
@@ -82,6 +83,13 @@ namespace WindowsFormsApplication
         //Metodas kuris sukuria zaidimo grida. Galima bus veliau bandyt taip updatint zaidimo busena speju: sena grida istrinant ir pakeiciant nauju.
         private void GridMaker(GameGrid gridToMake)
         {
+            //delete old tiles
+            foreach (PictureBox tile in tiles)
+            {
+                this.Controls.Remove(tile);
+            }
+            tiles.Clear();
+
             //Load battlefield
             int tileContentIterator = 0;
             Size size = new Size(gridToMake.TileWidth, gridToMake.TileHeight);
@@ -117,6 +125,7 @@ namespace WindowsFormsApplication
                     p.Name = String.Format("Col={0:00}-Row={1:00}", col, row);
                     p.MouseDown += new System.Windows.Forms.MouseEventHandler(MouseDownOnGrid);
                     this.Controls.Add(p);
+                    tiles.Add(p);
 
                     tileContentIterator++; //Saugo kokiam langeli dabar busim buildinant grida sita
                 }
@@ -286,10 +295,9 @@ namespace WindowsFormsApplication
         private void BuildCurrentGameState()
         {
             GridMaker(CurrentGameState.SelectedGameGrid); //reset the grid
-            var pictureBoxes = GetAllControls(this, typeof(PictureBox));
             foreach (Pawn pawn in CurrentGameState.Pawns)
             {
-                foreach (PictureBox pictureBox in pictureBoxes)
+                foreach (PictureBox pictureBox in tiles)
                 {
                     Position p = GetPositionFromTile(pictureBox);
                     if (p == pawn.Position)
