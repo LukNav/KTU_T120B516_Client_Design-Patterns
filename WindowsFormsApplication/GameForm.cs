@@ -10,11 +10,15 @@ namespace WindowsFormsApplication
     {
         public static string PlayerName { get; private set; }
         public static Game CurrentGame { get; private set; }
+        public GameState CurrentGameState { get; private set; }
         private Pawn _selectedPawn;
         private int _ticks = 0;
+        public List<PictureBox> tiles = new List<PictureBox>();
 
         public GameForm()
         {
+            CurrentGameState = new GameState();
+            CurrentGameState.Pawns = new List<Pawn>();
             InitializeComponent();
         }
 
@@ -79,6 +83,13 @@ namespace WindowsFormsApplication
         //Metodas kuris sukuria zaidimo grida. Galima bus veliau bandyt taip updatint zaidimo busena speju: sena grida istrinant ir pakeiciant nauju.
         private void GridMaker(GameGrid gridToMake)
         {
+            //delete old tiles
+            foreach (PictureBox tile in tiles)
+            {
+                this.Controls.Remove(tile);
+            }
+            tiles.Clear();
+
             //Load battlefield
             int tileContentIterator = 0;
             Size size = new Size(gridToMake.TileWidth, gridToMake.TileHeight);
@@ -114,6 +125,7 @@ namespace WindowsFormsApplication
                     p.Name = String.Format("Col={0:00}-Row={1:00}", col, row);
                     p.MouseDown += new System.Windows.Forms.MouseEventHandler(MouseDownOnGrid);
                     this.Controls.Add(p);
+                    tiles.Add(p);
 
                     tileContentIterator++; //Saugo kokiam langeli dabar busim buildinant grida sita
                 }
@@ -134,6 +146,8 @@ namespace WindowsFormsApplication
             tower2.Image = towerImage;
             tower1.Size = towerSize;
             tower2.Size = towerSize;
+            CurrentGameState.PlayerTowerHealth = 300;
+            CurrentGameState.OpponentTowerHealth = 300;
             this.Controls.Add(tower1);
             this.Controls.Add(tower2);
         }
@@ -209,7 +223,7 @@ namespace WindowsFormsApplication
                         SetGridContents(gridContents);
                     break;
             }
-
+            CurrentGameState.SelectedGameGrid = gridToMake;
             GridMaker(gridToMake);
 
             /*
@@ -272,6 +286,36 @@ namespace WindowsFormsApplication
             */
         }
 
+        //Metodas uzloadinti gamestate'a
+        public void LoadGameState(GameState gameState)
+        {
+            CurrentGameState = gameState;
+            BuildCurrentGameState();
+        }
+        private void BuildCurrentGameState()
+        {
+            GridMaker(CurrentGameState.SelectedGameGrid); //reset the grid
+            foreach (Pawn pawn in CurrentGameState.Pawns)
+            {
+                foreach (PictureBox pictureBox in tiles)
+                {
+                    Position p = GetPositionFromTile(pictureBox);
+                    if (p == pawn.Position)
+                    {
+                        LoadPawn(pawn, pictureBox);
+                        break;
+                    }
+                }
+            }
+        }
+        public IEnumerable<Control> GetAllControls(Control control, Type type)
+        {
+            var controls = control.Controls.Cast<Control>();
+
+            return controls.SelectMany(ctrl => GetAllControls(ctrl, type))
+                                      .Concat(controls)
+                                      .Where(c => c.GetType() == type);
+        }
         private void Pawn1Picture_Click(object sender, EventArgs e)
         {
             _selectedPawn = CurrentGame.GameLevel.Pawn1;
@@ -306,27 +350,43 @@ namespace WindowsFormsApplication
             Position currentPosition = GetPositionFromTile(_currentTile);
             if (currentPosition.Y <= 0)
             {
-                _currentTile.Image = FileUtils.GetImage(_selectedPawn.ImageName);
-                _currentTile.Paint += new PaintEventHandler((sender, e) =>
-                {
-                    e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-                    e.Graphics.DrawString(_selectedPawn.Health.ToString(), Font, Brushes.Red, 0, 0);
-                });
+                LoadPawn(_selectedPawn, _currentTile);
+                //_currentTile.Image = FileUtils.GetImage(_selectedPawn.ImageName);
+                //_currentTile.Paint += new PaintEventHandler((sender, e) =>
+                //{
+                //    e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                //    e.Graphics.DrawString(_selectedPawn.Health.ToString(), Font, Brushes.Red, 0, 0);
+                //});
 
                 Pawn pawnToSend = _selectedPawn;
                 pawnToSend.Position = currentPosition;
-                //TODO: Add this pawn to next tick send
+                CurrentGameState.Pawns.Add(pawnToSend);
             }
         }
-
+        private void LoadPawn(Pawn pawn, PictureBox tile)
+        {
+            tile.Image = FileUtils.GetImage(pawn.ImageName);
+            tile.Paint += new PaintEventHandler((sender, e) =>
+            {
+                e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                e.Graphics.DrawString(pawn.Health.ToString(), Font, Brushes.Red, 0, 0);
+            });
+        }
         private Position GetPositionFromTile(PictureBox tile)
         {
-            Position position = new Position
-            (
-                Int32.Parse(tile.Name.Substring(4, 2)),
-                Int32.Parse(tile.Name.Substring(11, 2))
-            );
-            return position;
+            try
+            {
+                Position position = new Position
+                (
+                    Int32.Parse(tile.Name.Substring(4, 2)),
+                    Int32.Parse(tile.Name.Substring(11, 2))
+                );
+                return position;
+            }
+            catch
+            {
+                return new Position(99999, 999999);
+            }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -342,6 +402,41 @@ namespace WindowsFormsApplication
         public void GetGameState()
         {
             //I exist
+        }
+
+        private void loadStateButton_Click(object sender, EventArgs e)
+        {
+            GameState testState = new GameState();
+            testState.PlayerTowerHealth = 200;
+            testState.OpponentTowerHealth = 200;
+            testState.Pawns = new List<Pawn>();
+            testState.Pawns.Add(new Pawn(new Position(3, 3), "Villager_3.png", 13, 2, 2, 2));
+            var GameGridBuilder = new GameGridBuilder();
+            GameGrid gridToMake = GameGridBuilder;
+
+            //Kazkodel prastai is anksto generuotas int listas veike, tai cia rankiniu budu sugeneruoju lygio kurimui.Gal pataisysiu kadanors, gal ne, IDK. -Maksas
+            List<int> gridContents = new List<int>(); //Cia galima saugoti kokie daiktai bus ant zemelapio "by default" kaip int kintamuosius. 0 = grass tile, 1 = kazkas kitko, etc. etc.
+            for (int i = 0; i < 49; i++)
+            {
+                gridContents.Add(0);
+            }
+
+            gridToMake = GameGridBuilder.
+                SetPlayerOneTowerY(25).
+                SetPlayerTwoTowerY(775).
+                SetTowerX(480).
+                SetTowerLength(100).
+                SetTileOriginX(200).
+                SetTileOriginY(100).
+                SetTileHeight(70).
+                SetTileWidth(70).
+                SetSpacer(2).
+                SetTileCols(9).
+                SetTileRows(9).
+                SetGridContents(gridContents);
+
+            testState.SelectedGameGrid = gridToMake;
+            LoadGameState(testState);
         }
     }
 }
