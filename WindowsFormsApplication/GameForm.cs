@@ -187,9 +187,6 @@ namespace WindowsFormsApplication
                         SetGridContents(gridContents);
                     break;
                 case 1:
-                    //Kazkodel prastai is anksto generuotas int listas veike, tai cia rankiniu budu sugeneruoju lygio kurimui. Gal pataisysiu kadanors, gal ne, IDK. - Maksas
-
-
                     gridToMake = GameGridBuilder.
                         SetPlayerOneTowerY(25).
                         SetPlayerTwoTowerY(775).
@@ -205,9 +202,6 @@ namespace WindowsFormsApplication
                         SetGridContents(gridContents);
                     break;
                 case 2:
-                    //Kazkodel prastai is anksto generuotas int listas veike, tai cia rankiniu budu sugeneruoju lygio kurimui. Gal pataisysiu kadanors, gal ne, IDK. - Maksas
-
-
                     gridToMake = GameGridBuilder.
                         SetPlayerOneTowerY(25).
                         SetPlayerTwoTowerY(775).
@@ -226,64 +220,65 @@ namespace WindowsFormsApplication
             CurrentGameState.SelectedGameGrid = gridToMake;
             GridMaker(gridToMake);
 
-            /*
             //Originalus grido gaminimo kintamieji
-            this.Size = new Size(1000, 900);
-            int tileOriginX = 200;
-            int tileOriginY = 125;
-            int spacer = 2;
-            int tileWidth = 70;
-            int tileHeight = 70;
-            int tileRows = 9;
-            int tileCols = 9;
-            
+            { 
+                /*this.Size = new Size(1000, 900);
+                int tileOriginX = 200;
+                int tileOriginY = 125;
+                int spacer = 2;
+                int tileWidth = 70;
+                int tileHeight = 70;
+                int tileRows = 9;
+                int tileCols = 9;
 
-            
-            //Originalus bokstu kintamieji
-            int towerX = 480;
-            int tower1Y = 25;
-            int tower2Y = 775;
-            int towerLength = 100;
-            
 
-            //Load towers
-            Image towerImage = FileUtils.GetImage("Tower_1.png");
-            Size towerSize = new Size(towerLength, towerLength);
-            PictureBox tower1 = new PictureBox();
-            PictureBox tower2 = new PictureBox();
-            Point tower1Location = new Point(towerX, tower1Y);
-            Point tower2Location = new Point(towerX, tower2Y);
-            tower1.Location = tower1Location;
-            tower2.Location = tower2Location;
-            tower1.Name = "Tower1"; //might need to change names to respresent players instead
-            tower2.Name = "Tower2";
-            tower1.Image = towerImage;
-            tower2.Image = towerImage;
-            tower1.Size = towerSize;
-            tower2.Size = towerSize;
-            this.Controls.Add(tower1);
-            this.Controls.Add(tower2);
 
-            
-            //Senas grido kurimo budas
-            Size s = new Size(tileWidth, tileHeight);
-            Rectangle destRect = new Rectangle(Point.Empty, s);
-            for (int row = 0; row < tileRows; row++)
-            {
-                for (int col = 0; col < tileCols; col++)
+                //Originalus bokstu kintamieji
+                int towerX = 480;
+                int tower1Y = 25;
+                int tower2Y = 775;
+                int towerLength = 100;
+
+
+                //Load towers
+                Image towerImage = FileUtils.GetImage("Tower_1.png");
+                Size towerSize = new Size(towerLength, towerLength);
+                PictureBox tower1 = new PictureBox();
+                PictureBox tower2 = new PictureBox();
+                Point tower1Location = new Point(towerX, tower1Y);
+                Point tower2Location = new Point(towerX, tower2Y);
+                tower1.Location = tower1Location;
+                tower2.Location = tower2Location;
+                tower1.Name = "Tower1"; //might need to change names to respresent players instead
+                tower2.Name = "Tower2";
+                tower1.Image = towerImage;
+                tower2.Image = towerImage;
+                tower1.Size = towerSize;
+                tower2.Size = towerSize;
+                this.Controls.Add(tower1);
+                this.Controls.Add(tower2);
+
+
+                //Senas grido kurimo budas
+                Size s = new Size(tileWidth, tileHeight);
+                Rectangle destRect = new Rectangle(Point.Empty, s);
+                for (int row = 0; row < tileRows; row++)
                 {
-                    PictureBox p = new PictureBox();
-                    p.Size = s;
-                    Point loc = new Point(spacer+tileOriginX + tileWidth * col, spacer+tileOriginY + tileHeight * row);
-                    p.Image = FileUtils.GetImage("GrassTile.png");
-                    p.Location = loc;
-                    p.Tag = loc;
-                    p.Name = String.Format("Col={0:00}-Row={1:00}", col, row);
-                    p.MouseDown += new System.Windows.Forms.MouseEventHandler(MouseDownOnGrid);
-                    this.Controls.Add(p);
+                    for (int col = 0; col < tileCols; col++)
+                    {
+                        PictureBox p = new PictureBox();
+                        p.Size = s;
+                        Point loc = new Point(spacer+tileOriginX + tileWidth * col, spacer+tileOriginY + tileHeight * row);
+                        p.Image = FileUtils.GetImage("GrassTile.png");
+                        p.Location = loc;
+                        p.Tag = loc;
+                        p.Name = String.Format("Col={0:00}-Row={1:00}", col, row);
+                        p.MouseDown += new System.Windows.Forms.MouseEventHandler(MouseDownOnGrid);
+                        this.Controls.Add(p);
+                    }
                 }
+                */
             }
-            */
         }
 
         //Metodas uzloadinti gamestate'a
@@ -394,14 +389,9 @@ namespace WindowsFormsApplication
             //Cia gali daryt kazka su fizika and shiet.
         }
 
-        public void UpdateGameState()
+        public GameState GetGameState()
         {
-            Player1Name.Text = "Oh boy the HTTP sent correctly!";
-        }
-
-        public void GetGameState()
-        {
-            //I exist
+            return CurrentGameState;
         }
 
         private void loadStateButton_Click(object sender, EventArgs e)
