@@ -21,7 +21,7 @@ namespace WindowsFormsApplication
             {
                 if (TryCreateClient(PlayerName, Program.LocalHostPort) == true)//try sending request to server and create a new player
                 {
-                    HideLoginItems();//Hide Ui login labels
+                    ToggleLoginItems(false);//Hide Ui login labels
                     ToggleReadyToPlayUIItems(true);//Show Ready to play button and label in UI
                 }
                 else
@@ -36,7 +36,7 @@ namespace WindowsFormsApplication
             SetPlayerAsReady(PlayerName);//Set Player as ready in Server
             ToggleReadyToPlayUIItems(false);//Hide Ready button
             ShowWaitingForPlayerLabel(true);//Show "Waiting for players" label
-            
+
             //Now we wait for server's response that everybody is ready
         }
 
@@ -48,18 +48,19 @@ namespace WindowsFormsApplication
         }
         #region UI controls
 
-        private void HideLoginItems()
+        private void ToggleLoginItems(bool isVisible)
         {
-            Program.MenuForm.SubmitNameButton.Visible = false;
-            Program.MenuForm.EnterNameLabel.Visible = false;
-            Program.MenuForm.NameTextBox.Visible = false;
-            Program.MenuForm.ErrorLabel.Visible = false;
+            Program.MenuForm.SubmitNameButton.Visible = isVisible;
+            Program.MenuForm.EnterNameLabel.Visible = isVisible;
+            Program.MenuForm.NameTextBox.Visible = isVisible;
+            Program.MenuForm.ErrorLabel.Visible = isVisible;
         }
 
         private void ToggleReadyToPlayUIItems(bool isVisible)
         {
             Program.MenuForm.ReadyToPlayButton.Visible = isVisible;
             Program.MenuForm.ReadyToPlayLabel.Visible = isVisible;
+            Program.MenuForm.quitButton.Visible = isVisible;
         }
 
         private void ShowWaitingForPlayerLabel(bool isVisible)
@@ -111,6 +112,14 @@ namespace WindowsFormsApplication
         {
             string serverUrl = $"{Program.ServerIp}/Debug/StartGameSolo/{Program.LocalHostPort}";
             HttpRequests.GetRequest(serverUrl);
+        }
+
+        private void quitButton_Click(object sender, EventArgs e)
+        {
+            string serverUrl = $"{Program.ServerIp}/Player/Unregister/{PlayerName}";
+            HttpRequests.DeleteRequest(serverUrl);
+            ToggleLoginItems(true);//Hide Ui login labels
+            ToggleReadyToPlayUIItems(false);//Show Ready to play button and label in UI
         }
     }
 }
