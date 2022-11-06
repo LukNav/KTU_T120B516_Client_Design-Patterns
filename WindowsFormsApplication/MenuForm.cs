@@ -60,6 +60,7 @@ namespace WindowsFormsApplication
         {
             Program.MenuForm.ReadyToPlayButton.Visible = isVisible;
             Program.MenuForm.ReadyToPlayLabel.Visible = isVisible;
+            Program.MenuForm.quitButton.Visible = isVisible;
         }
 
         private void ShowWaitingForPlayerLabel(bool isVisible)
@@ -111,6 +112,12 @@ namespace WindowsFormsApplication
         {
             string serverUrl = $"{Program.ServerIp}/Debug/StartGameSolo/{Program.LocalHostPort}";
             HttpRequests.GetRequest(serverUrl);
+        }
+
+        private void quitButton_Click(object sender, EventArgs e)
+        {
+            string serverUrl = $"{Program.ServerIp}/Player/Unregister/{PlayerName}";
+            HttpRequests.DeleteRequest(serverUrl);
         }
     }
 }

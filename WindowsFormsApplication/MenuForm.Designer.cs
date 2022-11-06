@@ -44,6 +44,7 @@
             this.Player1FactionColor = new System.Windows.Forms.Label();
             this.Player2FactionColor = new System.Windows.Forms.Label();
             this.DebugButton = new System.Windows.Forms.Button();
+            this.quitButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // NameTextBox
@@ -207,11 +208,23 @@
             this.DebugButton.UseVisualStyleBackColor = true;
             this.DebugButton.Click += new System.EventHandler(this.DebugButton_Click);
             // 
+            // quitButton
+            // 
+            this.quitButton.Location = new System.Drawing.Point(713, 12);
+            this.quitButton.Name = "quitButton";
+            this.quitButton.Size = new System.Drawing.Size(75, 23);
+            this.quitButton.TabIndex = 18;
+            this.quitButton.Text = "Quit";
+            this.quitButton.UseVisualStyleBackColor = true;
+            this.quitButton.Visible = false;
+            this.quitButton.Click += new System.EventHandler(this.quitButton_Click);
+            // 
             // MenuForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.quitButton);
             this.Controls.Add(this.DebugButton);
             this.Controls.Add(this.Player2FactionColor);
             this.Controls.Add(this.Player1FactionColor);
@@ -253,5 +266,6 @@
         private Label Player1FactionColor;
         private Label Player2FactionColor;
         private Button DebugButton;
+        private Button quitButton;
     }
 }
