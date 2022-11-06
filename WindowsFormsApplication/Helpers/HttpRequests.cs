@@ -22,7 +22,21 @@ namespace WindowsFormsApplication.Helpers
             };
 
             using (var httpClient = new HttpClient())
-               return httpClient.Send(httpRequestMessage);
+                return httpClient.Send(httpRequestMessage);
+        }
+        public static HttpResponseMessage DeleteRequest(string Url)
+        {
+            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, Url)
+            {
+                Headers =
+                {
+                    { HeaderNames.Accept, "*/*" },
+                    { HeaderNames.UserAgent, "Client" }
+                }
+            };
+
+            using (var httpClient = new HttpClient())
+                return httpClient.Send(httpRequestMessage);
         }
         public static HttpResponseMessage PostRequest<T>(string Url, T body)
         {
