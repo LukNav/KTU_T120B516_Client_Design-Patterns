@@ -9,6 +9,6 @@ namespace WindowsFormsApplication.Controllers.StrategyPattern
 {
     public interface IMoveAlgorithm
     {
-        public void Move(List<PictureBox> tileList, Pawn pawn, PictureBox defTile);
+        public void Move(List<PictureBox> tileList, Pawn pawn);
     }
 }

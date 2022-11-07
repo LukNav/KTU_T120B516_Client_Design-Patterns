@@ -10,12 +10,12 @@ namespace WindowsFormsApplication.Controllers.StrategyPattern
 {
     internal class DelayedMovement : IMoveAlgorithm
     {
-        public void Move(List<PictureBox> tileList, Pawn pawn, PictureBox defTile)
+        public void Move(List<PictureBox> tileList, Pawn pawn)
         {
             if (pawn.SkippedTick)
             {
-                PictureBox targetTile = new PictureBox();
-                bool canBreak = false;
+                Position newPosition = new Position(pawn.Position.X, pawn.Position.Y + 1);
+                bool movementAvailable = false;
                 foreach (PictureBox tile in tileList)
                 {
                     Position position;
@@ -29,28 +29,19 @@ namespace WindowsFormsApplication.Controllers.StrategyPattern
                     }
                     catch
                     {
-                        position = new Position(99999, 999999);
+                        position = new Position(999999, 999999);
                     }
-                    if (position.X - 1 == pawn.Position.X)
+                    if (position.Y - 1 == pawn.Position.Y && position.X == pawn.Position.X)
                     {
-                        targetTile = tile;
-                        if (canBreak) break;
-                        else canBreak = true;
-                    }
-                    else if (position == pawn.Position)
-                    {
-                        targetTile.Image = defTile.Image;
-                        if (canBreak) break;
-                        else canBreak = true;
+                        movementAvailable = true;
+                        break;
                     }
                 }
-                targetTile.Image = FileUtils.GetImage(pawn.ImageName);
-                targetTile.Paint += new PaintEventHandler((sender, e) =>
+
+                if (movementAvailable)
                 {
-                    e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-                    e.Graphics.DrawString(pawn.Health.ToString(), Control.DefaultFont, Brushes.Red, 0, 0);
-                });
-                pawn.SkippedTick = false;
+                    pawn.Position = newPosition;
+                }
             }
             else
             {

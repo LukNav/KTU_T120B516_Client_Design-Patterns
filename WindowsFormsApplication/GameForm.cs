@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json;
 using Microsoft.Net.Http.Headers;
 using WindowsFormsApplication.Controllers;
@@ -387,7 +388,14 @@ namespace WindowsFormsApplication
 
         private void timer1_Tick(object sender, EventArgs e)
         {          
-            //Cia gali daryt kazka su fizika and shiet.
+            //move all pawns
+            foreach (Pawn pawn in CurrentGameState.Pawns)
+            {
+                pawn.moveAlgorithm.Move(tiles, pawn);
+                Debug.WriteLine("Current pawns: {0}", CurrentGameState.Pawns.Count);
+                Debug.WriteLine("X: {0} | Y: {1}", pawn.Position.X, pawn.Position.Y);
+            }
+            LoadGameState(CurrentGameState);
         }
 
         public GameState GetGameState()
