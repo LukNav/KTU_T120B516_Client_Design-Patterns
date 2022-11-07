@@ -14,6 +14,7 @@ namespace WindowsFormsApplication
         private Pawn _selectedPawn;
         private int _ticks = 0;
         public List<PictureBox> tiles = new List<PictureBox>();
+        private PictureBox defTile;
 
         public GameForm()
         {
@@ -126,7 +127,7 @@ namespace WindowsFormsApplication
                     p.MouseDown += new System.Windows.Forms.MouseEventHandler(MouseDownOnGrid);
                     this.Controls.Add(p);
                     tiles.Add(p);
-
+                    if (defTile == null) defTile = p;
                     tileContentIterator++; //Saugo kokiam langeli dabar busim buildinant grida sita
                 }
             }
@@ -400,7 +401,7 @@ namespace WindowsFormsApplication
             testState.PlayerTowerHealth = 200;
             testState.OpponentTowerHealth = 200;
             testState.Pawns = new List<Pawn>();
-            testState.Pawns.Add(new Pawn(new Position(3, 3), "Villager_3.png", 13, 2, 2, 2));
+            testState.Pawns.Add(new Pawn(new Position(3, 3), "Villager_3.png", 13, 2, 2, 2, PawnClass.Tier3));
             var GameGridBuilder = new GameGridBuilder();
             GameGrid gridToMake = GameGridBuilder;
 
