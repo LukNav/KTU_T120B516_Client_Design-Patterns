@@ -3,6 +3,7 @@ using Microsoft.Net.Http.Headers;
 using WindowsFormsApplication.Controllers;
 using WindowsFormsApplication.Helpers;
 using WindowsFormsApplication.Models;
+using WindowsFormsApplication.Models.BridgePattern;
 
 namespace WindowsFormsApplication
 {
@@ -428,5 +429,10 @@ namespace WindowsFormsApplication
             testState.SelectedGameGrid = gridToMake;
             LoadGameState(testState);
         }
+
+        //BRIDGE PATTERN BASED OBSTACLE OBJECTS. THEY DO NOTHING ATM. THIS IS JUST THE FRAMEWORK FOR A BRIDGE PATTERN
+        public Obstacle Spikes = new Obstacle(new Hazard(),new Position(0,0),"I DO NOT EXIST");
+        public Obstacle Lake = new Obstacle(new Slower(), new Position(0, 0),"I DO NOT EXIST");
+        public Obstacle Mountain = new Obstacle(new Wall(), new Position(0, 0), "I DO NOT EXIST");
     }
 }
