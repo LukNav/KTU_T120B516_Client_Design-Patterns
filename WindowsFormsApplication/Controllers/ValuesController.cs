@@ -6,7 +6,7 @@ using WindowsFormsApplication.Models;
 namespace WindowsFormsApplication.Controllers
 {
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class ValuesController : ControllerBase, IStartGameObserver
     {
         private readonly IHttpClientFactory _httpClientFactory;
         public ValuesController(IHttpClientFactory httpClientFactory)
