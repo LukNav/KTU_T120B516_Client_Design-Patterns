@@ -317,13 +317,13 @@ namespace WindowsFormsApplication
         private void timer1_Tick(object sender, EventArgs e)
         {          
             //move all pawns
-            foreach (Pawn pawn in CurrentGameState.Pawns)
-            {
-                pawn.moveAlgorithm.Move(tiles, pawn);
-                Debug.WriteLine("Current pawns: {0}", CurrentGameState.Pawns.Count);
-                Debug.WriteLine("X: {0} | Y: {1}", pawn.Position.X, pawn.Position.Y);
-            }
-            LoadGameState(CurrentGameState);
+            //foreach (Pawn pawn in CurrentGameState.Pawns)
+            //{
+                //pawn.moveAlgorithm.Move(tiles, pawn);
+            //    Debug.WriteLine("Current pawns: {0}", CurrentGameState.Pawns.Count);
+            //    Debug.WriteLine("X: {0} | Y: {1}", pawn.Position.X, pawn.Position.Y);
+            //}
+            //LoadGameState(CurrentGameState);
         }
 
         public GameState GetGameState()
