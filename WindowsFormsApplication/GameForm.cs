@@ -17,6 +17,7 @@ namespace WindowsFormsApplication
         private int _ticks = 0;
         public List<PictureBox> tiles = new List<PictureBox>();
         private PictureBox defTile;
+        private bool _gridPawnSelected = false;
 
         public GameForm()
         {
@@ -273,21 +274,32 @@ namespace WindowsFormsApplication
         {
             _currentTile = (PictureBox)sender;
             Position currentPosition = GetPositionFromTile(_currentTile);
-            if (currentPosition.Y <= 0)
+            Pawn pawnOnGrid = CurrentGameState.Pawns.Where(p => p.Position == currentPosition).FirstOrDefault();
+            if (pawnOnGrid != null)//If pawn already is spawned
+            {
+                MarkPawnOnGridAsSelected(_currentTile);
+                //MarkPawnPossibleMoves(pawnOnGrid); <<Vincentai
+                _gridPawnSelected = true;
+            }
+            else if (currentPosition.Y <= 0)
             {
                 LoadPawn(_selectedPawn, _currentTile);
-                //_currentTile.Image = FileUtils.GetImage(_selectedPawn.ImageName);
-                //_currentTile.Paint += new PaintEventHandler((sender, e) =>
-                //{
-                //    e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-                //    e.Graphics.DrawString(_selectedPawn.Health.ToString(), Font, Brushes.Red, 0, 0);
-                //});
-
                 Pawn pawnToSend = _selectedPawn;
                 pawnToSend.Position = currentPosition;
                 CurrentGameState.Pawns.Add(pawnToSend);
             }
         }
+
+
+        private void MarkPawnOnGridAsSelected(PictureBox tile)
+        {
+            tile.Paint += new PaintEventHandler((sender, e) =>
+            {
+                e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                e.Graphics.DrawString("[x]", Font, Brushes.Green, 50, 0);
+            });
+        }
+
         private void LoadPawn(Pawn pawn, PictureBox tile)
         {
             tile.Image = FileUtils.GetImage(pawn.ImageName);
