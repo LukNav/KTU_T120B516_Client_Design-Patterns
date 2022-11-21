@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Text.Json;
+using System.Windows.Forms;
 using Microsoft.Net.Http.Headers;
 using WindowsFormsApplication.Controllers;
 using WindowsFormsApplication.Helpers;
@@ -10,13 +11,25 @@ namespace WindowsFormsApplication
 {
     public partial class GameForm : Form
     {
-        public static string PlayerName { get; private set; }
+        #region Game Session Settings
+        public static string PlayerName { get; set; }
         public static Game CurrentGame { get; private set; }
         public GameState CurrentGameState { get; private set; }
-        private Pawn _selectedPawn;
-        private int _ticks = 0;
+        public GameState EnemyGameState { get; private set; }
+        private bool IsPlayersTurn = false;
+        #endregion
+
+        #region Grid Settings
         public List<PictureBox> tiles = new List<PictureBox>();
         private PictureBox defTile;
+        private Pawn _selectedGridPawn = null;
+        private PictureBox _selectedPawnTile = null;
+        #endregion
+
+        #region Other Settings
+        private Pawn _selectedPawn;
+        private int _ticks = 0;
+        #endregion
 
         public GameForm()
         {
@@ -71,20 +84,64 @@ namespace WindowsFormsApplication
         }
 
         #endregion
-
-        #region HttpRequests
-
-        private Game GetGameInfo()
+       
+        internal void BeginPlayersTurn(GameState enemyGameState)
         {
-            string serverUrl = $"{Program.ServerIp}/Game";
-            HttpResponseMessage httpResponseMessage = HttpRequests.GetRequest(serverUrl);
-            return httpResponseMessage.Deserialize<Game>();
+            EnemyGameState = enemyGameState;
+            BuildCurrentGameState();
+            IsPlayersTurn = true;
+            YourTurnLabel.Visible = true;
+            WaitForYourTurnLabel.Visible = false;
         }
 
-        #endregion
+        private void EndPlayersTurn(GameState currentGameState)
+        {
+            IsPlayersTurn = false;
+            YourTurnLabel.Visible = false;
+            WaitForYourTurnLabel.Visible = true;
+            var temp = HttpRequests.PostRequest($"{Program.ServerIp}/EndTurn/{PlayerName}", currentGameState);
+        }
 
-        //Metodas kuris sukuria zaidimo grida. Galima bus veliau bandyt taip updatint zaidimo busena speju: sena grida istrinant ir pakeiciant nauju.
-        private void GridMaker(GameGrid gridToMake)
+        private void BuildCurrentGameState()
+        {
+            RebuildGrid(); //recreate the grid
+            foreach (Pawn pawn in CurrentGameState.Pawns)
+            {
+                foreach (PictureBox pictureBox in tiles)
+                {
+                    Position p = GameGrid.GetPositionFromTile(pictureBox);
+                    if (p == pawn.Position)
+                    {
+                        DrawPawn(pawn, pictureBox);
+                        break;
+                    }
+                }
+            }
+
+            foreach (Pawn pawn in EnemyGameState.Pawns)
+            {
+                foreach (PictureBox pictureBox in tiles)
+                {
+                    Position p = GameGrid.GetPositionFromTile(pictureBox);
+                    if (p == pawn.Position)
+                    {
+                        DrawPawn(pawn, pictureBox);
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void RebuildGrid()
+        {
+            BuildGrid(CurrentGameState.SelectedGameGrid);
+        }
+
+        /// <summary>
+        /// Metodas kuris sukuria zaidimo grida. Galima bus veliau bandyt taip updatint zaidimo busena speju: sena grida istrinant ir pakeiciant nauju.
+        /// </summary>
+        /// <param name="gridToMake"></param>
+        private void BuildGrid(GameGrid gridToMake)
         {
             //delete old tiles
             foreach (PictureBox tile in tiles)
@@ -107,21 +164,6 @@ namespace WindowsFormsApplication
 
                     //Switchas uzpildyti tilus pagal ju turini
                     p.Image = FileUtils.GetImage("GrassTile.png");
-                    switch(0) //Kazkodel meta nullreference errorus su GameGrid tai as tiesiog priverciu switcha zole det visur kol kas. - Maksas
-                    {
-                        case 0:
-                            p.Image = FileUtils.GetImage("GrassTile.png");
-                            break;
-                        case 1:
-                            p.Image = FileUtils.GetImage("Villager_1.png");
-                            break;
-                        case 2:
-                            p.Image = FileUtils.GetImage("Villager_2.png");
-                            break;
-                        case 3:
-                            p.Image = FileUtils.GetImage("Villager_3.png");
-                            break;
-                    }
 
                     p.Location = loc;
                     p.Tag = loc;
@@ -155,10 +197,77 @@ namespace WindowsFormsApplication
             this.Controls.Add(tower2);
         }
 
+        private void DrawPawn(Pawn pawn, PictureBox tile)
+        {
+            tile.Image = FileUtils.GetImage(pawn.ImageName);
+            tile.Paint += new PaintEventHandler((sender, e) =>
+            {
+                e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                e.Graphics.DrawString(pawn.Health.ToString(), Font, Brushes.Red, 0, 0);
+            });
+        }
+
+        private void MouseDownOnGrid(object sender, MouseEventArgs e)
+        {
+            if (!IsPlayersTurn)
+                return;
+            
+            PictureBox selectedTile = (PictureBox)sender;
+            Position currentPosition = GameGrid.GetPositionFromTile(selectedTile);
+            Pawn pawnOnGrid = CurrentGameState.Pawns.Where(p => p.Position == currentPosition).FirstOrDefault();//Try getting a pawn, if it exists in selected tile
+
+            //if (pawnOnGrid is selected and possible move is selected ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   Vincentai/Maksai
+            //{ Move Pawn; EndPlayersTurn(CurrentGameState); }
+
+            if (pawnOnGrid != null)//If in the selected tile there is a pawn
+            {
+                ShowPossibleMovesForSelectedPawn(sender, pawnOnGrid, selectedTile);
+            }
+            else if (currentPosition.Y <= 0)//If empty grid tile is selected to spawn
+            {
+                DrawPawn(_selectedPawn, selectedTile);
+                Pawn pawnToSend = _selectedPawn;
+                pawnToSend.Position = currentPosition;
+                CurrentGameState.Pawns.Add(pawnToSend);
+                if (_selectedGridPawn != null)//Deselect selected grid pawns
+                {
+                    BuildCurrentGameState();
+                    _selectedGridPawn = null;
+                    _selectedPawnTile = null;
+                }
+                EndPlayersTurn(CurrentGameState);
+            }
+        }
+        private void ShowPossibleMovesForSelectedPawn(object sender, Pawn pawnOnGrid, PictureBox pawnTile)
+        {
+            DrawSelectedPawnSymbol(pawnOnGrid, pawnTile);
+            //MarkPawnPossibleMoves(pawnOnGrid);                <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   Vincentai/Maksai
+            _selectedGridPawn = pawnOnGrid;
+            _selectedPawnTile = (PictureBox)sender;
+        }
+
+        /// <summary>
+        /// Draws [x] symbol near selected pawn
+        /// </summary>
+        /// <param name="pawn"></param>
+        /// <param name="tile"></param>
+        private void DrawSelectedPawnSymbol(Pawn pawn, PictureBox tile)
+        {
+            tile.Image = FileUtils.GetImage(pawn.ImageName);
+            tile.Paint += new PaintEventHandler((sender, e) =>
+            {
+                e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                e.Graphics.DrawString("[x]", Font, Brushes.Green, 50, 0);
+                e.Graphics.DrawString(pawn.Health.ToString(), Font, Brushes.Red, 0, 0);
+            });
+        }
+
+        #region other events
+
         private void GameForm_Load(object sender, EventArgs e)
         {
             this.Name = $"Game: {Program.LocalHostPort}";
-            this.Text = $"Game: {Program.LocalHostPort}";            
+            this.Text = $"Game: {Program.LocalHostPort}";
 
             //GameGridBuilderis
             var GameGridBuilder = new GameGridBuilder();
@@ -221,101 +330,14 @@ namespace WindowsFormsApplication
                     break;
             }
             CurrentGameState.SelectedGameGrid = gridToMake;
-            GridMaker(gridToMake);
+            BuildGrid(gridToMake);
 
-            //Originalus grido gaminimo kintamieji
-            { 
-                /*this.Size = new Size(1000, 900);
-                int tileOriginX = 200;
-                int tileOriginY = 125;
-                int spacer = 2;
-                int tileWidth = 70;
-                int tileHeight = 70;
-                int tileRows = 9;
-                int tileCols = 9;
-
-
-
-                //Originalus bokstu kintamieji
-                int towerX = 480;
-                int tower1Y = 25;
-                int tower2Y = 775;
-                int towerLength = 100;
-
-
-                //Load towers
-                Image towerImage = FileUtils.GetImage("Tower_1.png");
-                Size towerSize = new Size(towerLength, towerLength);
-                PictureBox tower1 = new PictureBox();
-                PictureBox tower2 = new PictureBox();
-                Point tower1Location = new Point(towerX, tower1Y);
-                Point tower2Location = new Point(towerX, tower2Y);
-                tower1.Location = tower1Location;
-                tower2.Location = tower2Location;
-                tower1.Name = "Tower1"; //might need to change names to respresent players instead
-                tower2.Name = "Tower2";
-                tower1.Image = towerImage;
-                tower2.Image = towerImage;
-                tower1.Size = towerSize;
-                tower2.Size = towerSize;
-                this.Controls.Add(tower1);
-                this.Controls.Add(tower2);
-
-
-                //Senas grido kurimo budas
-                Size s = new Size(tileWidth, tileHeight);
-                Rectangle destRect = new Rectangle(Point.Empty, s);
-                for (int row = 0; row < tileRows; row++)
-                {
-                    for (int col = 0; col < tileCols; col++)
-                    {
-                        PictureBox p = new PictureBox();
-                        p.Size = s;
-                        Point loc = new Point(spacer+tileOriginX + tileWidth * col, spacer+tileOriginY + tileHeight * row);
-                        p.Image = FileUtils.GetImage("GrassTile.png");
-                        p.Location = loc;
-                        p.Tag = loc;
-                        p.Name = String.Format("Col={0:00}-Row={1:00}", col, row);
-                        p.MouseDown += new System.Windows.Forms.MouseEventHandler(MouseDownOnGrid);
-                        this.Controls.Add(p);
-                    }
-                }
-                */
-            }
         }
 
-        //Metodas uzloadinti gamestate'a
-        public void LoadGameState(GameState gameState)
-        {
-            CurrentGameState = gameState;
-            BuildCurrentGameState();
-        }
-        private void BuildCurrentGameState()
-        {
-            GridMaker(CurrentGameState.SelectedGameGrid); //reset the grid
-            foreach (Pawn pawn in CurrentGameState.Pawns)
-            {
-                foreach (PictureBox pictureBox in tiles)
-                {
-                    Position p = GetPositionFromTile(pictureBox);
-                    if (p == pawn.Position)
-                    {
-                        LoadPawn(pawn, pictureBox);
-                        break;
-                    }
-                }
-            }
-        }
-        public IEnumerable<Control> GetAllControls(Control control, Type type)
-        {
-            var controls = control.Controls.Cast<Control>();
-
-            return controls.SelectMany(ctrl => GetAllControls(ctrl, type))
-                                      .Concat(controls)
-                                      .Where(c => c.GetType() == type);
-        }
         private void Pawn1Picture_Click(object sender, EventArgs e)
         {
+            if (!IsPlayersTurn)
+                return;
             _selectedPawn = CurrentGame.GameLevel.Pawn1;
             Pawn1PictureHighlight.Visible=true;
 
@@ -325,6 +347,8 @@ namespace WindowsFormsApplication
 
         private void Pawn2Picture_Click(object sender, EventArgs e)
         {
+            if (!IsPlayersTurn)
+                return;
             _selectedPawn = CurrentGame.GameLevel.Pawn2;
             Pawn2PictureHighlight.Visible=true;
 
@@ -334,78 +358,31 @@ namespace WindowsFormsApplication
 
         private void Pawn3Picture_Click(object sender, EventArgs e)
         {
+            if (!IsPlayersTurn)
+                return;
             _selectedPawn = CurrentGame.GameLevel.Pawn3;
             Pawn3PictureHighlight.Visible=true;
 
             Pawn2PictureHighlight.Visible=false;
             Pawn1PictureHighlight.Visible=false;
-        }
-
-        private PictureBox _currentTile;
-        void MouseDownOnGrid(object sender, MouseEventArgs e)
-        {
-            _currentTile = (PictureBox)sender;
-            Position currentPosition = GetPositionFromTile(_currentTile);
-            if (currentPosition.Y <= 0)
-            {
-                LoadPawn(_selectedPawn, _currentTile);
-                //_currentTile.Image = FileUtils.GetImage(_selectedPawn.ImageName);
-                //_currentTile.Paint += new PaintEventHandler((sender, e) =>
-                //{
-                //    e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-                //    e.Graphics.DrawString(_selectedPawn.Health.ToString(), Font, Brushes.Red, 0, 0);
-                //});
-
-                Pawn pawnToSend = _selectedPawn;
-                pawnToSend.Position = currentPosition;
-                CurrentGameState.Pawns.Add(pawnToSend);
-            }
-        }
-        private void LoadPawn(Pawn pawn, PictureBox tile)
-        {
-            tile.Image = FileUtils.GetImage(pawn.ImageName);
-            tile.Paint += new PaintEventHandler((sender, e) =>
-            {
-                e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-                e.Graphics.DrawString(pawn.Health.ToString(), Font, Brushes.Red, 0, 0);
-            });
-        }
-        private Position GetPositionFromTile(PictureBox tile)
-        {
-            try
-            {
-                Position position = new Position
-                (
-                    Int32.Parse(tile.Name.Substring(4, 2)),
-                    Int32.Parse(tile.Name.Substring(11, 2))
-                );
-                return position;
-            }
-            catch
-            {
-                return new Position(99999, 999999);
-            }
-        }
+        }  
 
         private void timer1_Tick(object sender, EventArgs e)
-        {          
-            //move all pawns
-            foreach (Pawn pawn in CurrentGameState.Pawns)
-            {
-                pawn.moveAlgorithm.Move(tiles, pawn);
-                Debug.WriteLine("Current pawns: {0}", CurrentGameState.Pawns.Count);
-                Debug.WriteLine("X: {0} | Y: {1}", pawn.Position.X, pawn.Position.Y);
-            }
-            LoadGameState(CurrentGameState);
-        }
-
-        public GameState GetGameState()
         {
-            return CurrentGameState;
+            //move all pawns
+            //foreach (Pawn pawn in CurrentGameState.Pawns)
+            //{
+            //pawn.moveAlgorithm.Move(tiles, pawn);
+            //    Debug.WriteLine("Current pawns: {0}", CurrentGameState.Pawns.Count);
+            //    Debug.WriteLine("X: {0} | Y: {1}", pawn.Position.X, pawn.Position.Y);
+            //}
+            //LoadGameState(CurrentGameState);
         }
 
         private void loadStateButton_Click(object sender, EventArgs e)
         {
+            if (!IsPlayersTurn)
+                return;
             GameState testState = new GameState();
             testState.PlayerTowerHealth = 200;
             testState.OpponentTowerHealth = 200;
@@ -436,12 +413,13 @@ namespace WindowsFormsApplication
                 SetGridContents(gridContents);
 
             testState.SelectedGameGrid = gridToMake;
-            LoadGameState(testState);
+            BeginPlayersTurn(testState);
         }
 
         //BRIDGE PATTERN BASED OBSTACLE OBJECTS. THEY DO NOTHING ATM. THIS IS JUST THE FRAMEWORK FOR A BRIDGE PATTERN
-        public Obstacle Spikes = new Obstacle(new Hazard(),new Position(0,0),"I DO NOT EXIST");
-        public Obstacle Lake = new Obstacle(new Slower(), new Position(0, 0),"I DO NOT EXIST");
+        public Obstacle Spikes = new Obstacle(new Hazard(), new Position(0, 0), "I DO NOT EXIST");
+        public Obstacle Lake = new Obstacle(new Slower(), new Position(0, 0), "I DO NOT EXIST");
         public Obstacle Mountain = new Obstacle(new Wall(), new Position(0, 0), "I DO NOT EXIST");
+        #endregion
     }
 }

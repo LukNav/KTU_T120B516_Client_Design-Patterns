@@ -17,6 +17,8 @@ namespace WindowsFormsApplication
         private void SubmitNameButton_Click(object sender, EventArgs e)
         {
             PlayerName = Program.MenuForm.NameTextBox.Text;
+            GameForm.PlayerName = PlayerName;
+            
             if (!string.IsNullOrEmpty(PlayerName))//if anything is entered in the name textbox
             {
                 if (TryCreateClient(PlayerName, Program.LocalHostPort) == true)//try sending request to server and create a new player

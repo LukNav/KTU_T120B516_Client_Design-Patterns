@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using WindowsFormsApplication.Controllers.StrategyPattern;
 
@@ -43,6 +44,7 @@ namespace WindowsFormsApplication.Models
         public int Damage { get; set; }
         public bool SkippedTick { get; set; }
         public PawnClass Tier { get; set; }
+        [JsonIgnore]
         public IMoveAlgorithm moveAlgorithm { get; set; }
     }
     public enum PawnClass

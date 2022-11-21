@@ -35,16 +35,16 @@ namespace WindowsFormsApplication.Controllers
         [HttpGet("GetGameState")]
         public ActionResult<GameState> GetGameState()
         {
-            return Ok(Program.GameForm.GetGameState());
+            return Ok(Program.GameForm.CurrentGameState);
         }
 
-        //DAR NEBAIGTAS, SCUFFED AF. - Maksas
-        [HttpPost("UpdateGameState")]
-        public ActionResult UpdateGameState([FromBody] GameState gameState)
+
+        [HttpPost("BeginPlayersTurn")]
+        public ActionResult BeginPlayersTurn([FromBody] GameState enemyGameState)
         {
             Program.GameForm.Invoke(new Action(() =>
             {
-                Program.GameForm.LoadGameState(gameState);
+                Program.GameForm.BeginPlayersTurn(enemyGameState);
             }));
             return NoContent();
         }
