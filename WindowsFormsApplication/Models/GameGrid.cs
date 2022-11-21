@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace WindowsFormsApplication.Models
@@ -19,8 +20,6 @@ namespace WindowsFormsApplication.Models
         public int TileHeight { get; set; }
         public int TileRows { get; set; }
         public int TileCols { get; set; }
-        public List<int> GridContents { get; set; }
-
 
         public static Position GetPositionFromTile(PictureBox tile)
         {

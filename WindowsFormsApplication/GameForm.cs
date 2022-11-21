@@ -12,7 +12,7 @@ namespace WindowsFormsApplication
     public partial class GameForm : Form
     {
         #region Game Session Settings
-        public static string PlayerName { get; private set; }
+        public static string PlayerName { get; set; }
         public static Game CurrentGame { get; private set; }
         public GameState CurrentGameState { get; private set; }
         public GameState EnemyGameState { get; private set; }
@@ -99,7 +99,7 @@ namespace WindowsFormsApplication
             IsPlayersTurn = false;
             YourTurnLabel.Visible = false;
             WaitForYourTurnLabel.Visible = true;
-            HttpRequests.PostRequest($"{Program.ServerIp}/EndTurn/{PlayerName}", currentGameState);
+            var temp = HttpRequests.PostRequest($"{Program.ServerIp}/EndTurn/{PlayerName}", currentGameState);
         }
 
         private void BuildCurrentGameState()
