@@ -209,6 +209,9 @@ namespace WindowsFormsApplication
 
         private void MouseDownOnGrid(object sender, MouseEventArgs e)
         {
+            if (!IsPlayersTurn)
+                return;
+            
             PictureBox selectedTile = (PictureBox)sender;
             Position currentPosition = GameGrid.GetPositionFromTile(selectedTile);
             Pawn pawnOnGrid = CurrentGameState.Pawns.Where(p => p.Position == currentPosition).FirstOrDefault();//Try getting a pawn, if it exists in selected tile
@@ -333,6 +336,8 @@ namespace WindowsFormsApplication
 
         private void Pawn1Picture_Click(object sender, EventArgs e)
         {
+            if (!IsPlayersTurn)
+                return;
             _selectedPawn = CurrentGame.GameLevel.Pawn1;
             Pawn1PictureHighlight.Visible=true;
 
@@ -342,6 +347,8 @@ namespace WindowsFormsApplication
 
         private void Pawn2Picture_Click(object sender, EventArgs e)
         {
+            if (!IsPlayersTurn)
+                return;
             _selectedPawn = CurrentGame.GameLevel.Pawn2;
             Pawn2PictureHighlight.Visible=true;
 
@@ -351,6 +358,8 @@ namespace WindowsFormsApplication
 
         private void Pawn3Picture_Click(object sender, EventArgs e)
         {
+            if (!IsPlayersTurn)
+                return;
             _selectedPawn = CurrentGame.GameLevel.Pawn3;
             Pawn3PictureHighlight.Visible=true;
 
@@ -372,6 +381,8 @@ namespace WindowsFormsApplication
 
         private void loadStateButton_Click(object sender, EventArgs e)
         {
+            if (!IsPlayersTurn)
+                return;
             GameState testState = new GameState();
             testState.PlayerTowerHealth = 200;
             testState.OpponentTowerHealth = 200;
