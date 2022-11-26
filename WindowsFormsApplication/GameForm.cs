@@ -241,9 +241,44 @@ namespace WindowsFormsApplication
         private void ShowPossibleMovesForSelectedPawn(object sender, Pawn pawnOnGrid, PictureBox pawnTile)
         {
             DrawSelectedPawnSymbol(pawnOnGrid, pawnTile);
-            //MarkPawnPossibleMoves(pawnOnGrid);                <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   Vincentai/Maksai
+            MarkPawnPossibleMoves(pawnOnGrid);               // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   Vincentai/Maksai
             _selectedGridPawn = pawnOnGrid;
             _selectedPawnTile = (PictureBox)sender;
+        }
+        private void MarkPawnPossibleMoves(Pawn pawn)
+        {
+            List<Position> possibleMoves = pawn.moveAlgorithm.MovePositions(pawn);
+            int foundPositionsToBreak = possibleMoves.Count;
+            foreach (PictureBox tile in tiles)
+            {
+                Position tilePosition = GetPositionFromTile(tile); 
+                foreach (Position position in possibleMoves)
+                {
+                    if (position == tilePosition)
+                    {
+                        DrawSelectedPawnSymbol(pawn, tile);
+                        foundPositionsToBreak--;
+                    }
+                    if (foundPositionsToBreak <= 0) break;
+                }
+                if (foundPositionsToBreak <= 0) break;
+            }
+        }
+        private Position GetPositionFromTile(PictureBox tile) // Neistrinkit sito metodo vel pls
+        {
+            try
+            {
+                Position position = new Position
+                (
+                    Int32.Parse(tile.Name.Substring(4, 2)),
+                    Int32.Parse(tile.Name.Substring(11, 2))
+                );
+                return position;
+            }
+            catch
+            {
+                return new Position(99999, 999999);
+            }
         }
 
         /// <summary>
