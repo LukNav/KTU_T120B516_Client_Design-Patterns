@@ -29,7 +29,7 @@ namespace WindowsFormsApplication.Models
                     moveAlgorithm = new DiagonalMovement();
                     break;
                 case PawnClass.Tier3:
-                    moveAlgorithm = new DelayedMovement();
+                    moveAlgorithm = new FurtherMovement();
                     break;
                 default:
                     break;

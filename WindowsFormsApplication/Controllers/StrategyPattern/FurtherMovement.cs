@@ -8,7 +8,7 @@ using WindowsFormsApplication.Models;
 
 namespace WindowsFormsApplication.Controllers.StrategyPattern
 {
-    internal class DelayedMovement : IMoveAlgorithm
+    internal class FurtherMovement : IMoveAlgorithm
     {
         public void Move(List<PictureBox> tileList, Pawn pawn)
         {
@@ -48,6 +48,13 @@ namespace WindowsFormsApplication.Controllers.StrategyPattern
                 pawn.SkippedTick = true;
             }
         }
-    
+        public List<Position> MovePositions(Pawn pawn)
+        {
+            List<Position> newPositions = new List<Position>();
+            Position newPosition = new Position(pawn.Position.X, pawn.Position.Y + 2);
+            newPositions.Add(newPosition);
+            return newPositions;
+        }
+
     }
 }

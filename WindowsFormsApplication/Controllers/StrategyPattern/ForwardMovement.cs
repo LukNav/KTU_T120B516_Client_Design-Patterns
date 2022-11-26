@@ -75,5 +75,13 @@ namespace WindowsFormsApplication.Controllers.StrategyPattern
                 pawn.Position = newPosition;
             }
         }
+
+        public List<Position> MovePositions(Pawn pawn)
+        {
+            List<Position> newPositions = new List<Position>();
+            Position newPosition = new Position(pawn.Position.X, pawn.Position.Y + 1);
+            newPositions.Add(newPosition);
+            return newPositions;
+        }
     }
 }

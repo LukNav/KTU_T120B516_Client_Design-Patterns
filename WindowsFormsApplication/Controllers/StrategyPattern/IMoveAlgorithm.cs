@@ -10,5 +10,6 @@ namespace WindowsFormsApplication.Controllers.StrategyPattern
     public interface IMoveAlgorithm
     {
         public void Move(List<PictureBox> tileList, Pawn pawn);
+        public List<Position> MovePositions(Pawn pawn);
     }
 }
