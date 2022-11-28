@@ -68,7 +68,7 @@ namespace WindowsFormsApplication
             CurrentGameState = new GameState();
             CurrentGameState.Pawns = new List<Pawn>();
 
-            EnemyGameState =  new GameState();
+            EnemyGameState = null;
             IsPlayersTurn= false;
 
             PictureBox defTile = null;
@@ -157,15 +157,18 @@ namespace WindowsFormsApplication
                 }
             }
 
-            foreach (Pawn pawn in EnemyGameState.Pawns)
+            if(EnemyGameState != null || EnemyGameState.Pawns != null)
             {
-                foreach (PictureBox pictureBox in tiles)
+                foreach (Pawn pawn in EnemyGameState.Pawns)
                 {
-                    Position p = GameGrid.GetPositionFromTile(pictureBox);
-                    if (p == pawn.Position)
+                    foreach (PictureBox pictureBox in tiles)
                     {
-                        DrawPawn(pawn, pictureBox);
-                        break;
+                        Position p = GameGrid.GetPositionFromTile(pictureBox);
+                        if (p == pawn.Position)
+                        {
+                            DrawPawn(pawn, pictureBox);
+                            break;
+                        }
                     }
                 }
             }
@@ -600,7 +603,7 @@ namespace WindowsFormsApplication
             CurrentGameState = new GameState();
             CurrentGameState.Pawns = new List<Pawn>();
 
-            EnemyGameState = new GameState();
+            EnemyGameState = null;
 
             string serverUrl = $"{Program.ServerIp}/NextLevel";
             HttpRequests.GetRequest(serverUrl);
