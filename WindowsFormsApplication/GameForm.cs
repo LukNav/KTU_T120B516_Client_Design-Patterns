@@ -24,6 +24,8 @@ namespace WindowsFormsApplication
         private PictureBox defTile;
         private Pawn _selectedGridPawn = null;
         private PictureBox _selectedPawnTile = null;
+        PictureBox tower1;
+        PictureBox tower2;
         #endregion
 
         #region Other Settings
@@ -48,22 +50,57 @@ namespace WindowsFormsApplication
             CurrentGame = game;
             _selectedPawn = CurrentGame.GameLevel.Pawn1;
             SetGameInfo(CurrentGame);//Update game info in UI
+            BuildCurrentGameState();
         }
+
+        internal void ChangeLevel(Game game)
+        {
+            YourTurnLabel.Visible = false;
+            WaitForYourTurnLabel.Visible = true;
+            ResetGameLevel();
+            SetGridContents(game.GameLevel.Level);
+            RebuildGrid();
+            StartGame(game);
+        }
+
+        private void ResetGameLevel()
+        {
+            CurrentGameState = new GameState();
+            CurrentGameState.Pawns = new List<Pawn>();
+
+            EnemyGameState = null;
+            IsPlayersTurn= false;
+
+            PictureBox defTile = null;
+            _selectedGridPawn = null;
+            _selectedPawnTile = null;
+            Pawn _selectedPawn = null;
+            _ticks = 0;
+            _hasSelectedAPawnOnTheGrid = false;
+            _previouslySelectedGridPawn = null;
+        }
+
         #region UI controls
 
-       
+
 
         private void SetGameInfo(Game game)
         {
             UpdatePlayersColorsAndNames(game);
-            UpdateSpawnablePawns(game.GameLevel);
+            UpdateLevelInfo(game.GameLevel);
         }
 
-        private void UpdateSpawnablePawns(GameLevel gameLevel)
+        private void UpdateLevelInfo(GameLevel gameLevel)
         {
+            LevelLabel.Text = gameLevel.Level.ToString();
             Pawn1Picture.Image = FileUtils.GetImage(gameLevel.Pawn1.ImageName);
             Pawn2Picture.Image = FileUtils.GetImage(gameLevel.Pawn2.ImageName);
             Pawn3Picture.Image = FileUtils.GetImage(gameLevel.Pawn3.ImageName);
+            if(tower1 != null && tower2 != null)
+            {
+                tower1.Image = FileUtils.GetImage(gameLevel.TowerType.imageName);
+                tower2.Image = FileUtils.GetImage(gameLevel.TowerType.imageName);
+            }
         }
 
         private static void UpdatePlayersColorsAndNames(Game game)
@@ -120,15 +157,18 @@ namespace WindowsFormsApplication
                 }
             }
 
-            foreach (Pawn pawn in EnemyGameState.Pawns)
+            if(EnemyGameState != null)
             {
-                foreach (PictureBox pictureBox in tiles)
+                foreach (Pawn pawn in EnemyGameState.Pawns)
                 {
-                    Position p = GameGrid.GetPositionFromTile(pictureBox);
-                    if (p == pawn.Position)
+                    foreach (PictureBox pictureBox in tiles)
                     {
-                        DrawPawn(pawn, pictureBox);
-                        break;
+                        Position p = GameGrid.GetPositionFromTile(pictureBox);
+                        if (p == pawn.Position)
+                        {
+                            DrawPawn(pawn, pictureBox);
+                            break;
+                        }
                     }
                 }
             }
@@ -181,8 +221,8 @@ namespace WindowsFormsApplication
             //Load towers
             Image towerImage = FileUtils.GetImage("Tower_1.png");
             Size towerSize = new Size(gridToMake.TowerLength, gridToMake.TowerLength);
-            PictureBox tower1 = new PictureBox();
-            PictureBox tower2 = new PictureBox();
+            tower1 = new PictureBox();
+            tower2 = new PictureBox();
             Point tower1Location = new Point(gridToMake.TowerX, gridToMake.PlayerOneTowerY);
             Point tower2Location = new Point(gridToMake.TowerX, gridToMake.PlayerTwoTowerY);
             tower1.Location = tower1Location;
@@ -402,6 +442,12 @@ namespace WindowsFormsApplication
             this.Text = $"Game: {Program.LocalHostPort}";
 
             //GameGridBuilderis
+            SetGridContents(1);
+
+        }
+
+        private void SetGridContents(int level)
+        {
             var GameGridBuilder = new GameGridBuilder();
             GameGrid gridToMake = GameGridBuilder;
 
@@ -413,23 +459,8 @@ namespace WindowsFormsApplication
             }
 
             //Kol kas tie papildomi lygiai identiski pirmam.
-            switch (0) //Keist skaiciuka kad pakeist generuojama lygi
+            switch (level) //Keist skaiciuka kad pakeist generuojama lygi
             {
-                case 0:
-                    gridToMake = GameGridBuilder.
-                        SetPlayerOneTowerY(25).
-                        SetPlayerTwoTowerY(775).
-                        SetTowerX(480).
-                        SetTowerLength(100).
-                        SetTileOriginX(200).
-                        SetTileOriginY(100).
-                        SetTileHeight(70).
-                        SetTileWidth(70).
-                        SetSpacer(2).
-                        SetTileCols(9).
-                        SetTileRows(9).
-                        SetGridContents(gridContents);
-                    break;
                 case 1:
                     gridToMake = GameGridBuilder.
                         SetPlayerOneTowerY(25).
@@ -460,10 +491,23 @@ namespace WindowsFormsApplication
                         SetTileRows(9).
                         SetGridContents(gridContents);
                     break;
+                case 3:
+                    gridToMake = GameGridBuilder.
+                        SetPlayerOneTowerY(25).
+                        SetPlayerTwoTowerY(775).
+                        SetTowerX(480).
+                        SetTowerLength(100).
+                        SetTileOriginX(200).
+                        SetTileOriginY(100).
+                        SetTileHeight(70).
+                        SetTileWidth(70).
+                        SetSpacer(2).
+                        SetTileCols(9).
+                        SetTileRows(9).
+                        SetGridContents(gridContents);
+                    break;
             }
             CurrentGameState.SelectedGameGrid = gridToMake;
-            BuildGrid(gridToMake);
-
         }
 
         private void Pawn1Picture_Click(object sender, EventArgs e)
@@ -553,5 +597,21 @@ namespace WindowsFormsApplication
         public Obstacle Lake = new Obstacle(new Slower(), new Position(0, 0), "I DO NOT EXIST");
         public Obstacle Mountain = new Obstacle(new Wall(), new Position(0, 0), "I DO NOT EXIST");
         #endregion
+
+        private void Debug_NextLevel_Click(object sender, EventArgs e)
+        {
+            CurrentGameState = new GameState();
+            CurrentGameState.Pawns = new List<Pawn>();
+
+            EnemyGameState = null;
+
+            string serverUrl = $"{Program.ServerIp}/NextLevel";
+            HttpRequests.GetRequest(serverUrl);
+        }
+
+        private void LevelNameLabel_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
