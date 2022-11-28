@@ -450,21 +450,6 @@ namespace WindowsFormsApplication
             //Kol kas tie papildomi lygiai identiski pirmam.
             switch (level) //Keist skaiciuka kad pakeist generuojama lygi
             {
-                case 0:
-                    gridToMake = GameGridBuilder.
-                        SetPlayerOneTowerY(25).
-                        SetPlayerTwoTowerY(775).
-                        SetTowerX(480).
-                        SetTowerLength(100).
-                        SetTileOriginX(200).
-                        SetTileOriginY(100).
-                        SetTileHeight(70).
-                        SetTileWidth(70).
-                        SetSpacer(2).
-                        SetTileCols(9).
-                        SetTileRows(9).
-                        SetGridContents(gridContents);
-                    break;
                 case 1:
                     gridToMake = GameGridBuilder.
                         SetPlayerOneTowerY(25).
@@ -481,6 +466,21 @@ namespace WindowsFormsApplication
                         SetGridContents(gridContents);
                     break;
                 case 2:
+                    gridToMake = GameGridBuilder.
+                        SetPlayerOneTowerY(25).
+                        SetPlayerTwoTowerY(775).
+                        SetTowerX(480).
+                        SetTowerLength(100).
+                        SetTileOriginX(200).
+                        SetTileOriginY(100).
+                        SetTileHeight(70).
+                        SetTileWidth(70).
+                        SetSpacer(2).
+                        SetTileCols(9).
+                        SetTileRows(9).
+                        SetGridContents(gridContents);
+                    break;
+                case 3:
                     gridToMake = GameGridBuilder.
                         SetPlayerOneTowerY(25).
                         SetPlayerTwoTowerY(775).
