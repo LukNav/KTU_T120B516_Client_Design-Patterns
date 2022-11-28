@@ -438,7 +438,7 @@ namespace WindowsFormsApplication
             this.Text = $"Game: {Program.LocalHostPort}";
 
             //GameGridBuilderis
-            SetGridContents(0);
+            SetGridContents(1);
 
         }
 
