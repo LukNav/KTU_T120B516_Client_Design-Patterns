@@ -95,8 +95,11 @@ namespace WindowsFormsApplication
             Pawn1Picture.Image = FileUtils.GetImage(gameLevel.Pawn1.ImageName);
             Pawn2Picture.Image = FileUtils.GetImage(gameLevel.Pawn2.ImageName);
             Pawn3Picture.Image = FileUtils.GetImage(gameLevel.Pawn3.ImageName);
-            tower1.Image = FileUtils.GetImage(gameLevel.TowerType.imageName);
-            tower2.Image = FileUtils.GetImage(gameLevel.TowerType.imageName);
+            if(tower1 != null && tower2 != null)
+            {
+                tower1.Image = FileUtils.GetImage(gameLevel.TowerType.imageName);
+                tower2.Image = FileUtils.GetImage(gameLevel.TowerType.imageName);
+            }
         }
 
         private static void UpdatePlayersColorsAndNames(Game game)
