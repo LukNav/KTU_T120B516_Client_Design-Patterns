@@ -10,7 +10,7 @@
 
         public GameLevel(Tower towerType, Pawn pawn1, Pawn pawn2, Pawn pawn3)
         {
-            Level = 0;
+            Level = 1;
             TowerType=towerType;
             Pawn1=pawn1;
             Pawn2=pawn2;
