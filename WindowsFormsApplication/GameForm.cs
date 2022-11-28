@@ -52,7 +52,10 @@ namespace WindowsFormsApplication
 
         internal void ChangeLevel(Game game)
         {
+            YourTurnLabel.Visible = false;
             ResetGameLevel();
+            CurrentGameState.SelectedGameGrid = new GameGridBuilder();
+            RebuildGrid();
             StartGame(game);
         }
 
@@ -65,7 +68,6 @@ namespace WindowsFormsApplication
             EnemyGameState = null;
             IsPlayersTurn= false;
 
-            tiles = new List<PictureBox>();
             PictureBox defTile = null;
             _selectedGridPawn = null;
             _selectedPawnTile = null;
