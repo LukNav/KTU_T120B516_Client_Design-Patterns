@@ -50,6 +50,7 @@ namespace WindowsFormsApplication
             CurrentGame = game;
             _selectedPawn = CurrentGame.GameLevel.Pawn1;
             SetGameInfo(CurrentGame);//Update game info in UI
+            BuildCurrentGameState();
         }
 
         internal void ChangeLevel(Game game)
