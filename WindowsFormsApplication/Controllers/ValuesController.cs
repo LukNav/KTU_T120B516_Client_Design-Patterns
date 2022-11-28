@@ -48,5 +48,15 @@ namespace WindowsFormsApplication.Controllers
             }));
             return NoContent();
         }
+
+        [HttpPost("ChangeLevel")]
+        public ActionResult ChangeLevel([FromBody] Game gameInfo)
+        {
+            Program.GameForm.Invoke(new Action(() =>
+            {
+                Program.GameForm.ChangeLevel(gameInfo);
+            }));
+            return NoContent();
+        }
     }
 }
