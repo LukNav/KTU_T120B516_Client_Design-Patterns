@@ -49,18 +49,45 @@ namespace WindowsFormsApplication
             _selectedPawn = CurrentGame.GameLevel.Pawn1;
             SetGameInfo(CurrentGame);//Update game info in UI
         }
+
+        internal void ChangeLevel(Game game)
+        {
+            ResetGameLevel();
+            StartGame(game);
+        }
+
+        private void ResetGameLevel()
+        {
+            CurrentGameState = new GameState();
+            CurrentGameState.Pawns = new List<Pawn>();
+            InitializeComponent();
+
+            EnemyGameState = null;
+            IsPlayersTurn= false;
+
+            tiles = new List<PictureBox>();
+            PictureBox defTile = null;
+            _selectedGridPawn = null;
+            _selectedPawnTile = null;
+            Pawn _selectedPawn = null;
+            _ticks = 0;
+            _hasSelectedAPawnOnTheGrid = false;
+            _previouslySelectedGridPawn = null;
+        }
+
         #region UI controls
 
-       
+
 
         private void SetGameInfo(Game game)
         {
             UpdatePlayersColorsAndNames(game);
-            UpdateSpawnablePawns(game.GameLevel);
+            UpdateLevelInfo(game.GameLevel);
         }
 
-        private void UpdateSpawnablePawns(GameLevel gameLevel)
+        private void UpdateLevelInfo(GameLevel gameLevel)
         {
+            LevelLabel.Text = gameLevel.Level.ToString();
             Pawn1Picture.Image = FileUtils.GetImage(gameLevel.Pawn1.ImageName);
             Pawn2Picture.Image = FileUtils.GetImage(gameLevel.Pawn2.ImageName);
             Pawn3Picture.Image = FileUtils.GetImage(gameLevel.Pawn3.ImageName);
@@ -553,5 +580,16 @@ namespace WindowsFormsApplication
         public Obstacle Lake = new Obstacle(new Slower(), new Position(0, 0), "I DO NOT EXIST");
         public Obstacle Mountain = new Obstacle(new Wall(), new Position(0, 0), "I DO NOT EXIST");
         #endregion
+
+        private void Debug_NextLevel_Click(object sender, EventArgs e)
+        {
+            string serverUrl = $"{Program.ServerIp}/NextLevel";
+            HttpRequests.GetRequest(serverUrl);
+        }
+
+        private void LevelNameLabel_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

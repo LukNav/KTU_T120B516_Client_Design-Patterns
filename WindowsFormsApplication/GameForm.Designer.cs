@@ -48,6 +48,9 @@
             this.loadStateButton = new System.Windows.Forms.Button();
             this.YourTurnLabel = new System.Windows.Forms.Label();
             this.WaitForYourTurnLabel = new System.Windows.Forms.Label();
+            this.Debug_NextLevel = new System.Windows.Forms.Button();
+            this.LevelNameLabel = new System.Windows.Forms.Label();
+            this.LevelLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Pawn1Picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Pawn2Picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Pawn3Picture)).BeginInit();
@@ -206,12 +209,12 @@
             // 
             // loadStateButton
             // 
-            this.loadStateButton.Location = new System.Drawing.Point(12, 22);
-            this.loadStateButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.loadStateButton.Location = new System.Drawing.Point(12, 30);
+            this.loadStateButton.Margin = new System.Windows.Forms.Padding(2);
             this.loadStateButton.Name = "loadStateButton";
             this.loadStateButton.Size = new System.Drawing.Size(131, 20);
             this.loadStateButton.TabIndex = 28;
-            this.loadStateButton.Text = "TestLoadState";
+            this.loadStateButton.Text = "Debug: LoadState";
             this.loadStateButton.UseVisualStyleBackColor = true;
             this.loadStateButton.Click += new System.EventHandler(this.loadStateButton_Click);
             // 
@@ -240,11 +243,44 @@
             this.WaitForYourTurnLabel.TabIndex = 30;
             this.WaitForYourTurnLabel.Text = "Wait For Your Turn";
             // 
+            // Debug_NextLevel
+            // 
+            this.Debug_NextLevel.Location = new System.Drawing.Point(12, 6);
+            this.Debug_NextLevel.Margin = new System.Windows.Forms.Padding(2);
+            this.Debug_NextLevel.Name = "Debug_NextLevel";
+            this.Debug_NextLevel.Size = new System.Drawing.Size(131, 20);
+            this.Debug_NextLevel.TabIndex = 31;
+            this.Debug_NextLevel.Text = "Debug: Next Level";
+            this.Debug_NextLevel.UseVisualStyleBackColor = true;
+            this.Debug_NextLevel.Click += new System.EventHandler(this.Debug_NextLevel_Click);
+            // 
+            // LevelNameLabel
+            // 
+            this.LevelNameLabel.AutoSize = true;
+            this.LevelNameLabel.Location = new System.Drawing.Point(148, 9);
+            this.LevelNameLabel.Name = "LevelNameLabel";
+            this.LevelNameLabel.Size = new System.Drawing.Size(37, 15);
+            this.LevelNameLabel.TabIndex = 32;
+            this.LevelNameLabel.Text = "Level:";
+            this.LevelNameLabel.Click += new System.EventHandler(this.LevelNameLabel_Click);
+            // 
+            // LevelLabel
+            // 
+            this.LevelLabel.AutoSize = true;
+            this.LevelLabel.Location = new System.Drawing.Point(191, 9);
+            this.LevelLabel.Name = "LevelLabel";
+            this.LevelLabel.Size = new System.Drawing.Size(18, 15);
+            this.LevelLabel.TabIndex = 33;
+            this.LevelLabel.Text = "-1";
+            // 
             // GameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1000, 637);
+            this.Controls.Add(this.LevelLabel);
+            this.Controls.Add(this.LevelNameLabel);
+            this.Controls.Add(this.Debug_NextLevel);
             this.Controls.Add(this.WaitForYourTurnLabel);
             this.Controls.Add(this.YourTurnLabel);
             this.Controls.Add(this.loadStateButton);
@@ -297,5 +333,8 @@
         private Button loadStateButton;
         private Label YourTurnLabel;
         private Label WaitForYourTurnLabel;
+        private Button Debug_NextLevel;
+        private Label LevelNameLabel;
+        private Label LevelLabel;
     }
 }
