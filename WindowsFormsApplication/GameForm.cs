@@ -24,6 +24,8 @@ namespace WindowsFormsApplication
         private PictureBox defTile;
         private Pawn _selectedGridPawn = null;
         private PictureBox _selectedPawnTile = null;
+        PictureBox tower1;
+        PictureBox tower2;
         #endregion
 
         #region Other Settings
@@ -93,6 +95,8 @@ namespace WindowsFormsApplication
             Pawn1Picture.Image = FileUtils.GetImage(gameLevel.Pawn1.ImageName);
             Pawn2Picture.Image = FileUtils.GetImage(gameLevel.Pawn2.ImageName);
             Pawn3Picture.Image = FileUtils.GetImage(gameLevel.Pawn3.ImageName);
+            tower1.Image = FileUtils.GetImage(gameLevel.TowerType.imageName);
+            tower2.Image = FileUtils.GetImage(gameLevel.TowerType.imageName);
         }
 
         private static void UpdatePlayersColorsAndNames(Game game)
@@ -210,8 +214,8 @@ namespace WindowsFormsApplication
             //Load towers
             Image towerImage = FileUtils.GetImage("Tower_1.png");
             Size towerSize = new Size(gridToMake.TowerLength, gridToMake.TowerLength);
-            PictureBox tower1 = new PictureBox();
-            PictureBox tower2 = new PictureBox();
+            tower1 = new PictureBox();
+            tower2 = new PictureBox();
             Point tower1Location = new Point(gridToMake.TowerX, gridToMake.PlayerOneTowerY);
             Point tower2Location = new Point(gridToMake.TowerX, gridToMake.PlayerTwoTowerY);
             tower1.Location = tower1Location;
