@@ -157,7 +157,7 @@ namespace WindowsFormsApplication
                 }
             }
 
-            if(EnemyGameState != null || EnemyGameState.Pawns != null)
+            if(EnemyGameState != null)
             {
                 foreach (Pawn pawn in EnemyGameState.Pawns)
                 {
