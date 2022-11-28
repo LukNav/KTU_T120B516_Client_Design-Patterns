@@ -68,7 +68,7 @@ namespace WindowsFormsApplication
             CurrentGameState = new GameState();
             CurrentGameState.Pawns = new List<Pawn>();
 
-            EnemyGameState = null;
+            EnemyGameState =  new GameState();
             IsPlayersTurn= false;
 
             PictureBox defTile = null;
@@ -600,7 +600,7 @@ namespace WindowsFormsApplication
             CurrentGameState = new GameState();
             CurrentGameState.Pawns = new List<Pawn>();
 
-            EnemyGameState = null;
+            EnemyGameState = new GameState();
 
             string serverUrl = $"{Program.ServerIp}/NextLevel";
             HttpRequests.GetRequest(serverUrl);
