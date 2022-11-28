@@ -53,8 +53,9 @@ namespace WindowsFormsApplication
         internal void ChangeLevel(Game game)
         {
             YourTurnLabel.Visible = false;
+            WaitForYourTurnLabel.Visible = true;
             ResetGameLevel();
-            CurrentGameState.SelectedGameGrid = new GameGridBuilder();
+            SetGridContents(game.GameLevel.Level);
             RebuildGrid();
             StartGame(game);
         }
@@ -63,7 +64,6 @@ namespace WindowsFormsApplication
         {
             CurrentGameState = new GameState();
             CurrentGameState.Pawns = new List<Pawn>();
-            InitializeComponent();
 
             EnemyGameState = null;
             IsPlayersTurn= false;
@@ -431,6 +431,12 @@ namespace WindowsFormsApplication
             this.Text = $"Game: {Program.LocalHostPort}";
 
             //GameGridBuilderis
+            SetGridContents(0);
+
+        }
+
+        private void SetGridContents(int level)
+        {
             var GameGridBuilder = new GameGridBuilder();
             GameGrid gridToMake = GameGridBuilder;
 
@@ -442,7 +448,7 @@ namespace WindowsFormsApplication
             }
 
             //Kol kas tie papildomi lygiai identiski pirmam.
-            switch (0) //Keist skaiciuka kad pakeist generuojama lygi
+            switch (level) //Keist skaiciuka kad pakeist generuojama lygi
             {
                 case 0:
                     gridToMake = GameGridBuilder.
@@ -491,8 +497,6 @@ namespace WindowsFormsApplication
                     break;
             }
             CurrentGameState.SelectedGameGrid = gridToMake;
-            BuildGrid(gridToMake);
-
         }
 
         private void Pawn1Picture_Click(object sender, EventArgs e)
@@ -585,6 +589,11 @@ namespace WindowsFormsApplication
 
         private void Debug_NextLevel_Click(object sender, EventArgs e)
         {
+            CurrentGameState = new GameState();
+            CurrentGameState.Pawns = new List<Pawn>();
+
+            EnemyGameState = null;
+
             string serverUrl = $"{Program.ServerIp}/NextLevel";
             HttpRequests.GetRequest(serverUrl);
         }
