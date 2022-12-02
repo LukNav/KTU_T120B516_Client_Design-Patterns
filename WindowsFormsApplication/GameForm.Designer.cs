@@ -51,6 +51,8 @@
             this.Debug_NextLevel = new System.Windows.Forms.Button();
             this.LevelNameLabel = new System.Windows.Forms.Label();
             this.LevelLabel = new System.Windows.Forms.Label();
+            this.DebugLabel = new System.Windows.Forms.Label();
+            this.DebugText = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Pawn1Picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Pawn2Picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Pawn3Picture)).BeginInit();
@@ -273,11 +275,31 @@
             this.LevelLabel.TabIndex = 33;
             this.LevelLabel.Text = "-1";
             // 
+            // DebugLabel
+            // 
+            this.DebugLabel.AutoSize = true;
+            this.DebugLabel.Location = new System.Drawing.Point(215, 9);
+            this.DebugLabel.Name = "DebugLabel";
+            this.DebugLabel.Size = new System.Drawing.Size(69, 15);
+            this.DebugLabel.TabIndex = 34;
+            this.DebugLabel.Text = "DEBUGTEXT";
+            // 
+            // DebugText
+            // 
+            this.DebugText.AutoSize = true;
+            this.DebugText.Location = new System.Drawing.Point(290, 9);
+            this.DebugText.Name = "DebugText";
+            this.DebugText.Size = new System.Drawing.Size(119, 15);
+            this.DebugText.TabIndex = 35;
+            this.DebugText.Text = "<DEBUG TEXT HERE>";
+            // 
             // GameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1000, 637);
+            this.Controls.Add(this.DebugText);
+            this.Controls.Add(this.DebugLabel);
             this.Controls.Add(this.LevelLabel);
             this.Controls.Add(this.LevelNameLabel);
             this.Controls.Add(this.Debug_NextLevel);
@@ -336,5 +358,7 @@
         private Button Debug_NextLevel;
         private Label LevelNameLabel;
         private Label LevelLabel;
+        private Label DebugLabel;
+        private Label DebugText;
     }
 }

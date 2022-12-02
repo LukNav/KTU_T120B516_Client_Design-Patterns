@@ -31,9 +31,8 @@ namespace WindowsFormsApplication
         #region Other Settings
         private Pawn _selectedPawn;
         private int _ticks = 0;
-        private bool _hasSelectedAPawnOnTheGrid = false;
         private Pawn _previouslySelectedGridPawn = null;
-        private List<PictureBox> _targetTiles= new List<PictureBox>();
+        private List<Position> _targetPositions = new List<Position>();
         #endregion
 
         public GameForm()
@@ -77,7 +76,6 @@ namespace WindowsFormsApplication
             _selectedPawnTile = null;
             Pawn _selectedPawn = null;
             _ticks = 0;
-            _hasSelectedAPawnOnTheGrid = false;
             _previouslySelectedGridPawn = null;
         }
 
@@ -132,7 +130,7 @@ namespace WindowsFormsApplication
             IsPlayersTurn = true;
             YourTurnLabel.Visible = true;
             WaitForYourTurnLabel.Visible = false;
-            _targetTiles = new List<PictureBox>();
+            _targetPositions.Clear();
         }
 
         private void EndPlayersTurn(GameState currentGameState)
@@ -269,175 +267,122 @@ namespace WindowsFormsApplication
             Position currentPosition = GameGrid.GetPositionFromTile(selectedTile);
             Pawn pawnOnGrid = CurrentGameState.Pawns.Where(p => p.Position == currentPosition).FirstOrDefault();//Try getting a pawn, if it exists in selected tile
 
-            //Dud pictureboxas skirtas tikrinimui, ar parinktas tile yra tuscias zoles tilas
+            //Tikriname selectedTile.Image ar tai toks pats image kaip grassTile.Image ar MarkedTile.png
+            #region Picture Comparison
             PictureBox grassTile = new PictureBox();
             grassTile.Image = FileUtils.GetImage("GrassTile.png");
-
-            //Tikriname selectedTile.Image ar tai toks pats image kaip grassTile.Image
+            PictureBox markedTile = new PictureBox();
+            markedTile.Image = FileUtils.GetImage("MarkedTile.png");         
             var grassArray = ImageToByteArray(grassTile.Image);
             var selectedImageArray = ImageToByteArray(selectedTile.Image);
-            bool samePictures = grassArray.Length == selectedImageArray.Length;
-            if(samePictures)
+            var markedArray = ImageToByteArray(selectedTile.Image);
+            bool isGrass = grassArray.Length == selectedImageArray.Length;
+            if(isGrass)
             {
                 for(int i = 0; i < grassArray.Length; i++)
                 {
                     if(grassArray[i] != selectedImageArray[i])
                     {
-                        samePictures = false;
+                        isGrass = false;
                         break;
                     }
                 }
             }
+            bool isMarked = markedArray.Length == selectedImageArray.Length;
+            if(isMarked)
+            {
+                for (int i = 0; i < markedArray.Length; i++)
+                {
+                    if(markedArray[i] != selectedImageArray[i])
+                    {
+                        isMarked = false;
+                        break;
+                    }
+                }
+            }
+            #endregion
+
 
             //Darome veiksmus paspaudus kazka priklausomai nuo to ka paspaudeme ir kada
-
-            //TODO: basically pakeist sita metoda i ataka
-            if(pawnOnGrid != null && _previouslySelectedGridPawn != null)//Mes anskciau parinkome pawnsa ant grido
-            {
-                if(samePictures)//Bandom ji kisti ten kur negalima; resetinam selectus
-                {
-                    _selectedGridPawn = null;
-                    _selectedPawnTile = null;
-                    _previouslySelectedGridPawn = null;
-                    _hasSelectedAPawnOnTheGrid = false;
-                }
-                else//Bandom ji judinti kazkur
-                {
-                    bool cellIsOccupiedByARealPawn = false;
-
-                    for (int i = 0; i < CurrentGameState.Pawns.Count(); i++)//Cicklas tikrinantis ar parinktas langelis nera uzimtas svetimo pawno. Kol kas tiktais atmeta zaideja atgal i "deselect" stadija.
-                    {
-                        if (CurrentGameState.Pawns[i].Position == currentPosition && CurrentGameState.Pawns[i].Position != _previouslySelectedGridPawn.Position)
-                        {
-                            cellIsOccupiedByARealPawn = true;
-                            break;
-                        }
-                    }
-
-                    if (cellIsOccupiedByARealPawn)//Langelis uzimtas, blogai.
-                    {
-                        _selectedGridPawn = null;
-                        _selectedPawnTile = null;
-                        _previouslySelectedGridPawn = null;
-                        _hasSelectedAPawnOnTheGrid = false;
-                    }
-                    else//Langelis laisvas, lendam vidun.
-                    {
-                        for (int i = 0; i < CurrentGameState.Pawns.Count(); i++)
-                        {
-                            if (CurrentGameState.Pawns[i].Position == _previouslySelectedGridPawn.Position)
-                            {
-                                CurrentGameState.Pawns[i].Position = currentPosition;
-                                BuildCurrentGameState();
-                                _selectedGridPawn = null;
-                                _selectedPawnTile = null;
-                                _previouslySelectedGridPawn = null;
-                                _hasSelectedAPawnOnTheGrid = false;
-                                EndPlayersTurn(CurrentGameState);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            else if (pawnOnGrid == null && _previouslySelectedGridPawn != null && _targetTiles.Count > 0)
-            {
-                if (_previouslySelectedGridPawn.moveAlgorithm.MovePositions(_previouslySelectedGridPawn).Contains(currentPosition))//Bandom ji kisti ten kur negalima; resetinam selectus
-                {
-                    _selectedGridPawn = null;
-                    _selectedPawnTile = null;
-                    _previouslySelectedGridPawn = null;
-                    _hasSelectedAPawnOnTheGrid = false;
-                }
-                else//Bandom ji judinti kazkur
-                {
-                    bool cellIsOccupiedByARealPawn = false;
-
-                    for (int i = 0; i < CurrentGameState.Pawns.Count(); i++)//Cicklas tikrinantis ar parinktas langelis nera uzimtas svetimo pawno. Kol kas tiktais atmeta zaideja atgal i "deselect" stadija.
-                    {
-                        if (CurrentGameState.Pawns[i].Position == currentPosition && CurrentGameState.Pawns[i].Position != _previouslySelectedGridPawn.Position)
-                        {
-                            cellIsOccupiedByARealPawn = true;
-                            break;
-                        }
-                    }
-
-                    // check ar langelis yra possible move'as
-                    bool targetTile = false;
-                    foreach (PictureBox tile in _targetTiles)
-                    {
-                        Position tilePos = GetPositionFromTile(tile);
-                        if (tilePos.Equals(currentPosition))
-                        {
-                            targetTile = true;
-                            break;
-                        }
-                    }
-
-                    if (cellIsOccupiedByARealPawn || !targetTile)//Langelis uzimtas or illegal move
-                    {
-                        _selectedGridPawn = null;
-                        _selectedPawnTile = null;
-                        _previouslySelectedGridPawn = null;
-                        _hasSelectedAPawnOnTheGrid = false;
-                    }
-                    else//Langelis laisvas, lendam vidun.
-                    {
-                        for (int i = 0; i < CurrentGameState.Pawns.Count(); i++)
-                        {
-                            if (CurrentGameState.Pawns[i].Position == _previouslySelectedGridPawn.Position)
-                            {
-                                CurrentGameState.Pawns[i].Position = currentPosition;
-                                BuildCurrentGameState();
-                                _selectedGridPawn = null;
-                                _selectedPawnTile = null;
-                                _previouslySelectedGridPawn = null;
-                                _hasSelectedAPawnOnTheGrid = false;
-                                EndPlayersTurn(CurrentGameState);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            else if (pawnOnGrid != null)//If in the selected tile there is a pawn and we have not selected a pawn previously
-            {
-                ShowPossibleMovesForSelectedPawn(sender, pawnOnGrid, selectedTile);
-                _previouslySelectedGridPawn = pawnOnGrid;
-                _hasSelectedAPawnOnTheGrid = true;
-            }
-            else if (currentPosition.Y <= 0 && samePictures == true)//If empty grid tile is selected to spawn
-            {
-                if (_hasSelectedAPawnOnTheGrid)//Deselecting one of the grid spawned pawns
-                {
-                    _selectedGridPawn = null;
-                    _selectedPawnTile = null;
-                    _previouslySelectedGridPawn = null;
-                    _hasSelectedAPawnOnTheGrid = false;
-                }
-                else//No grid spawned pawns selected so we can do the spawn thing instead of causing movement conflicts
-                {
-                    DrawPawn(_selectedPawn, selectedTile);
-                    Pawn pawnToSend = _selectedPawn;
-                    pawnToSend.Position = currentPosition;
-                    CurrentGameState.Pawns.Add(pawnToSend);
-                    if (_selectedGridPawn != null)//Deselect selected grid pawns
-                    {
-                        BuildCurrentGameState();
-                        _selectedGridPawn = null;
-                        _selectedPawnTile = null;
-                        _previouslySelectedGridPawn = null;
-                        _hasSelectedAPawnOnTheGrid = false;
-                    }
-                    EndPlayersTurn(CurrentGameState);
-                }
-            }
-            else//Failsafe in the event nothing worked
-            {
+            if(pawnOnGrid != null && _previouslySelectedGridPawn != null)//Ataka
+            {                
+                BuildCurrentGameState();
                 _selectedGridPawn = null;
                 _selectedPawnTile = null;
                 _previouslySelectedGridPawn = null;
-                _hasSelectedAPawnOnTheGrid = false;
+                DebugText.Text = "ATAKA IF RETURNED TRUE";
+            }
+            else if(pawnOnGrid == null && _previouslySelectedGridPawn != null && isMarked == true)//Movementas
+            {
+                bool movementValid = false;
+                for(int j = 0; j < _targetPositions.Count; j++)
+                {
+                    if(_targetPositions[j] == currentPosition)
+                    {
+                        movementValid = true;
+                        break;
+                    }
+                }
+
+                if(movementValid)
+                {
+                    for (int i = 0; i < CurrentGameState.Pawns.Count(); i++)
+                    {
+                        if (CurrentGameState.Pawns[i].Position == _previouslySelectedGridPawn.Position)
+                        {
+                            CurrentGameState.Pawns[i].Position = currentPosition;
+                            BuildCurrentGameState();
+                            _selectedGridPawn = null;
+                            _selectedPawnTile = null;
+                            _previouslySelectedGridPawn = null;
+                            _targetPositions.Clear();
+                            DebugText.Text = "MOVEMENTAS IF RETURNED TRUE";
+                            EndPlayersTurn(CurrentGameState);
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    BuildCurrentGameState();
+                    _selectedGridPawn = null;
+                    _selectedPawnTile = null;
+                    _previouslySelectedGridPawn = null;
+                    _targetPositions.Clear();
+                    DebugText.Text = "MOVEMENTAS FAILSAFE IF RETURNED TRUE";
+                }
+            }
+            else if (pawnOnGrid != null && _previouslySelectedGridPawn == null)//If in the selected tile there is a pawn and we have not selected a pawn previously
+            {
+                DebugText.Text = "MARK MOVES IF RETURNED TRUE";
+                ShowPossibleMovesForSelectedPawn(sender, pawnOnGrid, selectedTile);
+                _previouslySelectedGridPawn = pawnOnGrid;
+            }
+            else if (currentPosition.Y <= 0 && pawnOnGrid == null)//If empty grid tile is selected to spawn
+            {                
+                DrawPawn(_selectedPawn, selectedTile);
+                Pawn pawnToSend = _selectedPawn;
+                pawnToSend.Position = currentPosition;
+                CurrentGameState.Pawns.Add(pawnToSend);
+                if (_selectedGridPawn != null)//Deselect selected grid pawns
+                {
+                    BuildCurrentGameState();
+                    DebugText.Text = "SPAWN PAWN IF RETURNED TRUE";
+                    _selectedGridPawn = null;
+                    _selectedPawnTile = null;
+                    _targetPositions.Clear();
+                    _previouslySelectedGridPawn = null;
+                }
+                EndPlayersTurn(CurrentGameState);
+            }
+            else//Failsafe in the event nothing worked
+            {
+                DebugText.Text = "FAILSAFE IF RETURNED TRUE";
+                BuildCurrentGameState();
+                _selectedGridPawn = null;
+                _selectedPawnTile = null;
+                _previouslySelectedGridPawn = null;
+                _targetPositions.Clear();
             }
         }
         private void ShowPossibleMovesForSelectedPawn(object sender, Pawn pawnOnGrid, PictureBox pawnTile)
@@ -449,17 +394,17 @@ namespace WindowsFormsApplication
         }
         private void MarkPawnPossibleMoves(Pawn pawn)
         {
-            _targetTiles.Clear();
-            List<Position> possibleMoves = pawn.moveAlgorithm.MovePositions(pawn);
-            int foundPositionsToBreak = possibleMoves.Count;
+            _targetPositions.Clear();
+            _targetPositions = pawn.moveAlgorithm.MovePositions(pawn);
+            int foundPositionsToBreak = _targetPositions.Count;
             foreach (PictureBox tile in tiles)
             {
                 Position tilePosition = GetPositionFromTile(tile); 
-                foreach (Position position in possibleMoves)
+                foreach (Position position in _targetPositions)
                 {
                     if (position == tilePosition)
                     {
-                        DrawSelectedPawnSymbol(tile);
+                        DrawSelectedMarkSymbol(tile);
                         foundPositionsToBreak--;
                     }
                     if (foundPositionsToBreak <= 0) break;
@@ -498,18 +443,11 @@ namespace WindowsFormsApplication
                 e.Graphics.DrawString("[x]", Font, Brushes.Red, 50, 0);
                 e.Graphics.DrawString(pawn.Health.ToString(), Font, Brushes.Red, 0, 0);
             });
-            _targetTiles.Add(tile);
 
         }
-        private void DrawSelectedPawnSymbol(PictureBox tile)
+        private void DrawSelectedMarkSymbol(PictureBox tile)
         {
-            tile.Image = FileUtils.GetImage("GrassTile.png");
-            tile.Paint += new PaintEventHandler((sender, e) =>
-            {
-                e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-                e.Graphics.DrawString("[x]", Font, Brushes.Green, 50, 0);
-            });
-            _targetTiles.Add(tile);
+            tile.Image = FileUtils.GetImage("MarkedTile.png");
         }
 
         #region other events
