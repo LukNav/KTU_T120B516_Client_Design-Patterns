@@ -265,46 +265,13 @@ namespace WindowsFormsApplication
             
             PictureBox selectedTile = (PictureBox)sender;
             Position currentPosition = GameGrid.GetPositionFromTile(selectedTile);
-            Pawn pawnOnGrid = CurrentGameState.Pawns.Where(p => p.Position == currentPosition).FirstOrDefault();//Try getting a pawn, if it exists in selected tile
 
-            //Tikriname selectedTile.Image ar tai toks pats image kaip grassTile.Image ar MarkedTile.png
-            #region Picture Comparison
-            PictureBox grassTile = new PictureBox();
-            grassTile.Image = FileUtils.GetImage("GrassTile.png");
-            PictureBox markedTile = new PictureBox();
-            markedTile.Image = FileUtils.GetImage("MarkedTile.png");         
-            var grassArray = ImageToByteArray(grassTile.Image);
-            var selectedImageArray = ImageToByteArray(selectedTile.Image);
-            var markedArray = ImageToByteArray(selectedTile.Image);
-            bool isGrass = grassArray.Length == selectedImageArray.Length;
-            if(isGrass)
-            {
-                for(int i = 0; i < grassArray.Length; i++)
-                {
-                    if(grassArray[i] != selectedImageArray[i])
-                    {
-                        isGrass = false;
-                        break;
-                    }
-                }
-            }
-            bool isMarked = markedArray.Length == selectedImageArray.Length;
-            if(isMarked)
-            {
-                for (int i = 0; i < markedArray.Length; i++)
-                {
-                    if(markedArray[i] != selectedImageArray[i])
-                    {
-                        isMarked = false;
-                        break;
-                    }
-                }
-            }
-            #endregion
+            Pawn allyPawnOnGrid = CurrentGameState.Pawns.Where(p => p.Position == currentPosition).FirstOrDefault();//Try getting ally pawn, if it exists in selected tile
+            Pawn enemyPawnOnGrid = EnemyGameState.Pawns.Where(p => p.Position == currentPosition).FirstOrDefault();//Try getting enemy pawn, if it exists in selected tile
 
-
+            
             //Darome veiksmus paspaudus kazka priklausomai nuo to ka paspaudeme ir kada
-            if(pawnOnGrid != null && _previouslySelectedGridPawn != null)//Ataka
+            if(enemyPawnOnGrid != null && _previouslySelectedGridPawn != null)//Ataka
             {                
                 BuildCurrentGameState();
                 _selectedGridPawn = null;
@@ -312,7 +279,7 @@ namespace WindowsFormsApplication
                 _previouslySelectedGridPawn = null;
                 DebugText.Text = "ATAKA IF RETURNED TRUE";
             }
-            else if(pawnOnGrid == null && _previouslySelectedGridPawn != null && isMarked == true)//Movementas
+            else if(enemyPawnOnGrid == null && allyPawnOnGrid == null && _previouslySelectedGridPawn != null)//Movementas
             {
                 bool movementValid = false;
                 for(int j = 0; j < _targetPositions.Count; j++)
@@ -352,13 +319,13 @@ namespace WindowsFormsApplication
                     DebugText.Text = "MOVEMENTAS FAILSAFE IF RETURNED TRUE";
                 }
             }
-            else if (pawnOnGrid != null && _previouslySelectedGridPawn == null)//If in the selected tile there is a pawn and we have not selected a pawn previously
+            else if (allyPawnOnGrid != null && _previouslySelectedGridPawn == null)//If in the selected tile there is a pawn and we have not selected a pawn previously
             {
                 DebugText.Text = "MARK MOVES IF RETURNED TRUE";
-                ShowPossibleMovesForSelectedPawn(sender, pawnOnGrid, selectedTile);
-                _previouslySelectedGridPawn = pawnOnGrid;
+                ShowPossibleMovesForSelectedPawn(sender, allyPawnOnGrid, selectedTile);
+                _previouslySelectedGridPawn = allyPawnOnGrid;
             }
-            else if (currentPosition.Y <= 0 && pawnOnGrid == null)//If empty grid tile is selected to spawn
+            else if (currentPosition.Y <= 0 && allyPawnOnGrid == null && enemyPawnOnGrid == null)//If empty grid tile is selected to spawn
             {                
                 DrawPawn(_selectedPawn, selectedTile);
                 Pawn pawnToSend = _selectedPawn;
