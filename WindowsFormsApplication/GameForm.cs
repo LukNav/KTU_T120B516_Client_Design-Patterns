@@ -292,7 +292,7 @@ namespace WindowsFormsApplication
             //Darome veiksmus paspaudus kazka priklausomai nuo to ka paspaudeme ir kada
 
             //TODO: basically pakeist sita metoda i ataka
-            if(_hasSelectedAPawnOnTheGrid == true && _previouslySelectedGridPawn != null)//Mes anskciau parinkome pawnsa ant grido
+            if(pawnOnGrid != null && _previouslySelectedGridPawn != null)//Mes anskciau parinkome pawnsa ant grido
             {
                 if(samePictures)//Bandom ji kisti ten kur negalima; resetinam selectus
                 {
@@ -340,10 +340,9 @@ namespace WindowsFormsApplication
                     }
                 }
             }
-            // Pagal ideja turetu movint cia normaliai i selected tileús, bet nemovina. 0 Clue why
-            else if (_hasSelectedAPawnOnTheGrid == false && _previouslySelectedGridPawn != null && _targetTiles.Count > 0)
+            else if (pawnOnGrid == null && _previouslySelectedGridPawn != null && _targetTiles.Count > 0)
             {
-                if (samePictures)//Bandom ji kisti ten kur negalima; resetinam selectus
+                if (_previouslySelectedGridPawn.moveAlgorithm.MovePositions(_previouslySelectedGridPawn).Contains(currentPosition))//Bandom ji kisti ten kur negalima; resetinam selectus
                 {
                     _selectedGridPawn = null;
                     _selectedPawnTile = null;
@@ -401,7 +400,7 @@ namespace WindowsFormsApplication
                     }
                 }
             }
-            else if (pawnOnGrid != null && _hasSelectedAPawnOnTheGrid == false)//If in the selected tile there is a pawn and we have not selected a pawn previously
+            else if (pawnOnGrid != null)//If in the selected tile there is a pawn and we have not selected a pawn previously
             {
                 ShowPossibleMovesForSelectedPawn(sender, pawnOnGrid, selectedTile);
                 _previouslySelectedGridPawn = pawnOnGrid;
