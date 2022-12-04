@@ -5,7 +5,7 @@ VisualStudioVersion = 17.2.32516.85
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsFormsApplication", "WindowsFormsApplication\WindowsFormsApplication.csproj", "{0C247E7D-24C0-4888-85A8-8648DCFA83FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{3D7DEF2A-7032-43EE-9A33-F61B3B526316}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "IntegrationTests\IntegrationTests.csproj", "{5F9EEEED-DF24-484A-93C5-746159A28227}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{0C247E7D-24C0-4888-85A8-8648DCFA83FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C247E7D-24C0-4888-85A8-8648DCFA83FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C247E7D-24C0-4888-85A8-8648DCFA83FB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3D7DEF2A-7032-43EE-9A33-F61B3B526316}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3D7DEF2A-7032-43EE-9A33-F61B3B526316}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3D7DEF2A-7032-43EE-9A33-F61B3B526316}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3D7DEF2A-7032-43EE-9A33-F61B3B526316}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F9EEEED-DF24-484A-93C5-746159A28227}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F9EEEED-DF24-484A-93C5-746159A28227}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F9EEEED-DF24-484A-93C5-746159A28227}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F9EEEED-DF24-484A-93C5-746159A28227}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
