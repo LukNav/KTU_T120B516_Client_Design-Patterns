@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Microsoft.Net.Http.Headers;
 using WindowsFormsApplication.Controllers;
+using WindowsFormsApplication.Controllers.MediatorPattern;
 using WindowsFormsApplication.Helpers;
 using WindowsFormsApplication.Models;
 
@@ -9,6 +10,8 @@ namespace WindowsFormsApplication
     public partial class MenuForm : Form
     {
         public static string PlayerName { get; private set; }
+        private static MenuMediator Mediator { get; set; }
+
         public MenuForm()
         {
             InitializeComponent();
@@ -76,30 +79,25 @@ namespace WindowsFormsApplication
 
         private bool TryCreateClient(string name, string localhostPort)
         {
-            string serverUrl = $"{Program.ServerIp}/Player/Create/{name}/{localhostPort}";
+            if (Mediator == null)
+                Mediator = new MenuMediator(name, Program.LocalHostPort);
 
-            HttpResponseMessage httpResponseMessage = HttpRequests.GetRequest(serverUrl);
-            string responseMessage = httpResponseMessage.Message();
-
-            if (httpResponseMessage.StatusCode == System.Net.HttpStatusCode.Created)
-                return true;
-            else
-                Program.MenuForm.ErrorLabel.Text = responseMessage;
-
-            return false;
+            string errorMessage = Mediator.CreateClient();
+            if (errorMessage != null)
+                Program.MenuForm.ErrorLabel.Text = errorMessage;
+            return true;//Returns true if client was created
         }
 
         private Game GetGameInfo()
         {
-            string serverUrl = $"{Program.ServerIp}/Game";
-            HttpResponseMessage httpResponseMessage = HttpRequests.GetRequest(serverUrl);
-            return httpResponseMessage.Deserialize<Game>();
+            return Mediator.GetGameInfo();
         }
 
         private void SetPlayerAsReady(string name)
         {
-            string serverUrl = $"{Program.ServerIp}/Player/SetAsReady/{name}";
-            HttpRequests.GetRequest(serverUrl);
+            if (Mediator == null)
+                Mediator = new MenuMediator(name, Program.LocalHostPort);
+            Mediator.SetPlayerAsReady();
         }
 
         #endregion
@@ -118,8 +116,7 @@ namespace WindowsFormsApplication
 
         private void quitButton_Click(object sender, EventArgs e)
         {
-            string serverUrl = $"{Program.ServerIp}/Player/Unregister/{PlayerName}";
-            HttpRequests.DeleteRequest(serverUrl);
+            Mediator.UnregisterPlayer();
             ToggleLoginItems(true);//Hide Ui login labels
             ToggleReadyToPlayUIItems(false);//Show Ready to play button and label in UI
         }
