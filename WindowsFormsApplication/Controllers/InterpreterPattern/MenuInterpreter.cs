@@ -21,7 +21,7 @@ namespace WindowsFormsApplication.Controllers.InterpreterPattern
             //quit
             switch (context.value)
             {
-                case "Quit":
+                case "quit":
                     Program.MenuForm.quitButton_Click(null, null);
                     break;
 
