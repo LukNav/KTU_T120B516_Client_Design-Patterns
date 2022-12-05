@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Windows.Forms;
 using Microsoft.Net.Http.Headers;
 using WindowsFormsApplication.Controllers;
+using WindowsFormsApplication.Controllers.ChainPattern;
 using WindowsFormsApplication.Helpers;
 using WindowsFormsApplication.Models;
 using WindowsFormsApplication.Models.BridgePattern;
@@ -33,7 +34,7 @@ namespace WindowsFormsApplication
         private int _ticks = 0;
         private Pawn _previouslySelectedGridPawn = null;
         private List<Position> _targetPositions = new List<Position>();
-        #endregion
+        #endregion        
 
         public GameForm()
         {
@@ -262,61 +263,82 @@ namespace WindowsFormsApplication
         {
             if (!IsPlayersTurn)
                 return;
-            
+
+            #region Chain Pattern Setup
+            var damagePawn = new PawnDamageHandler();
+            var damageTower = new TowerDamageHandler();
+            damagePawn.SetNextHandler(damageTower);
+            #endregion
+
             PictureBox selectedTile = (PictureBox)sender;
             Position currentPosition = GameGrid.GetPositionFromTile(selectedTile);
 
             Pawn allyPawnOnGrid = CurrentGameState.Pawns.Where(p => p.Position == currentPosition).FirstOrDefault();//Try getting ally pawn, if it exists in selected tile
             Pawn enemyPawnOnGrid = EnemyGameState.Pawns.Where(p => p.Position == currentPosition).FirstOrDefault();//Try getting enemy pawn, if it exists in selected tile
 
-            
-            //Darome veiksmus paspaudus kazka priklausomai nuo to ka paspaudeme ir kada
-            if(enemyPawnOnGrid != null && _previouslySelectedGridPawn != null)//Ataka
-            {                
-                BuildCurrentGameState();
-                _selectedGridPawn = null;
-                _selectedPawnTile = null;
-                _previouslySelectedGridPawn = null;
-                DebugText.Text = "ATAKA IF RETURNED TRUE";
-            }
-            else if(enemyPawnOnGrid == null && allyPawnOnGrid == null && _previouslySelectedGridPawn != null)//Movementas
+            //Checking if the clicked tile corresponds to a marked tiles position
+            bool isMarkedPosition = false;
+            for (int j = 0; j < _targetPositions.Count; j++)
             {
-                bool movementValid = false;
-                for(int j = 0; j < _targetPositions.Count; j++)
+                if (_targetPositions[j] == currentPosition)
                 {
-                    if(_targetPositions[j] == currentPosition)
-                    {
-                        movementValid = true;
-                        break;
-                    }
+                    isMarkedPosition = true;
+                    break;
                 }
+            }
 
-                if(movementValid)
+            //Darome veiksmus paspaudus kazka priklausomai nuo to ka paspaudeme ir kada
+            if (enemyPawnOnGrid != null && _previouslySelectedGridPawn != null && isMarkedPosition == true)//Ataka pries pawnsa
+            {
+                for (int i = 0; i < EnemyGameState.Pawns.Count(); i++)
                 {
-                    for (int i = 0; i < CurrentGameState.Pawns.Count(); i++)
+                    if (EnemyGameState.Pawns[i].Position == enemyPawnOnGrid.Position)
                     {
-                        if (CurrentGameState.Pawns[i].Position == _previouslySelectedGridPawn.Position)
+                        int damage = damagePawn.CalculateDamageValue("PAWN", _previouslySelectedGridPawn.Damage, EnemyGameState.Pawns[i].Armor);
+                        if (damage > 0)
                         {
-                            CurrentGameState.Pawns[i].Position = currentPosition;
+                            EnemyGameState.Pawns[i].Health -= damage;
+                            if(EnemyGameState.Pawns[i].Health <= 0)
+                            {
+                                EnemyGameState.Pawns.Remove(EnemyGameState.Pawns[i]);
+                            }
                             BuildCurrentGameState();
                             _selectedGridPawn = null;
                             _selectedPawnTile = null;
                             _previouslySelectedGridPawn = null;
                             _targetPositions.Clear();
-                            DebugText.Text = "MOVEMENTAS IF RETURNED TRUE";
+                            DebugText.Text = "DEALT " + damage + " DAMAGE TO PAWN.";
                             EndPlayersTurn(CurrentGameState);
                             break;
                         }
+                        else
+                        {
+                            BuildCurrentGameState();
+                            _selectedGridPawn = null;
+                            _selectedPawnTile = null;
+                            _previouslySelectedGridPawn = null;
+                            _targetPositions.Clear();
+                            DebugText.Text = "FAILED TO DEAL DAMAGE. THIS MEANS THE CHAIN FAILED SOMEHOW.";
+                        }
                     }
                 }
-                else
+            }
+            else if(enemyPawnOnGrid == null && allyPawnOnGrid == null && _previouslySelectedGridPawn != null && isMarkedPosition == true)//Movementas
+            {
+                for (int i = 0; i < CurrentGameState.Pawns.Count(); i++)
                 {
-                    BuildCurrentGameState();
-                    _selectedGridPawn = null;
-                    _selectedPawnTile = null;
-                    _previouslySelectedGridPawn = null;
-                    _targetPositions.Clear();
-                    DebugText.Text = "MOVEMENTAS FAILSAFE IF RETURNED TRUE";
+                    if (CurrentGameState.Pawns[i].Position == _previouslySelectedGridPawn.Position)
+                    {
+                        CurrentGameState.Pawns[i].Position = currentPosition;
+                        BuildCurrentGameState();
+                        _selectedGridPawn = null;
+                        _selectedPawnTile = null;
+                        _previouslySelectedGridPawn = null;
+                        _targetPositions.Clear();
+                        DebugText.Text = "MOVEMENTAS IF RETURNED TRUE";
+                        EndPlayersTurn(CurrentGameState);
+                        break;
+                    }
                 }
             }
             else if (allyPawnOnGrid != null && _previouslySelectedGridPawn == null)//If in the selected tile there is a pawn and we have not selected a pawn previously
@@ -546,7 +568,7 @@ namespace WindowsFormsApplication
             testState.PlayerTowerHealth = 200;
             testState.OpponentTowerHealth = 200;
             testState.Pawns = new List<Pawn>();
-            testState.Pawns.Add(new Pawn(new Position(3, 3), "Villager_3.png", 13, 2, 2, 2, PawnClass.Tier3));
+            testState.Pawns.Add(new Pawn(new Position(3, 3), "Villager_3.png", 13, 2, 2, 2, 1, PawnClass.Tier3));
             var GameGridBuilder = new GameGridBuilder();
             GameGrid gridToMake = GameGridBuilder;
 

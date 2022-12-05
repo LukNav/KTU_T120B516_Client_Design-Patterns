@@ -10,7 +10,7 @@ namespace WindowsFormsApplication.Models
 {
     public class Pawn
     {
-        public Pawn(Position position, string imageName, int health, int cost, int speed, int damage, PawnClass tier)
+        public Pawn(Position position, string imageName, int health, int cost, int speed, int damage, int armor, PawnClass tier)
         {
             Position = position;
             ImageName = imageName;
@@ -18,6 +18,7 @@ namespace WindowsFormsApplication.Models
             Cost = cost;
             Speed = speed;
             Damage = damage;
+            Armor = armor;
             SkippedTick = false;
             Tier = tier;
             switch (tier)
@@ -42,6 +43,7 @@ namespace WindowsFormsApplication.Models
         public int Cost { get; set; }
         public int Speed { get; set; }
         public int Damage { get; set; }
+        public int Armor { get; set; }
         public bool SkippedTick { get; set; }
         public PawnClass Tier { get; set; }
         [JsonIgnore]
