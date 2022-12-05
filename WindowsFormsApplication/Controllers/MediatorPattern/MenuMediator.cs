@@ -11,18 +11,25 @@ namespace WindowsFormsApplication.Controllers.MediatorPattern
 {
     internal class MenuMediator : IMenuMediator
     {
-        private object PlayerName { get; set; }
+        private string PlayerName { get; set; }
         private string LocalHostPort { get; set; }
+        private string ServerIp { get; set; }
 
-        public MenuMediator(object playerName, string localHostPort)
+        public MenuMediator(string playerName, string localHostPort)
         {
             PlayerName=playerName;
             LocalHostPort=localHostPort;
+            ServerIp = Program.ServerIp;
+        }
+
+        public MenuMediator(string playerName, string localHostPort, string proxyIp) : this(playerName, localHostPort)
+        {
+            ServerIp=proxyIp;
         }
 
         public string CreateClient()
         {
-            string serverUrl = $"{Program.ServerIp}/Player/Create/{PlayerName}/{LocalHostPort}";
+            string serverUrl = $"{ServerIp}/Player/Create/{PlayerName}/{LocalHostPort}";
 
             HttpResponseMessage httpResponseMessage = HttpRequests.GetRequest(serverUrl);
             string responseMessage = httpResponseMessage.Message();
@@ -35,20 +42,20 @@ namespace WindowsFormsApplication.Controllers.MediatorPattern
 
         public Game GetGameInfo()
         {
-            string serverUrl = $"{Program.ServerIp}/Game";
+            string serverUrl = $"{ServerIp}/Game";
             HttpResponseMessage httpResponseMessage = HttpRequests.GetRequest(serverUrl);
             return httpResponseMessage.Deserialize<Game>();
         }
 
         public void SetPlayerAsReady()
         {
-            string serverUrl = $"{Program.ServerIp}/Player/SetAsReady/{PlayerName}";
+            string serverUrl = $"{ServerIp}/Player/SetAsReady/{PlayerName}";
             HttpRequests.GetRequest(serverUrl);
         }
 
         public void UnregisterPlayer()
         {
-            string serverUrl = $"{Program.ServerIp}/Player/Unregister/{PlayerName}";
+            string serverUrl = $"{ServerIp}/Player/Unregister/{PlayerName}";
             HttpRequests.DeleteRequest(serverUrl);
         }
     }
