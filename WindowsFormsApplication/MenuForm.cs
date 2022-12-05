@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Microsoft.Net.Http.Headers;
 using WindowsFormsApplication.Controllers;
+using WindowsFormsApplication.Controllers.InterpreterPattern;
 using WindowsFormsApplication.Controllers.MediatorPattern;
 using WindowsFormsApplication.Helpers;
 using WindowsFormsApplication.Models;
@@ -122,11 +123,22 @@ namespace WindowsFormsApplication
             HttpRequests.GetRequest(serverUrl);
         }
 
-        private void quitButton_Click(object sender, EventArgs e)
+        public void quitButton_Click(object sender, EventArgs e)
         {
             Mediator.UnregisterPlayer();
             ToggleLoginItems(true);//Hide Ui login labels
             ToggleReadyToPlayUIItems(false);//Show Ready to play button and label in UI
+        }
+
+
+        private void InterpreterTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        MenuInterpreter menuInterpreter = new MenuInterpreter();
+        private void InterpreterSubmit_Click(object sender, EventArgs e)
+        {
+            menuInterpreter.Interpret(new MenuContext(Program.MenuForm.InterpreterTextBox.Text));
         }
     }
 }
