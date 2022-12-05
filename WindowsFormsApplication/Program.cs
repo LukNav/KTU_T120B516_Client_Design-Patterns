@@ -10,8 +10,11 @@ namespace WindowsFormsApplication
     {
         public static MenuForm MenuForm { get; private set; }
         public static GameForm GameForm { get; private set; }
+
+        public static readonly string ProxyIp = "http://localhost:5269/Proxy";
         public static readonly string ServerIp = "https://localhost:7134";
         public static readonly string LocalHostPort = "5550";
+        public static readonly bool ShouldUseProxy = true;
 
         [STAThread]
         public static void Main(string[] args)

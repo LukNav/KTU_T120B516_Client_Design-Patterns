@@ -4,6 +4,7 @@ using WindowsFormsApplication.Controllers;
 using WindowsFormsApplication.Controllers.MediatorPattern;
 using WindowsFormsApplication.Helpers;
 using WindowsFormsApplication.Models;
+using static System.Net.WebRequestMethods;
 
 namespace WindowsFormsApplication
 {
@@ -79,13 +80,21 @@ namespace WindowsFormsApplication
 
         private bool TryCreateClient(string name, string localhostPort)
         {
-            if (Mediator == null)
-                Mediator = new MenuMediator(name, Program.LocalHostPort);
+            CreateMediatorIfNeeded(name);
 
             string errorMessage = Mediator.CreateClient();
             if (errorMessage != null)
                 Program.MenuForm.ErrorLabel.Text = errorMessage;
             return true;//Returns true if client was created
+        }
+
+        private static void CreateMediatorIfNeeded(string name)
+        {
+            if (Mediator == null)
+                if (Program.ShouldUseProxy)
+                    Mediator = new MenuMediator(name, Program.LocalHostPort, Program.ProxyIp);
+                else
+                    Mediator = new MenuMediator(name, Program.LocalHostPort);
         }
 
         private Game GetGameInfo()
@@ -95,8 +104,7 @@ namespace WindowsFormsApplication
 
         private void SetPlayerAsReady(string name)
         {
-            if (Mediator == null)
-                Mediator = new MenuMediator(name, Program.LocalHostPort);
+            CreateMediatorIfNeeded(name);
             Mediator.SetPlayerAsReady();
         }
 
