@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace WindowsFormsApplication.Controllers.InterpreterPattern
 {
@@ -15,22 +16,28 @@ namespace WindowsFormsApplication.Controllers.InterpreterPattern
 
         public void Interpret(MenuContext context)
         {
+            string[] values = context.value.Split(' ');
             //input name
             //submit name
             //ready
             //quit
-            switch (context.value)
+            switch (values[0])
             {
                 case "quit":
                     Program.MenuForm.quitButton_Click(null, null);
                     break;
 
                 case "ready":
-
+                    Program.MenuForm.ReadyButton_Click(null, null);
                     break;
 
-                case "name":
+                case "input":
+                    if(values.Length > 1)
+                        Program.MenuForm.NameTextBox.Text = values[1];
+                    break;
 
+                case "submit":
+                    Program.MenuForm.SubmitNameButton_Click(null, null);
                     break;
             }
         }     

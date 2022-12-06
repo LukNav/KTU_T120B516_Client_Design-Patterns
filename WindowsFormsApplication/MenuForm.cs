@@ -19,7 +19,7 @@ namespace WindowsFormsApplication
             InitializeComponent();
         }
 
-        private void SubmitNameButton_Click(object sender, EventArgs e)
+        public void SubmitNameButton_Click(object sender, EventArgs e)
         {
             PlayerName = Program.MenuForm.NameTextBox.Text;
             GameForm.PlayerName = PlayerName;
@@ -38,7 +38,7 @@ namespace WindowsFormsApplication
                 Program.MenuForm.ErrorLabel.Text = "Please enter a Name and then click Start Session";
         }
 
-        private void ReadyButton_Click(object sender, EventArgs e)
+        public void ReadyButton_Click(object sender, EventArgs e)
         {
             SetPlayerAsReady(PlayerName);//Set Player as ready in Server
             ToggleReadyToPlayUIItems(false);//Hide Ready button
