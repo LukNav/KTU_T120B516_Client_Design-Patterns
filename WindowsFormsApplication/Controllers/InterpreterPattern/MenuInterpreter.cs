@@ -17,10 +17,7 @@ namespace WindowsFormsApplication.Controllers.InterpreterPattern
         public void Interpret(MenuContext context)
         {
             string[] values = context.value.Split(' ');
-            //input name
-            //submit name
-            //ready
-            //quit
+
             switch (values[0])
             {
                 case "quit":
@@ -31,12 +28,12 @@ namespace WindowsFormsApplication.Controllers.InterpreterPattern
                     Program.MenuForm.ReadyButton_Click(null, null);
                     break;
 
-                case "input":
+                case "name":
                     if(values.Length > 1)
                         Program.MenuForm.NameTextBox.Text = values[1];
                     break;
 
-                case "submit":
+                case "start":
                     Program.MenuForm.SubmitNameButton_Click(null, null);
                     break;
             }
