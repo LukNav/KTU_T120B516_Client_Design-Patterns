@@ -45,6 +45,8 @@
             this.Player2FactionColor = new System.Windows.Forms.Label();
             this.DebugButton = new System.Windows.Forms.Button();
             this.quitButton = new System.Windows.Forms.Button();
+            this.InterpreterTextBox = new System.Windows.Forms.TextBox();
+            this.InterpreterSubmit = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // NameTextBox
@@ -219,11 +221,31 @@
             this.quitButton.Visible = false;
             this.quitButton.Click += new System.EventHandler(this.quitButton_Click);
             // 
+            // InterpreterTextBox
+            // 
+            this.InterpreterTextBox.Location = new System.Drawing.Point(306, 320);
+            this.InterpreterTextBox.Name = "InterpreterTextBox";
+            this.InterpreterTextBox.Size = new System.Drawing.Size(162, 23);
+            this.InterpreterTextBox.TabIndex = 19;
+            this.InterpreterTextBox.TextChanged += new System.EventHandler(this.InterpreterTextBox_TextChanged);
+            // 
+            // InterpreterSubmit
+            // 
+            this.InterpreterSubmit.Location = new System.Drawing.Point(474, 320);
+            this.InterpreterSubmit.Name = "InterpreterSubmit";
+            this.InterpreterSubmit.Size = new System.Drawing.Size(75, 23);
+            this.InterpreterSubmit.TabIndex = 20;
+            this.InterpreterSubmit.Text = "Submit";
+            this.InterpreterSubmit.UseVisualStyleBackColor = true;
+            this.InterpreterSubmit.Click += new System.EventHandler(this.InterpreterSubmit_Click);
+            // 
             // MenuForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.InterpreterSubmit);
+            this.Controls.Add(this.InterpreterTextBox);
             this.Controls.Add(this.quitButton);
             this.Controls.Add(this.DebugButton);
             this.Controls.Add(this.Player2FactionColor);
@@ -267,5 +289,7 @@
         private Label Player2FactionColor;
         private Button DebugButton;
         private Button quitButton;
+        private TextBox InterpreterTextBox;
+        private Button InterpreterSubmit;
     }
 }
