@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using WindowsFormsApplication.Controllers.StatePattern;
 using WindowsFormsApplication.Controllers.StrategyPattern;
 
 namespace WindowsFormsApplication.Models
 {
     public class Pawn
     {
-        public Pawn(Position position, string imageName, int health, int cost, int speed, int damage, int armor, PawnClass tier)
+        public Pawn(Position position, string imageName, int health, int cost, int speed, int damage, int armor, PawnClass tier, State state)
         {
             Position = position;
             ImageName = imageName;
@@ -21,6 +22,7 @@ namespace WindowsFormsApplication.Models
             Armor = armor;
             SkippedTick = false;
             Tier = tier;
+            PlayerState = state;
             switch (tier)
             {
                 case PawnClass.Tier1:
@@ -36,7 +38,7 @@ namespace WindowsFormsApplication.Models
                     break;
             }
         }
-
+        public State PlayerState { get; set; }
         public Position Position { get; set; }
         public string ImageName { get; set; }
         public int Health { get; set; }
