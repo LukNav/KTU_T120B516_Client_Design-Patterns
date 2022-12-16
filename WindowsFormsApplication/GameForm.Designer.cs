@@ -53,6 +53,9 @@
             this.LevelLabel = new System.Windows.Forms.Label();
             this.DebugLabel = new System.Windows.Forms.Label();
             this.DebugText = new System.Windows.Forms.Label();
+            this.PawnDataLabel = new System.Windows.Forms.Label();
+            this.PawnDataText = new System.Windows.Forms.Label();
+            this.AttackTowerButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Pawn1Picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Pawn2Picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Pawn3Picture)).BeginInit();
@@ -197,9 +200,9 @@
             // 
             // SpawnPawnButton
             // 
-            this.SpawnPawnButton.Location = new System.Drawing.Point(27, 310);
+            this.SpawnPawnButton.Location = new System.Drawing.Point(12, 310);
             this.SpawnPawnButton.Name = "SpawnPawnButton";
-            this.SpawnPawnButton.Size = new System.Drawing.Size(75, 23);
+            this.SpawnPawnButton.Size = new System.Drawing.Size(111, 23);
             this.SpawnPawnButton.TabIndex = 27;
             this.SpawnPawnButton.Text = "Spawn";
             this.SpawnPawnButton.UseVisualStyleBackColor = true;
@@ -293,11 +296,43 @@
             this.DebugText.TabIndex = 35;
             this.DebugText.Text = "<DEBUG TEXT HERE>";
             // 
+            // PawnDataLabel
+            // 
+            this.PawnDataLabel.AutoSize = true;
+            this.PawnDataLabel.Location = new System.Drawing.Point(12, 375);
+            this.PawnDataLabel.Name = "PawnDataLabel";
+            this.PawnDataLabel.Size = new System.Drawing.Size(62, 15);
+            this.PawnDataLabel.TabIndex = 37;
+            this.PawnDataLabel.Text = "Pawn data";
+            // 
+            // PawnDataText
+            // 
+            this.PawnDataText.AutoSize = true;
+            this.PawnDataText.Location = new System.Drawing.Point(12, 390);
+            this.PawnDataText.Name = "PawnDataText";
+            this.PawnDataText.Size = new System.Drawing.Size(146, 15);
+            this.PawnDataText.TabIndex = 38;
+            this.PawnDataText.Text = "<PAWN DATA TEXT HERE>";
+            // 
+            // AttackTowerButton
+            // 
+            this.AttackTowerButton.Location = new System.Drawing.Point(12, 339);
+            this.AttackTowerButton.Name = "AttackTowerButton";
+            this.AttackTowerButton.Size = new System.Drawing.Size(111, 23);
+            this.AttackTowerButton.TabIndex = 39;
+            this.AttackTowerButton.Text = "Attack tower";
+            this.AttackTowerButton.UseVisualStyleBackColor = true;
+            this.AttackTowerButton.Visible = false;
+            this.AttackTowerButton.Click += new System.EventHandler(this.AttackTowerButton_Click);
+            // 
             // GameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1000, 637);
+            this.Controls.Add(this.AttackTowerButton);
+            this.Controls.Add(this.PawnDataText);
+            this.Controls.Add(this.PawnDataLabel);
             this.Controls.Add(this.DebugText);
             this.Controls.Add(this.DebugLabel);
             this.Controls.Add(this.LevelLabel);
@@ -360,5 +395,8 @@
         private Label LevelLabel;
         private Label DebugLabel;
         private Label DebugText;
+        private Label PawnDataLabel;
+        private Label PawnDataText;
+        private Button AttackTowerButton;
     }
 }

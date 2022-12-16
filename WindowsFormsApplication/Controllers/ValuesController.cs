@@ -49,6 +49,16 @@ namespace WindowsFormsApplication.Controllers
             return NoContent();
         }
 
+        [HttpPost("SetPlayerData")]
+        public ActionResult SetPlayerData([FromBody] GameState myGameState)
+        {
+            Program.GameForm.Invoke(new Action(() =>
+            {
+                Program.GameForm.SetPlayerData(myGameState);
+            }));
+            return NoContent();
+        }
+
         [HttpPost("ChangeLevel")]
         public ActionResult ChangeLevel([FromBody] Game gameInfo)
         {

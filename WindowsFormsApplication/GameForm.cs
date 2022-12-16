@@ -124,6 +124,11 @@ namespace WindowsFormsApplication
 
         #endregion
        
+        internal void SetPlayerData(GameState myGameState)
+        {
+            CurrentGameState = myGameState;
+        }
+
         internal void BeginPlayersTurn(GameState enemyGameState)
         {
             EnemyGameState = enemyGameState;
@@ -134,12 +139,17 @@ namespace WindowsFormsApplication
             _targetPositions.Clear();
         }
 
-        private void EndPlayersTurn(GameState currentGameState)
+        private void EndPlayersTurn(GameState currentGameState, GameState enemyGameState)
         {
             IsPlayersTurn = false;
             YourTurnLabel.Visible = false;
             WaitForYourTurnLabel.Visible = true;
-            var temp = HttpRequests.PostRequest($"{Program.ServerIp}/EndTurn/{PlayerName}", currentGameState);
+
+            GameState myStateToSend = PositionFlipper(currentGameState);
+            GameState enemyStateToSend = PositionFlipper(enemyGameState);
+
+            var temp1 = HttpRequests.PostRequest($"{Program.ServerIp}/GiveEnemyData/{PlayerName}", enemyStateToSend);            
+            var temp2 = HttpRequests.PostRequest($"{Program.ServerIp}/EndTurn/{PlayerName}", myStateToSend);
         }
 
         private void BuildCurrentGameState()
@@ -152,7 +162,7 @@ namespace WindowsFormsApplication
                     Position p = GameGrid.GetPositionFromTile(pictureBox);
                     if (p == pawn.Position)
                     {
-                        DrawPawn(pawn, pictureBox);
+                        DrawPawn(pawn, pictureBox, false);
                         break;
                     }
                 }
@@ -167,7 +177,7 @@ namespace WindowsFormsApplication
                         Position p = GameGrid.GetPositionFromTile(pictureBox);
                         if (p == pawn.Position)
                         {
-                            DrawPawn(pawn, pictureBox);
+                            DrawPawn(pawn, pictureBox, false); //CIA KOL KAS RODO FALSE DEL TO, KAD "Knight_1_1.png" SULAUZO PROGRAMA KAZKODEL IR DAR NEISISAIKINAU KODEL - Maksas
                             break;
                         }
                     }
@@ -240,9 +250,17 @@ namespace WindowsFormsApplication
             this.Controls.Add(tower2);
         }
 
-        private void DrawPawn(Pawn pawn, PictureBox tile)
+        private void DrawPawn(Pawn pawn, PictureBox tile, bool isEnemy)
         {
-            tile.Image = FileUtils.GetImage(pawn.ImageName);
+            if(isEnemy)
+            {
+                tile.Image = FileUtils.GetImage("Enemy_" + pawn.ImageName);
+            }
+            else
+            {
+                tile.Image = FileUtils.GetImage(pawn.ImageName);
+            }
+
             tile.Paint += new PaintEventHandler((sender, e) =>
             {
                 e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
@@ -276,6 +294,8 @@ namespace WindowsFormsApplication
             Pawn allyPawnOnGrid = CurrentGameState.Pawns.Where(p => p.Position == currentPosition).FirstOrDefault();//Try getting ally pawn, if it exists in selected tile
             Pawn enemyPawnOnGrid = EnemyGameState.Pawns.Where(p => p.Position == currentPosition).FirstOrDefault();//Try getting enemy pawn, if it exists in selected tile
 
+            PawnDataText.Text = "SELECTED POSITION IS: X = " + currentPosition.X + " Y = " + currentPosition.Y;
+
             //Checking if the clicked tile corresponds to a marked tiles position
             bool isMarkedPosition = false;
             for (int j = 0; j < _targetPositions.Count; j++)
@@ -308,7 +328,8 @@ namespace WindowsFormsApplication
                             _previouslySelectedGridPawn = null;
                             _targetPositions.Clear();
                             DebugText.Text = "DEALT " + damage + " DAMAGE TO PAWN.";
-                            EndPlayersTurn(CurrentGameState);
+                            AttackTowerButton.Visible = false;
+                            EndPlayersTurn(CurrentGameState, EnemyGameState);
                             break;
                         }
                         else
@@ -318,6 +339,7 @@ namespace WindowsFormsApplication
                             _selectedPawnTile = null;
                             _previouslySelectedGridPawn = null;
                             _targetPositions.Clear();
+                            AttackTowerButton.Visible = false;
                             DebugText.Text = "FAILED TO DEAL DAMAGE. THIS MEANS THE CHAIN FAILED SOMEHOW.";
                         }
                     }
@@ -335,8 +357,9 @@ namespace WindowsFormsApplication
                         _selectedPawnTile = null;
                         _previouslySelectedGridPawn = null;
                         _targetPositions.Clear();
+                        AttackTowerButton.Visible = false;
                         DebugText.Text = "MOVEMENTAS IF RETURNED TRUE";
-                        EndPlayersTurn(CurrentGameState);
+                        EndPlayersTurn(CurrentGameState,EnemyGameState);
                         break;
                     }
                 }
@@ -346,23 +369,56 @@ namespace WindowsFormsApplication
                 DebugText.Text = "MARK MOVES IF RETURNED TRUE";
                 ShowPossibleMovesForSelectedPawn(sender, allyPawnOnGrid, selectedTile);
                 _previouslySelectedGridPawn = allyPawnOnGrid;
+                if(currentPosition.Y >= CurrentGameState.SelectedGameGrid.TileRows - 1)
+                {
+                    AttackTowerButton.Visible = true;
+                }
             }
             else if (currentPosition.Y <= 0 && allyPawnOnGrid == null && enemyPawnOnGrid == null)//If empty grid tile is selected to spawn
-            {                
-                DrawPawn(_selectedPawn, selectedTile);
-                Pawn pawnToSend = _selectedPawn;
-                pawnToSend.Position = currentPosition;
-                CurrentGameState.Pawns.Add(pawnToSend);
-                if (_selectedGridPawn != null)//Deselect selected grid pawns
+            {
+                //Checking if the limit on the specific pawn is reached
+                int countOfThisTypeOfPawn = 0;
+                bool pawnLimitReached = false;
+                for(int i = 0; i < CurrentGameState.Pawns.Count(); i++)
                 {
-                    BuildCurrentGameState();
-                    DebugText.Text = "SPAWN PAWN IF RETURNED TRUE";
+                    if(String.Equals(_selectedPawn.ImageName, CurrentGameState.Pawns[i].ImageName))
+                    {
+                        countOfThisTypeOfPawn++;
+                        if(countOfThisTypeOfPawn == 2)
+                        {
+                            pawnLimitReached = true;
+                            break;
+                        }
+                    }
+                }
+
+                if(pawnLimitReached)
+                {
+                    DebugText.Text = "TOO MANY OF THIS SPECIFIC PAWN";
                     _selectedGridPawn = null;
                     _selectedPawnTile = null;
                     _targetPositions.Clear();
                     _previouslySelectedGridPawn = null;
+                    AttackTowerButton.Visible = false;
                 }
-                EndPlayersTurn(CurrentGameState);
+                else
+                {
+                    DrawPawn(_selectedPawn, selectedTile, false);
+                    Pawn pawnToSend = _selectedPawn;
+                    pawnToSend.Position = currentPosition;
+                    CurrentGameState.Pawns.Add(pawnToSend);
+                    if (_selectedGridPawn != null)//Deselect selected grid pawns
+                    {
+                        BuildCurrentGameState();
+                        DebugText.Text = "SPAWN PAWN IF RETURNED TRUE";
+                        _selectedGridPawn = null;
+                        _selectedPawnTile = null;
+                        _targetPositions.Clear();
+                        _previouslySelectedGridPawn = null;
+                        AttackTowerButton.Visible = false;
+                    }
+                    EndPlayersTurn(CurrentGameState, EnemyGameState);
+                }
             }
             else//Failsafe in the event nothing worked
             {
@@ -372,6 +428,7 @@ namespace WindowsFormsApplication
                 _selectedPawnTile = null;
                 _previouslySelectedGridPawn = null;
                 _targetPositions.Clear();
+                AttackTowerButton.Visible = false;
             }
         }
         private void ShowPossibleMovesForSelectedPawn(object sender, Pawn pawnOnGrid, PictureBox pawnTile)
@@ -617,6 +674,71 @@ namespace WindowsFormsApplication
         private void LevelNameLabel_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private GameState PositionFlipper(GameState gameStateToFlip)
+        {
+            //Temporary GameState object for calculations
+            GameState tempState = gameStateToFlip;
+
+            //Bools that check if we have an odd or not amount of columns/rows ( IMPORTANT FOR CALCULATING COORDINATE FLIPPING. )
+            bool oddColumns = false;
+            bool oddRows = false;
+
+            if(tempState.SelectedGameGrid.TileRows % 2 == 1)
+            {
+                oddRows = true;
+            }
+            if(tempState.SelectedGameGrid.TileCols % 2 == 1)
+            {
+                oddColumns = true;
+            }
+
+
+            for(int i = 0; i < tempState.Pawns.Count; i++)
+            {
+                //Flipping Y coordinate
+                if(oddRows)
+                {
+                    //Checking if we aren't in the middle row ( If we are, we obviously don't need to flip it. )
+                    if(tempState.Pawns[i].Position.Y + 1 != tempState.SelectedGameGrid.TileRows - tempState.SelectedGameGrid.TileRows / 2)
+                    {
+                        tempState.Pawns[i].Position.Y = tempState.SelectedGameGrid.TileRows - tempState.Pawns[i].Position.Y - 1;
+                    }
+                }
+                else
+                {
+                    tempState.Pawns[i].Position.Y = tempState.SelectedGameGrid.TileRows - tempState.Pawns[i].Position.Y - 1;
+                }
+
+                //Flipping the X coordinate
+                if(oddColumns)
+                {
+                    //Checking if we aren't in the middle column ( If we are, we obviously don't need to flip it. )
+                    if (tempState.Pawns[i].Position.X + 1 != tempState.SelectedGameGrid.TileCols - tempState.SelectedGameGrid.TileCols / 2)
+                    {
+                        tempState.Pawns[i].Position.X = tempState.SelectedGameGrid.TileCols - tempState.Pawns[i].Position.X - 1;
+                    }
+                }
+                else
+                {
+                    tempState.Pawns[i].Position.X = tempState.SelectedGameGrid.TileCols - tempState.Pawns[i].Position.X - 1;
+                }
+            }
+
+            return tempState;
+        }
+
+        //METHOD FOR DAMAGING THE ENEMY TOWER
+        private void AttackTowerButton_Click(object sender, EventArgs e)
+        {
+            DebugText.Text = "NO FUNCTIONALITY SO FAR TBH.";
+            BuildCurrentGameState();
+            _selectedGridPawn = null;
+            _selectedPawnTile = null;
+            _targetPositions.Clear();
+            _previouslySelectedGridPawn = null;
+            AttackTowerButton.Visible = false;
         }
     }
 }
