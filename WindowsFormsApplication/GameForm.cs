@@ -130,7 +130,7 @@ namespace WindowsFormsApplication
         }
 
         internal void BeginPlayersTurn(GameState enemyGameState)
-        {
+        {            
             EnemyGameState = enemyGameState;
             BuildCurrentGameState();
             IsPlayersTurn = true;
@@ -154,6 +154,9 @@ namespace WindowsFormsApplication
 
         private void BuildCurrentGameState()
         {
+            MyTowerHealthLabel.Text = CurrentGameState.PlayerTowerHealth.ToString();
+            EnemyTowerHealthLabel.Text = CurrentGameState.OpponentTowerHealth.ToString();
+
             RebuildGrid(); //recreate the grid
             foreach (Pawn pawn in CurrentGameState.Pawns)
             {
@@ -739,14 +742,18 @@ namespace WindowsFormsApplication
             #endregion
 
             int damage = damagePawn.CalculateDamageValue("TOWER", _previouslySelectedGridPawn.Damage, 1); //Tas "1" yra kintamasis, pagal kuri dalinamas damage bus. i.e.: Jeigu 2, tai zala padaryta bokstui bus padalinta is dvieju.
+            CurrentGameState.OpponentTowerHealth -= damage;
+            EnemyGameState.PlayerTowerHealth -= damage;
 
-            DebugText.Text = "NO FUNCTIONALITY SO FAR TBH.";
+            DebugText.Text = "DEALT " + damage + " TO ENEMY TOWER!";
             BuildCurrentGameState();
             _selectedGridPawn = null;
             _selectedPawnTile = null;
             _targetPositions.Clear();
             _previouslySelectedGridPawn = null;
             AttackTowerButton.Visible = false;
+
+            EndPlayersTurn(CurrentGameState, EnemyGameState);
         }
     }
 }

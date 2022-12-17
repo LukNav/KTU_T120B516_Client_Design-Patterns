@@ -56,6 +56,10 @@
             this.PawnDataLabel = new System.Windows.Forms.Label();
             this.PawnDataText = new System.Windows.Forms.Label();
             this.AttackTowerButton = new System.Windows.Forms.Button();
+            this.MyTowerLabel = new System.Windows.Forms.Label();
+            this.MyTowerHealthLabel = new System.Windows.Forms.Label();
+            this.EnemyTowerLabel = new System.Windows.Forms.Label();
+            this.EnemyTowerHealthLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Pawn1Picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Pawn2Picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Pawn3Picture)).BeginInit();
@@ -299,7 +303,7 @@
             // PawnDataLabel
             // 
             this.PawnDataLabel.AutoSize = true;
-            this.PawnDataLabel.Location = new System.Drawing.Point(12, 375);
+            this.PawnDataLabel.Location = new System.Drawing.Point(12, 453);
             this.PawnDataLabel.Name = "PawnDataLabel";
             this.PawnDataLabel.Size = new System.Drawing.Size(62, 15);
             this.PawnDataLabel.TabIndex = 37;
@@ -308,7 +312,7 @@
             // PawnDataText
             // 
             this.PawnDataText.AutoSize = true;
-            this.PawnDataText.Location = new System.Drawing.Point(12, 390);
+            this.PawnDataText.Location = new System.Drawing.Point(12, 468);
             this.PawnDataText.Name = "PawnDataText";
             this.PawnDataText.Size = new System.Drawing.Size(146, 15);
             this.PawnDataText.TabIndex = 38;
@@ -325,11 +329,51 @@
             this.AttackTowerButton.Visible = false;
             this.AttackTowerButton.Click += new System.EventHandler(this.AttackTowerButton_Click);
             // 
+            // MyTowerLabel
+            // 
+            this.MyTowerLabel.AutoSize = true;
+            this.MyTowerLabel.Location = new System.Drawing.Point(12, 383);
+            this.MyTowerLabel.Name = "MyTowerLabel";
+            this.MyTowerLabel.Size = new System.Drawing.Size(101, 15);
+            this.MyTowerLabel.TabIndex = 40;
+            this.MyTowerLabel.Text = "My towers health:";
+            // 
+            // MyTowerHealthLabel
+            // 
+            this.MyTowerHealthLabel.AutoSize = true;
+            this.MyTowerHealthLabel.Location = new System.Drawing.Point(12, 398);
+            this.MyTowerHealthLabel.Name = "MyTowerHealthLabel";
+            this.MyTowerHealthLabel.Size = new System.Drawing.Size(25, 15);
+            this.MyTowerHealthLabel.TabIndex = 41;
+            this.MyTowerHealthLabel.Text = "420";
+            // 
+            // EnemyTowerLabel
+            // 
+            this.EnemyTowerLabel.AutoSize = true;
+            this.EnemyTowerLabel.Location = new System.Drawing.Point(12, 413);
+            this.EnemyTowerLabel.Name = "EnemyTowerLabel";
+            this.EnemyTowerLabel.Size = new System.Drawing.Size(120, 15);
+            this.EnemyTowerLabel.TabIndex = 42;
+            this.EnemyTowerLabel.Text = "Enemy towers health:";
+            // 
+            // EnemyTowerHealthLabel
+            // 
+            this.EnemyTowerHealthLabel.AutoSize = true;
+            this.EnemyTowerHealthLabel.Location = new System.Drawing.Point(12, 428);
+            this.EnemyTowerHealthLabel.Name = "EnemyTowerHealthLabel";
+            this.EnemyTowerHealthLabel.Size = new System.Drawing.Size(25, 15);
+            this.EnemyTowerHealthLabel.TabIndex = 43;
+            this.EnemyTowerHealthLabel.Text = "420";
+            // 
             // GameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1000, 637);
+            this.Controls.Add(this.EnemyTowerHealthLabel);
+            this.Controls.Add(this.EnemyTowerLabel);
+            this.Controls.Add(this.MyTowerHealthLabel);
+            this.Controls.Add(this.MyTowerLabel);
             this.Controls.Add(this.AttackTowerButton);
             this.Controls.Add(this.PawnDataText);
             this.Controls.Add(this.PawnDataLabel);
@@ -398,5 +442,9 @@
         private Label PawnDataLabel;
         private Label PawnDataText;
         private Button AttackTowerButton;
+        private Label MyTowerLabel;
+        private Label MyTowerHealthLabel;
+        private Label EnemyTowerLabel;
+        private Label EnemyTowerHealthLabel;
     }
 }
