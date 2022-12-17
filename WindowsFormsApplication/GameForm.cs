@@ -177,7 +177,7 @@ namespace WindowsFormsApplication
                         Position p = GameGrid.GetPositionFromTile(pictureBox);
                         if (p == pawn.Position)
                         {
-                            DrawPawn(pawn, pictureBox, false); //CIA KOL KAS RODO FALSE DEL TO, KAD "Knight_1_1.png" SULAUZO PROGRAMA KAZKODEL IR DAR NEISISAIKINAU KODEL - Maksas
+                            DrawPawn(pawn, pictureBox, true); //CIA KOL KAS RODO FALSE DEL TO, KAD "Knight_1_1.png" SULAUZO PROGRAMA KAZKODEL IR DAR NEISISAIKINAU KODEL - Maksas
                             break;
                         }
                     }
@@ -732,6 +732,14 @@ namespace WindowsFormsApplication
         //METHOD FOR DAMAGING THE ENEMY TOWER
         private void AttackTowerButton_Click(object sender, EventArgs e)
         {
+            #region Chain Pattern Setup
+            var damagePawn = new PawnDamageHandler();
+            var damageTower = new TowerDamageHandler();
+            damagePawn.SetNextHandler(damageTower);
+            #endregion
+
+            int damage = damagePawn.CalculateDamageValue("TOWER", _previouslySelectedGridPawn.Damage, 1); //Tas "1" yra kintamasis, pagal kuri dalinamas damage bus. i.e.: Jeigu 2, tai zala padaryta bokstui bus padalinta is dvieju.
+
             DebugText.Text = "NO FUNCTIONALITY SO FAR TBH.";
             BuildCurrentGameState();
             _selectedGridPawn = null;

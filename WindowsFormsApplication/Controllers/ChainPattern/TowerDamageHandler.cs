@@ -8,7 +8,13 @@ namespace WindowsFormsApplication.Controllers.ChainPattern
 {
     internal class TowerDamageHandler : Handler
     {
-        private Handler nextHandler;
+        private Handler nextHandler = null;
+
+        public void SetNextHandler(Handler newHandler)
+        {
+            nextHandler = newHandler;
+        }
+
         public override int CalculateDamageValue(string targetType, int damageStat, int armorStat)
         {
             if (targetType == "TOWER")
