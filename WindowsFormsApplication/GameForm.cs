@@ -156,8 +156,14 @@ namespace WindowsFormsApplication
         {
             MyTowerHealthLabel.Text = CurrentGameState.PlayerTowerHealth.ToString();
             EnemyTowerHealthLabel.Text = CurrentGameState.OpponentTowerHealth.ToString();
-
+            int playerTowerHealth = CurrentGameState.PlayerTowerHealth;
+            int enemyTowerHealth = CurrentGameState.OpponentTowerHealth;
             RebuildGrid(); //recreate the grid
+            if (playerTowerHealth > 0 && enemyTowerHealth > 0)
+            {
+                CurrentGameState.PlayerTowerHealth = playerTowerHealth;
+                CurrentGameState.OpponentTowerHealth = enemyTowerHealth;
+            }
             foreach (Pawn pawn in CurrentGameState.Pawns)
             {
                 foreach (PictureBox pictureBox in tiles)
@@ -745,15 +751,31 @@ namespace WindowsFormsApplication
             CurrentGameState.OpponentTowerHealth -= damage;
             EnemyGameState.PlayerTowerHealth -= damage;
 
-            DebugText.Text = "DEALT " + damage + " TO ENEMY TOWER!";
-            BuildCurrentGameState();
-            _selectedGridPawn = null;
-            _selectedPawnTile = null;
-            _targetPositions.Clear();
-            _previouslySelectedGridPawn = null;
-            AttackTowerButton.Visible = false;
+            DebugText.Text = "Player game state player tower hp: " + CurrentGameState.PlayerTowerHealth + " \n";
+            DebugText.Text = "Player game state enemy tower hp: " + CurrentGameState.OpponentTowerHealth + " \n";
+            DebugText.Text += "Enemy game state player tower hp: " + EnemyGameState.PlayerTowerHealth + " \n";
+            DebugText.Text += "Enemy game state enemy tower hp: " + EnemyGameState.OpponentTowerHealth;
+            if (CurrentGameState.OpponentTowerHealth > 0)
+            {
+                BuildCurrentGameState();
+                _selectedGridPawn = null;
+                _selectedPawnTile = null;
+                _targetPositions.Clear();
+                _previouslySelectedGridPawn = null;
+                AttackTowerButton.Visible = false;
 
-            EndPlayersTurn(CurrentGameState, EnemyGameState);
+                EndPlayersTurn(CurrentGameState, EnemyGameState);
+            }
+            else
+            {
+                CurrentGameState = new GameState();
+                CurrentGameState.Pawns = new List<Pawn>();
+
+                EnemyGameState = null;
+
+                string serverUrl = $"{Program.ServerIp}/NextLevel";
+                HttpRequests.GetRequest(serverUrl);
+            }
         }
     }
 }
