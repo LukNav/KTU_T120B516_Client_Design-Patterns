@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Microsoft.Net.Http.Headers;
 using WindowsFormsApplication.Controllers;
 using WindowsFormsApplication.Controllers.ChainPattern;
+using WindowsFormsApplication.Controllers.VisitorPattern;
 using WindowsFormsApplication.Helpers;
 using WindowsFormsApplication.Models;
 using WindowsFormsApplication.Models.BridgePattern;
@@ -141,6 +142,8 @@ namespace WindowsFormsApplication
 
         private void EndPlayersTurn(GameState currentGameState, GameState enemyGameState)
         {
+            BuildCurrentGameState();
+
             IsPlayersTurn = false;
             YourTurnLabel.Visible = false;
             WaitForYourTurnLabel.Visible = true;
@@ -154,41 +157,73 @@ namespace WindowsFormsApplication
 
         private void BuildCurrentGameState()
         {
+            //Tower health manipulation
             MyTowerHealthLabel.Text = CurrentGameState.PlayerTowerHealth.ToString();
             EnemyTowerHealthLabel.Text = CurrentGameState.OpponentTowerHealth.ToString();
             int playerTowerHealth = CurrentGameState.PlayerTowerHealth;
             int enemyTowerHealth = CurrentGameState.OpponentTowerHealth;
-            RebuildGrid(); //recreate the grid
             if (playerTowerHealth > 0 && enemyTowerHealth > 0)
             {
                 CurrentGameState.PlayerTowerHealth = playerTowerHealth;
                 CurrentGameState.OpponentTowerHealth = enemyTowerHealth;
             }
-            foreach (Pawn pawn in CurrentGameState.Pawns)
+
+            RebuildGrid(); //recreate the grid                      
+
+            //Render friendly pawns
+            for(int i = 0; i < CurrentGameState.Pawns.Count(); i++)
             {
                 foreach (PictureBox pictureBox in tiles)
                 {
                     Position p = GameGrid.GetPositionFromTile(pictureBox);
-                    if (p == pawn.Position)
+                    if (p == CurrentGameState.Pawns[i].Position)
                     {
-                        DrawPawn(pawn, pictureBox, false);
+                        DrawPawn(CurrentGameState.Pawns[i], pictureBox, false);
+                        if (String.Equals(CurrentGameState.Pawns[i].ImageName, "Corpse.png"))
+                        {
+                            CurrentGameState.Pawns[i].Accept(new KillVisitor());
+                        }
                         break;
                     }
                 }
             }
 
+            //Render enemy pawns
             if(EnemyGameState != null)
             {
-                foreach (Pawn pawn in EnemyGameState.Pawns)
+                for(int i = 0; i < EnemyGameState.Pawns.Count; i++)
                 {
-                    foreach (PictureBox pictureBox in tiles)
+                    foreach(PictureBox pictureBox in tiles)
                     {
                         Position p = GameGrid.GetPositionFromTile(pictureBox);
-                        if (p == pawn.Position)
+                        if (p == EnemyGameState.Pawns[i].Position)
                         {
-                            DrawPawn(pawn, pictureBox, true); //CIA KOL KAS RODO FALSE DEL TO, KAD "Knight_1_1.png" SULAUZO PROGRAMA KAZKODEL IR DAR NEISISAIKINAU KODEL - Maksas
+                            DrawPawn(EnemyGameState.Pawns[i], pictureBox, true);
+                            if (String.Equals(EnemyGameState.Pawns[i].ImageName, "Corpse.png"))
+                            {
+                                EnemyGameState.Pawns[i].Accept(new KillVisitor());
+                            }
                             break;
                         }
+                    }
+                }
+            }
+
+            //Removing the dead pawns from the states
+            for(int i = 0; i < CurrentGameState.Pawns.Count; i++)
+            {
+                if(CurrentGameState.Pawns[i].IsDead)
+                {
+                    CurrentGameState.Pawns.Remove(CurrentGameState.Pawns[i]);
+                }
+            }
+            if(EnemyGameState != null)
+            {
+                for (int i = 0; i < EnemyGameState.Pawns.Count; i++)
+                {
+                    if (EnemyGameState.Pawns[i].IsDead)
+                    {
+                        EnemyGameState.Pawns.Remove(EnemyGameState.Pawns[i]);
                     }
                 }
             }
@@ -329,9 +364,8 @@ namespace WindowsFormsApplication
                             EnemyGameState.Pawns[i].Health -= damage;
                             if(EnemyGameState.Pawns[i].Health <= 0)
                             {
-                                EnemyGameState.Pawns.Remove(EnemyGameState.Pawns[i]);
-                            }
-                            BuildCurrentGameState();
+                                EnemyGameState.Pawns[i].Accept(new CorpseVisitor());                                
+                            }                            
                             _selectedGridPawn = null;
                             _selectedPawnTile = null;
                             _previouslySelectedGridPawn = null;
@@ -361,7 +395,6 @@ namespace WindowsFormsApplication
                     if (CurrentGameState.Pawns[i].Position == _previouslySelectedGridPawn.Position)
                     {
                         CurrentGameState.Pawns[i].Position = currentPosition;
-                        BuildCurrentGameState();
                         _selectedGridPawn = null;
                         _selectedPawnTile = null;
                         _previouslySelectedGridPawn = null;
@@ -418,7 +451,6 @@ namespace WindowsFormsApplication
                     CurrentGameState.Pawns.Add(pawnToSend);
                     if (_selectedGridPawn != null)//Deselect selected grid pawns
                     {
-                        BuildCurrentGameState();
                         DebugText.Text = "SPAWN PAWN IF RETURNED TRUE";
                         _selectedGridPawn = null;
                         _selectedPawnTile = null;
