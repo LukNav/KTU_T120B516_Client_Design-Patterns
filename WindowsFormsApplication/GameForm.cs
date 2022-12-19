@@ -148,10 +148,15 @@ namespace WindowsFormsApplication
             YourTurnLabel.Visible = false;
             WaitForYourTurnLabel.Visible = true;
 
-            GameState myStateToSend = PositionFlipper(currentGameState);
-            GameState enemyStateToSend = PositionFlipper(enemyGameState);
+            if (enemyGameState != null)
+            {
+                GameState enemyStateToSend = PositionFlipper(enemyGameState);
+                var temp1 = HttpRequests.PostRequest($"{Program.ServerIp}/GiveEnemyData/{PlayerName}", enemyStateToSend);
 
-            var temp1 = HttpRequests.PostRequest($"{Program.ServerIp}/GiveEnemyData/{PlayerName}", enemyStateToSend);            
+            }
+
+            GameState myStateToSend = PositionFlipper(currentGameState);
+
             var temp2 = HttpRequests.PostRequest($"{Program.ServerIp}/EndTurn/{PlayerName}", myStateToSend);
         }
 
@@ -798,10 +803,12 @@ namespace WindowsFormsApplication
             }
             else
             {
+                EnemyGameState = new GameState();
+                EnemyGameState.Pawns = new List<Pawn>();
+                EnemyGameState.SelectedGameGrid = CurrentGameState.SelectedGameGrid;
+
                 CurrentGameState = new GameState();
                 CurrentGameState.Pawns = new List<Pawn>();
-
-                EnemyGameState = null;
 
                 string serverUrl = $"{Program.ServerIp}/NextLevel";
                 HttpRequests.GetRequest(serverUrl);

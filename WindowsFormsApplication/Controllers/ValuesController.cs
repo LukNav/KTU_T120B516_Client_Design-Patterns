@@ -37,6 +37,11 @@ namespace WindowsFormsApplication.Controllers
         {
             return Ok(Program.GameForm.CurrentGameState);
         }
+        [HttpGet("GetEnemyGameState")]
+        public ActionResult<GameState> GetEnemyGameState()
+        {
+            return Ok(Program.GameForm.EnemyGameState);
+        }
 
 
         [HttpPost("BeginPlayersTurn")]
