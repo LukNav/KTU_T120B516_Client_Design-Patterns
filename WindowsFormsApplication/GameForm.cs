@@ -157,21 +157,19 @@ namespace WindowsFormsApplication
 
         private void BuildCurrentGameState()
         {
-            //Tower health manipulation
             MyTowerHealthLabel.Text = CurrentGameState.PlayerTowerHealth.ToString();
             EnemyTowerHealthLabel.Text = CurrentGameState.OpponentTowerHealth.ToString();
             int playerTowerHealth = CurrentGameState.PlayerTowerHealth;
             int enemyTowerHealth = CurrentGameState.OpponentTowerHealth;
+            RebuildGrid(); //recreate the grid
             if (playerTowerHealth > 0 && enemyTowerHealth > 0)
             {
                 CurrentGameState.PlayerTowerHealth = playerTowerHealth;
                 CurrentGameState.OpponentTowerHealth = enemyTowerHealth;
             }
 
-            RebuildGrid(); //recreate the grid                      
-
             //Render friendly pawns
-            for(int i = 0; i < CurrentGameState.Pawns.Count(); i++)
+            for (int i = 0; i < CurrentGameState.Pawns.Count(); i++)
             {
                 foreach (PictureBox pictureBox in tiles)
                 {
