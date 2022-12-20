@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Microsoft.Net.Http.Headers;
 using WindowsFormsApplication.Controllers;
 using WindowsFormsApplication.Controllers.ChainPattern;
+using WindowsFormsApplication.Controllers.Composite;
 using WindowsFormsApplication.Controllers.VisitorPattern;
 using WindowsFormsApplication.Helpers;
 using WindowsFormsApplication.Models;
@@ -35,6 +36,7 @@ namespace WindowsFormsApplication
         private int _ticks = 0;
         private Pawn _previouslySelectedGridPawn = null;
         private List<Position> _targetPositions = new List<Position>();
+        private PlayerComposite playerComposite;
         #endregion        
 
         public GameForm()
@@ -53,6 +55,7 @@ namespace WindowsFormsApplication
             _selectedPawn = CurrentGame.GameLevel.Pawn1;
             SetGameInfo(CurrentGame);//Update game info in UI
             BuildCurrentGameState();
+            playerComposite = new PlayerComposite() { Name = PlayerName};
         }
 
         internal void ChangeLevel(Game game)
@@ -134,6 +137,9 @@ namespace WindowsFormsApplication
         {            
             EnemyGameState = enemyGameState;
             BuildCurrentGameState();
+            playerComposite.RemoveAllChildren();
+            CurrentGameState.Pawns.ForEach(p => playerComposite.AddChild(new PawnLeaf(p.ImageName, p.Health)));
+            GameStatsLabel.Text = playerComposite.Operation();
             IsPlayersTurn = true;
             YourTurnLabel.Visible = true;
             WaitForYourTurnLabel.Visible = false;
