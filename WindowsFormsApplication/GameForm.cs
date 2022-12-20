@@ -140,6 +140,13 @@ namespace WindowsFormsApplication
             _targetPositions.Clear();
         }
 
+        private void ChangeStates(GameState gameState)
+        {
+            foreach (Pawn pawn in gameState.Pawns)
+            {
+                pawn.CurrentState.SwitchState();
+            }
+        }
         private void EndPlayersTurn(GameState currentGameState, GameState enemyGameState)
         {
             BuildCurrentGameState();
@@ -147,16 +154,15 @@ namespace WindowsFormsApplication
             IsPlayersTurn = false;
             YourTurnLabel.Visible = false;
             WaitForYourTurnLabel.Visible = true;
-
             if (enemyGameState != null)
             {
+                ChangeStates(enemyGameState);
                 GameState enemyStateToSend = PositionFlipper(enemyGameState);
                 var temp1 = HttpRequests.PostRequest($"{Program.ServerIp}/GiveEnemyData/{PlayerName}", enemyStateToSend);
 
             }
-
+            ChangeStates(currentGameState);
             GameState myStateToSend = PositionFlipper(currentGameState);
-
             var temp2 = HttpRequests.PostRequest($"{Program.ServerIp}/EndTurn/{PlayerName}", myStateToSend);
         }
 
