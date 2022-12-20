@@ -57,7 +57,7 @@ namespace WindowsFormsApplication.Controllers.Composite
             string message = string.Format("Player: {0}\n", Name);
             foreach (ICompositePlayer child in _children)
             {
-                message += string.Format("\t Name: {0}, HP: {1}\n", Name, Health);
+                message += string.Format("\t Name: {0}, HP: {1}\n", child.Name, child.Health);
             }
             return message;
         }
