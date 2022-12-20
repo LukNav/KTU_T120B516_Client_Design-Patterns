@@ -60,6 +60,8 @@
             this.MyTowerHealthLabel = new System.Windows.Forms.Label();
             this.EnemyTowerLabel = new System.Windows.Forms.Label();
             this.EnemyTowerHealthLabel = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.GameStatsLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Pawn1Picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Pawn2Picture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Pawn3Picture)).BeginInit();
@@ -365,11 +367,31 @@
             this.EnemyTowerHealthLabel.TabIndex = 43;
             this.EnemyTowerHealthLabel.Text = "420";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 499);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(66, 15);
+            this.label2.TabIndex = 44;
+            this.label2.Text = "Game Stats";
+            // 
+            // GameStatsLabel
+            // 
+            this.GameStatsLabel.AutoSize = true;
+            this.GameStatsLabel.Location = new System.Drawing.Point(14, 519);
+            this.GameStatsLabel.Name = "GameStatsLabel";
+            this.GameStatsLabel.Size = new System.Drawing.Size(16, 15);
+            this.GameStatsLabel.TabIndex = 45;
+            this.GameStatsLabel.Text = "...";
+            // 
             // GameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1000, 637);
+            this.Controls.Add(this.GameStatsLabel);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.EnemyTowerHealthLabel);
             this.Controls.Add(this.EnemyTowerLabel);
             this.Controls.Add(this.MyTowerHealthLabel);
@@ -446,5 +468,7 @@
         private Label MyTowerHealthLabel;
         private Label EnemyTowerLabel;
         private Label EnemyTowerHealthLabel;
+        private Label label2;
+        private Label GameStatsLabel;
     }
 }
