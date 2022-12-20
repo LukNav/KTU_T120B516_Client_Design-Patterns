@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using WindowsFormsApplication.Controllers.StatePattern;
 using WindowsFormsApplication.Controllers.StrategyPattern;
 using WindowsFormsApplication.Controllers.VisitorPattern;
 
@@ -23,6 +24,7 @@ namespace WindowsFormsApplication.Models
             SkippedTick = false;
             Tier = tier;
             IsDead = false;
+            CurrentState = new PlayerState(this);
             switch (tier)
             {
                 case PawnClass.Tier1:
@@ -48,6 +50,7 @@ namespace WindowsFormsApplication.Models
         public int Armor { get; set; }
         public bool SkippedTick { get; set; }
         public bool IsDead { get; set; }
+        public State CurrentState { get; set; }
         public PawnClass Tier { get; set; }
         [JsonIgnore]
         public IMoveAlgorithm moveAlgorithm { get; set; }
